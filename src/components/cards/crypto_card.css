@@ -1,0 +1,77 @@
+.crypto_card{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--secondary);
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+.crypto_card:hover{
+    filter: brightness(1.2);
+    transform: scale(1.01);
+}
+.crypto_card .img{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 70px;
+    width: 70px;
+    border-radius: 100%;
+}
+.crypto_card .name{
+    font-size: 18px;
+    text-align: center;
+    color: var(--headingColour);
+}
+.crypto_card .price_change{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 13px;
+}
+.crypto_card .price_change svg{
+    margin-right: 3px;
+    font-size: 15px;
+}
+.crypto_card .price_change .profit,
+.crypto_card .price_change .profit svg path{
+    color: var(--success);
+}
+.crypto_card .price_change .zero,
+.crypto_card .price_change .zero svg path{
+    color: var(--fontColour);
+}
+.crypto_card .price_change .loss,
+.crypto_card .price_change .loss svg path{
+    color: var(--danger);
+}
+.crypto_card .ranking{
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 14px;
+}
+.crypto_card.loading .img{
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.crypto_card.loading .name,
+.crypto_card.loading .price{
+    margin-bottom: 5px;
+    width: 100%;
+    height: 18px;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.no_coin{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    border: 2px dashed var(--lineColour);
+    font-size: 18px;
+}

@@ -1,0 +1,183 @@
+.stock_detail > .heading_cont{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.stock_detail > .heading_cont img{
+    height: 60px;
+    max-width: 200px;
+    margin-bottom: 5px;
+}
+.stock_detail > .heading_cont .heading{
+    font-size: 28px;
+    text-align: center;
+    color: var(--headingColour);
+}
+.stock_detail .sub_heading{
+    text-align: center;
+    font-size: 14px;
+}
+.stock_detail > .heading_cont.loading .image{
+    height: 60px;
+    width: 200px;
+    margin-bottom: 10px;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.stock_detail > .heading_cont.loading .heading{
+    background-color: var(--secondary);
+    height: 40px;
+    width: 100px;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.stock_detail .user_investment{
+    background-color: var(--secondary);
+    padding: 10px;
+    border-radius: 10px;
+}
+.stock_detail .user_investment .heading{
+    font-size: 22px;
+    color: var(--headingColour);
+    text-align: center;
+}
+.stock_detail .user_investment .title{
+    font-size: 18px;
+    font-weight: 500;
+    border-top: 1px solid var(--lineColour);
+    border-bottom: 1px solid var(--lineColour);
+}
+.stock_detail .user_investment .data{
+    display: flex;
+    justify-content: center;
+    padding-block: 10px;
+}
+.stock_detail .user_investment .data .profit,
+.stock_detail .user_investment .data .profit svg path{
+    color: var(--success);
+}
+.stock_detail .user_investment .data .zero,
+.stock_detail .user_investment .data .zero svg path{
+    color: var(--fontColour);
+}
+.stock_detail .user_investment .data .loss,
+.stock_detail .user_investment .data .loss svg path{
+    color: var(--danger);
+}
+.stock_detail .user_investment .bottom_footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    border-top: 1px solid var(--lineColour);
+}
+.stock_detail .details_cont{
+    padding: 5px 10px;
+    padding-top: 10px;
+    background-color: var(--secondary);
+    border-radius: 5px;
+}
+.stock_detail .details_cont .row_heading .title{
+    font-size: 22px;
+    color: var(--headingColour);
+    text-align: center;
+}
+.stock_detail .details_cont .row_heading .text{
+    margin-block: 10px;
+    margin-bottom: 20px;
+}
+.stock_detail .details_cont .row_details{
+    padding: 10px 20px;
+    margin-bottom: 5px;
+    background-color: var(--secondary);
+    filter: brightness(1.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 2px;
+    transition: 0.3s ease-in-out;
+}
+.stock_detail .details_cont .row_details:hover{
+    background-color: var(--secondary);
+    filter: brightness(1.4);
+}
+.stock_detail .details_cont .row_details .title{
+    width: 60%;
+}
+.stock_detail .details_cont .row_details .title svg{
+    font-size: 18px;
+    transform: translateY(3px);
+}
+
+
+.stock_detail .details_cont.loading .row_heading .title{
+    height: 22px;
+    width: 50%;
+    transform: translateX(50%);
+    background-color: var(--secondary);
+    border-radius: 2px;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.stock_detail .details_cont.loading .row_heading .text{
+    height: 16px;
+    width: 100%;
+    background-color: var(--secondary);
+    border-radius: 2px;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.stock_detail .details_cont.loading .row_heading .text.text2{
+    width: 75%;
+}
+.stock_detail .details_cont.loading .row_details .title svg{
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    background-color: var(--secondary);
+    transform: translateY(-3px);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.stock_detail .details_cont.loading .row_details .title div,
+.stock_detail .link_crpto.loading .row_details .title div{
+    height: 16px;
+    width: 25%;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.stock_detail .details_cont.loading .row_details .value{
+    height: 16px;
+    width: 20%;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.stock_detail .stock_info .heading{
+    font-size: 24px;
+    text-align: center;
+    color: var(--headingColour);
+}
+.stock_detail .stock_info .company_details{
+    text-align: justify;
+}
+.stock_detail .stock_info .company_details .detail span{
+    font-size: 18px;
+    font-weight: 500;
+}
+.stock_detail .company_details .row .title,
+.stock_detail .company_details .row .details{
+    border-bottom: 1px solid var(--lineColour);
+    text-align: center;
+    font-size: 18px;
+    padding-block: 10px;
+    border-left: 1px solid var(--lineColour);
+}
+.stock_detail .company_details .row .title.noboder,
+.stock_detail .company_details .row .details.noboder{
+    border-left: none;
+}
+.stock_detail .company_details .row .details{
+    font-size: 16px;
+}
+.stock_detail .source_name{
+    float: right;
+    font-size: 14px;
+    margin-top: 20px;
+}

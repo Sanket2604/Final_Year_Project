@@ -1,0 +1,81 @@
+.crypto_news_card{
+    background-color: var(--secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+.crypto_news_card:hover{
+    filter: brightness(1.2);
+    transform: scale(1.01);
+}
+.crypto_news_card .top_row{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.crypto_news_card .top_row .title{
+    font-size: 18px;
+}
+.crypto_news_card .top_row .image{
+    margin-left: 5px;
+    height: 70px;
+    width: 70px;
+    min-width: 70px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.crypto_news_card .news_detail{
+    font-size: 13px;
+    text-align: justify;
+}
+.crypto_news_card .bottom_row{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+.crypto_news_card .bottom_row .company{
+    display: flex;
+    align-items: center;
+}
+.crypto_news_card .bottom_row .company .img{
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    margin-right: 5px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.crypto_news_card.loading .top_row .title{
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+    height: 18px;
+    width: 100%;
+}
+.crypto_news_card.loading .top_row .image{
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.crypto_news_card.loading .news_detail{
+    height: 10px;
+    width: 100%;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.crypto_news_card.loading .bottom_row .company .img{
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.crypto_news_card.loading .bottom_row .company .text,
+.crypto_news_card.loading .bottom_row .time{
+    height: 7px;
+    width: 100px;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}

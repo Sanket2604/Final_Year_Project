@@ -1,0 +1,41 @@
+.chart_cont > .heading_cont{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.chart_cont > .heading_cont .heading{
+    font-size: 20px;
+}
+.chart_cont > .heading_cont .price{
+    font-size: 18px;
+}
+.chart_cont .heading_cont .price .price_change{
+    font-size: 16px;
+    margin-left: 10px;
+}
+.chart_cont .heading_cont .price .price_change svg{
+    margin-right: 3px;
+    font-size: 18px;
+}
+.chart_cont .heading_cont .price .price_change .profit,
+.chart_cont .heading_cont .price .price_change .profit svg path{
+    color: var(--success);
+}
+.chart_cont .heading_cont .price .price_change .zero,
+.chart_cont .heading_cont .price .price_change .zero svg path{
+    color: var(--fontColour);
+}
+.chart_cont .heading_cont .price .price_change .loss,
+.chart_cont .heading_cont .price .price_change .loss svg path{
+    color: var(--danger);
+}
+.chart_cont > .heading_cont .heading.loading,
+.chart_cont .heading_cont .price.loading{
+    background-color: var(--secondary);
+    height: 25px;
+    width: 250px;
+    border-radius: 2px;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+
+

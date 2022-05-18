@@ -1,0 +1,46 @@
+.crypto_market .heading{
+    font-size: 24px;
+}
+
+
+.crypto_dashboard .row .heading_cont{
+    display: flex;
+    justify-content: space-between;
+}
+.crypto_dashboard .heading{
+    font-size: 24px;
+}
+.crypto_dashboard .section1 .box{
+    padding: 10px;
+    border: 2px solid var(--lineColour);
+    border-radius: 5px;
+    background-color: var(--body);
+    cursor: defaultp;
+    transition: 0.25s ease-in-out;
+}
+.crypto_dashboard .section1 .box:hover{
+    filter: brightness(1.3);
+}
+.crypto_dashboard .section1 .box .line2{
+    font-size: 14px;
+}
+.crypto_dashboard .section1 .loading_box_stat .line1{
+    height: 22px;
+    margin-bottom: 5px;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.crypto_dashboard .section1 .loading_box_stat .line2{
+    height: 17px;
+    width: 80%;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+@keyframes pulse {
+    from{
+        filter: brightness(1.1);
+    }
+    to{
+        filter: brightness(1.4);
+    }
+}

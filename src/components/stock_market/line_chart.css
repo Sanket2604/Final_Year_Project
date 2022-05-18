@@ -1,0 +1,84 @@
+.chart_cont > .heading_cont{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.chart_cont > .heading_cont .heading{
+    font-size: 20px;
+}
+.chart_cont > .heading_cont .price{
+    font-size: 18px;
+}
+.chart_cont .heading_cont .price .price_change{
+    font-size: 16px;
+    margin-left: 10px;
+}
+.chart_cont .heading_cont .price .price_change svg{
+    margin-right: 3px;
+    font-size: 18px;
+}
+.chart_cont .heading_cont .price .price_change .profit,
+.chart_cont .heading_cont .price .price_change .profit svg path{
+    color: var(--success);
+}
+.chart_cont .heading_cont .price .price_change .zero,
+.chart_cont .heading_cont .price .price_change .zero svg path{
+    color: var(--fontColour);
+}
+.chart_cont .heading_cont .price .price_change .loss,
+.chart_cont .heading_cont .price .price_change .loss svg path{
+    color: var(--danger);
+}
+.chart_cont > .heading_cont .heading.loading,
+.chart_cont .heading_cont .price.loading{
+    background-color: var(--secondary);
+    height: 25px;
+    width: 250px;
+    border-radius: 2px;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+
+.radio_cont, .radio_cont .radio_group{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.radio_cont .radio_group .radio_btn{
+    height: 22px;
+    width: 22px;
+    border-radius: 100%;
+    margin-right: 5px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+}
+.radio_cont .radio_group .radio_btn .dot{
+    height: 12px;
+    width: 12px;
+    border-radius: 100%;
+    z-index: -1;
+    transform: scale(0);
+    transition: 0.5s ease-in-out;
+}
+.radio_cont .radio_group .radio_btn.high{
+    border: 2px solid rgb(0, 255, 0);
+}
+.radio_cont .radio_group .radio_btn.avg{
+    border: 2px solid #0071bd;
+}
+.radio_cont .radio_group .radio_btn.low{
+    border: 2px solid red;
+}
+.radio_cont .radio_group .radio_btn.high.active .dot{
+    transform: scale(1);
+    background-color: rgb(0, 255, 0);
+}
+.radio_cont .radio_group .radio_btn.avg.active .dot{
+    transform: scale(1);
+    background-color: #0071bd;
+}
+.radio_cont .radio_group .radio_btn.low.active .dot{
+    transform: scale(1);
+    background-color: red;
+}

@@ -1,0 +1,7 @@
+.stock_dashboard .row .heading_cont{
+    display: flex;
+    justify-content: space-between;
+}
+.stock_dashboard .heading{
+    font-size: 24px;
+}

@@ -1,0 +1,225 @@
+.coin_details > .heading_cont{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.coin_details > .heading_cont .image{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+}
+.coin_details > .heading_cont .heading{
+    font-size: 32px;
+    text-align: center;
+    color: var(--headingColour);
+}
+.coin_details .sub_heading{
+    text-align: center;
+    font-size: 14px;
+}
+.coin_details > .heading_cont.loading .image{
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details > .heading_cont.loading .heading{
+    background-color: var(--secondary);
+    height: 40px;
+    width: 100px;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details .timestamp_cont{
+    display: flex;
+    justify-content: flex-end;
+}
+.coin_details .user_investment{
+    background-color: var(--secondary);
+    padding: 10px;
+    border-radius: 10px;
+}
+.coin_details .user_investment .heading{
+    font-size: 22px;
+    color: var(--headingColour);
+    text-align: center;
+}
+.coin_details .user_investment .title{
+    font-size: 18px;
+    font-weight: 500;
+    border-top: 1px solid var(--lineColour);
+    border-bottom: 1px solid var(--lineColour);
+}
+.coin_details .user_investment .data{
+    display: flex;
+    justify-content: center;
+    padding-block: 10px;
+}
+.coin_details .user_investment .data .profit,
+.coin_details .user_investment .data .profit svg path{
+    color: var(--success);
+}
+.coin_details .user_investment .data .zero,
+.coin_details .user_investment .data .zero svg path{
+    color: var(--fontColour);
+}
+.coin_details .user_investment .data .loss,
+.coin_details .user_investment .data .loss svg path{
+    color: var(--danger);
+}
+.coin_details .user_investment .bottom_footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    border-top: 1px solid var(--lineColour);
+}
+.coin_details .details_cont{
+    padding: 5px 10px;
+    padding-top: 10px;
+    background-color: var(--secondary);
+    border-radius: 5px;
+}
+.coin_details .details_cont .row_heading .title{
+    font-size: 22px;
+    color: var(--headingColour);
+    text-align: center;
+}
+.coin_details .details_cont .row_heading .text{
+    margin-block: 10px;
+    margin-bottom: 20px;
+}
+.coin_details .details_cont .row_details{
+    padding: 10px 20px;
+    margin-bottom: 5px;
+    background-color: var(--secondary);
+    filter: brightness(1.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 2px;
+    transition: 0.3s ease-in-out;
+}
+.coin_details .details_cont .row_details:hover{
+    background-color: var(--secondary);
+    filter: brightness(1.4);
+}
+.coin_details .details_cont .row_details .title{
+    width: 60%;
+}
+.coin_details .details_cont .row_details .title svg{
+    font-size: 18px;
+    transform: translateY(3px);
+}
+
+
+.coin_details .details_cont.loading .row_heading .title{
+    height: 22px;
+    width: 50%;
+    transform: translateX(50%);
+    background-color: var(--secondary);
+    border-radius: 2px;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details .details_cont.loading .row_heading .text{
+    height: 16px;
+    width: 100%;
+    background-color: var(--secondary);
+    border-radius: 2px;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details .details_cont.loading .row_heading .text.text2{
+    width: 75%;
+}
+.coin_details .details_cont.loading .row_details .title svg{
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    background-color: var(--secondary);
+    transform: translateY(-3px);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details .details_cont.loading .row_details .title div,
+.coin_details .link_crpto.loading .row_details .title div{
+    height: 16px;
+    width: 25%;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details .details_cont.loading .row_details .value{
+    height: 16px;
+    width: 20%;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+
+.coin_details .about_crpto{
+    background-color: var(--secondary);
+    padding: 10px;
+    border-radius: 5px;
+}
+.coin_details .about_crpto .title{
+    font-size: 24px;
+    color: var(--headingColour);
+}
+.coin_details .about_crpto h3{
+    font-size: 20px!important;
+    color: var(--headingColour);
+}
+.coin_details .about_crpto.loading .title,
+.coin_details .link_crpto.loading > .title{
+    height: 30px;
+    width: 50%;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details .about_crpto.loading .heading{
+    height: 20px;
+    width: 75%;
+    background-color: var(--secondary);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details .about_crpto.loading .line{
+    height: 15px;
+    width: 100%;
+    background-color: var(--secondary);
+    margin-bottom: 5px;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details .about_crpto.loading .line.half{
+    width: 50%;
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details .link_crpto{
+    background-color: var(--secondary);
+    padding: 10px;
+    border-radius: 5px;
+}
+.coin_details .link_crpto .title{
+    font-size: 24px;
+    color: var(--headingColour);
+}
+.coin_details .link_crpto .row_details{
+    padding: 10px 20px;
+    margin-bottom: 5px;
+    background-color: var(--secondary);
+    filter: brightness(1.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 2px;
+    transition: 0.3s ease-in-out;
+}
+.coin_details .link_crpto .row_details:hover{
+    background-color: var(--secondary);
+    filter: brightness(1.4);
+}
+.coin_details .link_crpto.loading .row_details .title,
+.coin_details .link_crpto.loading .row_details .value{
+    height: 18px;
+    width: 150px;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}

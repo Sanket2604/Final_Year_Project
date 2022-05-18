@@ -1,0 +1,64 @@
+.row.d-inline-margin{
+    margin-inline: 0px!important;
+}
+.stock_card{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--secondary);
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+.stock_card:hover{
+    filter: brightness(1.2);
+    transform: scale(1.01);
+}
+.stock_card img{
+    height: 70px;
+    max-width: 200px;
+    margin-bottom: 10px;
+}
+.stock_card .name{
+    font-size: 16px;
+    text-align: center;
+}
+.stock_card .symbol{
+    font-size: 14px;
+    text-align: center;
+}
+.stock_card.loading .logo{
+    height: 70px;
+    width: 70px;
+    border-radius: 100%;
+    margin-bottom: 10px;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.stock_card.loading .name{
+    height: 25px;
+    width: 80%;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.stock_card.loading .symbol{
+    margin-top: 7px;
+    height: 18px;
+    width: 50%;
+    background-color: var(--secondary);
+    animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.no_stock{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    border: 2px dashed var(--lineColour);
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+}

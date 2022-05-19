@@ -11,7 +11,7 @@ export default function StockCard(props) {
     const [calc, setCalc] = useState(false)
 
     useEffect(() => {
-        if (props.stockList?.length > 0 && props.searchTerm.length===0) {
+        if (props.stockList?.length > 0 && props.searchTerm?.length===0) {
             let temp = []
             for (let i = 0; i < 100; i++) {
                 temp.push(props.stockList[i])
@@ -19,7 +19,7 @@ export default function StockCard(props) {
             setStocksInView(stockInView.concat(temp))
             setCalc(true)
         }
-        if(props.searchTerm.length>0) setCalc(false)
+        if(props.searchTerm?.length>0) setCalc(false)
     }, [props.stockList])
 
     function getMoreData() {
@@ -50,11 +50,30 @@ export default function StockCard(props) {
             </div>
         )
     }
+    let count=0
+    if(props.recommendation){
+        return(
+            <div className="row mt-4 d-inline-margin">
+                {props.stockList?.map((stock, i) =>
+                    stock?.shortName && !/^\d+$/.test(stock?.shortName) && stock?.symbol && !/[^a-zA-Z]/.test(stock?.symbol) && count<=9 ? (
+                        <div className="col-12 col-lg-3 p-0" key={i}>
+                            <Link to={`/stock_market/${stock.symbol}`} className="stock_card m-1">
+                                <img src={stock.logo} alt="" />
+                                <div className="name">{stock.shortName}</div>
+                                <div className="symbol">Ticker: {stock.symbol}</div>
+                                <div className="hidden" style={{display: 'none'}}>{count+=1}</div>
+                            </Link>
+                        </div>
+                    ) : (<></>)
+                )}
+            </div>
+        )
+    }
     if (props.searchTerm.length > 0 && props.stockList?.length > 0) {
         return (
             <div className="row mt-4 d-inline-margin">
                 {props.stockList?.map((stock, i) =>
-                    stock?.name && !/^\d+$/.test(stock?.name) && stock?.symbol ? (
+                    stock?.name && !/^\d+$/.test(stock?.name) && stock?.symbol && !/[^a-zA-Z]/.test(stock?.symbol) ? (
                         <div className="col-12 col-lg-3 p-0" key={i}>
                             <Link to={`/stock_market/${stock.symbol}`} className="stock_card m-1">
                                 <img src={stock.logo} alt="" />
@@ -82,7 +101,7 @@ export default function StockCard(props) {
             >
                 <div className="row mt-4 d-inline-margin">
                     {stockInView?.map((stock, i) =>
-                        stock?.name && !/^\d+$/.test(stock?.name) && stock?.symbol ? (
+                        stock?.name && !/^\d+$/.test(stock?.name) && stock?.symbol && !/[^a-zA-Z]/.test(stock?.symbol) ? (
                             <div className="col-12 col-lg-3 p-0" key={i}>
                                 <Link to={`/stock_market/${stock.symbol}`} className="stock_card m-1">
                                     <img src={stock.logo} alt="" />

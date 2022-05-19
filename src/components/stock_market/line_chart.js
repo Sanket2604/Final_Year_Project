@@ -16,7 +16,7 @@ ChartJS.register(
     Legend
 );
 
-export default function LineChart({ stockHistory, stockName, timeperiod, isFetching }) {
+export default function LineChart({ stockHistory, stockName, timeperiod, isFetching, inrValue }) {
 
     const [datasets, setDataSets] = useState([])
     let stockChartOpen = []
@@ -26,9 +26,9 @@ export default function LineChart({ stockHistory, stockName, timeperiod, isFetch
     const borderWidth = 2
     
     for(let i=0; i<=stockHistory?.Results.length-1; i++){
-        stockChartOpen.push((stockHistory.Results[i].Open+stockHistory.Results[i].Close)/2)
-        stockChartHigh.push(stockHistory.Results[i].High)
-        stockChartLow.push(stockHistory.Results[i].Low)
+        stockChartOpen.push((stockHistory.Results[i].Open*inrValue+stockHistory.Results[i].Close*inrValue)/2)
+        stockChartHigh.push(stockHistory.Results[i].High*inrValue)
+        stockChartLow.push(stockHistory.Results[i].Low*inrValue)
         if(timeperiod==='24h'){
             stockTimestamp.push(moment(stockHistory?.Results[i].Date).format("hh:mm A"));
         }
@@ -213,7 +213,7 @@ export default function LineChart({ stockHistory, stockName, timeperiod, isFetch
                 </div>
                 {stockHistory&&!isFetching ?
                     (
-                        <div className="price">Current Price: ₹ {stockHistory.Results[stockHistory?.Results?.length-1].Open}
+                        <div className="price">Current Price: ₹ {parseFloat(stockHistory.Results[stockHistory?.Results?.length-1].Open*inrValue).toFixed(2)}
                             <span className='price_change'>
                                 {priceChange>0 ? 
                                     (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{priceChange}%</span>): 

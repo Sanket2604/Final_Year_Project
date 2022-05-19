@@ -1,12 +1,18 @@
 import React, { useEffect } from 'react'
 import CryptoNewsCard from '../cards/crypto_news';
+import StockCard from '../cards/stock_card';
+import StockDonutChart from './donut_chart';
 import { useGetCryptoNewsQuery } from '../../services/cryptoNewsApi'
+import { useGetStockRecommendationQuery } from '../../services/stockDetailApi';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import './stock_dashboard.css'
 
 export default function StockDashboard() {
 
     const { data: cryptoNews, isFetching: isNewsFetching } = useGetCryptoNewsQuery({ newsCategory: 'Stock Market', count: 9 })
+    const { data: stockRecommendation, isFetching: istockRecommendationFetching } = useGetStockRecommendationQuery()
 
     useEffect(()=>{
         document.title = `CDFYP | Crypto DashBoard`
@@ -17,14 +23,239 @@ export default function StockDashboard() {
         })
         document.getElementById('3').classList.add('active')
     },[])
-
+    
     return (
         <div className='container stock_dashboard mt-5 mb-5'>
+            <div className="row mb-4">
+                <div className="col-12 heading_cont mb-4">
+                    <div className="heading">Your Stock Investment</div>
+                    <Link to="/crypto_investments" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
+                </div>
+                <div className="col-12 col-lg-6">
+                    <StockDonutChart />
+                </div>
+                <div className="col-12 col-lg-6">
+                    <div className="container-fluid invest_list ms-1 mt-4 mt-lg-0">
+                        <div className="row invest heading">
+                            <div className="col-3 data name ms-2">Name</div>
+                            <div className="col-3 data pos_price ms-2">Invest Price</div>
+                            <div className="col-1 data quantity ms-2">Qty</div>
+                            <div className="col-3 data total_money ms-2">Total Investment</div>
+                        </div>
+                        <div className="row invest my-2">
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div className="row invest my-2">
+                            
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="row invest my-2">
+                            
+                            <div className="col-3 data name ms-2">Stock Name</div>
+                            <div className="col-3 data pos_price ms-2">₹ 10000</div>
+                            <div className="col-1 data quantity ms-2">x2</div>
+                            <div className="col-3 data total_money ms-2">₹ 20000
+                                <div className='change ms-2'>
+                                {true>0 ? 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
+                                    (2===0 ? 
+                                        (<span className='zero'>{0}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="row">
                 <div className="col-12 heading_cont mb-4">
-                    <div className="heading">Top Companies Stocks</div>
+                    <div className="heading">Trending Stocks</div>
                         <Link to="/stock_market" className="btn_cont"><div className='btn_ btn_small'>Show More</div></Link>
                 </div>
+                <StockCard stockList={stockRecommendation?.finance?.result[0]?.quotes} recommendation={true} />
             </div>
             <div className="row">
                 <div className="col-12 heading_cont mt-4 mb-4">

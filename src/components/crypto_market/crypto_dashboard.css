@@ -1,46 +1,78 @@
-.crypto_market .heading{
-    font-size: 24px;
-}
-
-
 .crypto_dashboard .row .heading_cont{
     display: flex;
     justify-content: space-between;
 }
-.crypto_dashboard .heading{
+.crypto_dashboard .row .heading_cont .heading{
     font-size: 24px;
 }
-.crypto_dashboard .section1 .box{
-    padding: 10px;
-    border: 2px solid var(--lineColour);
+.crypto_dashboard .invest_list{
+    background-color: var(--secondary);
+    padding-block: 10px;
     border-radius: 5px;
-    background-color: var(--body);
-    cursor: defaultp;
-    transition: 0.25s ease-in-out;
+    max-height: 600px;
+    overflow-y: scroll;
 }
-.crypto_dashboard .section1 .box:hover{
-    filter: brightness(1.3);
+.crypto_dashboard .invest_list::-webkit-scrollbar {
+    width: 0.3vw;
 }
-.crypto_dashboard .section1 .box .line2{
+.crypto_dashboard .invest_list .invest{
+    background-color: var(--secondary);
+    filter: brightness(1.2);
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.5s ease-in-out;
+}
+.crypto_dashboard .invest_list .invest:hover{
+    transform: scale(1.01);
+    filter: brightness(1.4);
+}
+.crypto_dashboard .invest_list .invest.heading:hover{
+    transform: scale(1);
+    filter: brightness(1.2);
+}
+.crypto_dashboard .invest_list .invest .data{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.crypto_dashboard .invest_list .invest .logo{
+    height: 40px;
+    min-width: 40px;
+    border-radius: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.crypto_dashboard .invest_list .invest.heading .logo{
+    background-color: transparent;
+    height: fit-content;
+    width: fit-content;
+}
+.crypto_dashboard .invest_list .invest .name{
+    font-size: 16px;
+}
+.crypto_dashboard .invest_list .invest .change{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
     font-size: 14px;
 }
-.crypto_dashboard .section1 .loading_box_stat .line1{
-    height: 22px;
-    margin-bottom: 5px;
-    background-color: var(--secondary);
-    animation: pulse 0.5s alternate infinite ease-in-out;
+.crypto_dashboard .invest_list .invest .change svg{
+    margin-right: 3px;
+    font-size: 15px;
 }
-.crypto_dashboard .section1 .loading_box_stat .line2{
-    height: 17px;
-    width: 80%;
-    background-color: var(--secondary);
-    animation: pulse 0.5s alternate infinite ease-in-out;
+.crypto_dashboard .invest_list .invest .change .profit,
+.crypto_dashboard .invest_list .invest .change .profit svg path{
+    color: var(--success);
 }
-@keyframes pulse {
-    from{
-        filter: brightness(1.1);
-    }
-    to{
-        filter: brightness(1.4);
-    }
+.crypto_dashboard .invest_list .invest .price_change .zero,
+.crypto_dashboard .invest_list .invest .change .zero svg path{
+    color: var(--fontColour);
+}
+.crypto_dashboard .invest_list .invest .change .loss,
+.crypto_dashboard .invest_list .invest .change .loss svg path{
+    color: var(--danger);
 }

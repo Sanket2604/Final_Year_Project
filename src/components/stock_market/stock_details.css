@@ -52,6 +52,27 @@
     justify-content: center;
     padding-block: 10px;
 }
+.stock_detail .user_investment .invest_data{
+    position: relative;
+}
+.stock_detail .user_investment .invest_data .symbol{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    font-size: 12px;
+    padding: 2px 10px;
+    width: fit-content;
+    border-radius: 5px;
+}
+.stock_detail .user_investment .invest_data .symbol.buy{
+    border: 2px solid var(--success);
+    background-color: var(--success);
+}
+.stock_detail .user_investment .invest_data .symbol.sell{
+    border: 2px solid var(--danger);
+    background-color: var(--danger);
+}
 .stock_detail .user_investment .data .profit,
 .stock_detail .user_investment .data .profit svg path{
     color: var(--success);

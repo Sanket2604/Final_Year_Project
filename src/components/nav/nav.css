@@ -66,6 +66,15 @@ a:hover {
     text-decoration: none !important;
 }
 
+@keyframes pulse {
+    from{
+        filter: brightness(1.1);
+    }
+    to{
+        filter: brightness(1.4);
+    }
+}
+
 .ant-select {
     float: right;
     width: 200px;
@@ -220,8 +229,8 @@ a:hover {
     position: relative;
     top: 20px;
     left: 0px;
-    height: 80px;
-    width: 80px;
+    height: 55px;
+    width: 55px;
     border-radius: 15px;
     background-image: url(logo.jpeg);
     background-position: center;

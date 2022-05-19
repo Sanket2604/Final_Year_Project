@@ -8,6 +8,7 @@ const stockApiHeaders = {
 const baseUrl = 'https://yh-finance.p.rapidapi.com'
 
 const createStockDetailRequest = (url, symbol) => ({ url, headers: stockApiHeaders, params: {symbol: symbol, region: 'US'} })
+const createStockRecommendationRequest = (url) => ({ url, headers: stockApiHeaders, params: {region: 'US'} })
 
 export const stockDetailApi = createApi({
     reducerPath: 'stockDetailApi',
@@ -15,10 +16,15 @@ export const stockDetailApi = createApi({
     endpoints: (builder) => ({
         getStockDetail: builder.query({
             query: (symbol) => createStockDetailRequest('/stock/v2/get-profile', symbol)
-        })
+        }),
+        getStockRecommendation: builder.query({
+            query: () => createStockRecommendationRequest('/market/get-trending-tickers')
+        }),
+        
     })
 })
 
 export const {
-    useGetStockDetailQuery
+    useGetStockDetailQuery,
+    useGetStockRecommendationQuery
 } = stockDetailApi;

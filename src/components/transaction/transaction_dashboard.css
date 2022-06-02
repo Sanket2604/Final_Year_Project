@@ -1,0 +1,51 @@
+.trans_dashboard .row .heading_cont{
+    display: flex;
+    justify-content: space-between;
+}
+.trans_dashboard .row .heading_cont .heading{
+    font-size: 24px;
+}
+
+.trans_dashboard .invest_list{
+    background-color: var(--secondary);
+    padding-bottom: 10px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    max-height: 600px;
+    overflow-y: scroll;
+}
+.trans_dashboard .invest_list.heading_sec{
+    padding-bottom: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    padding-top: 10px;
+}
+.trans_dashboard .invest_list::-webkit-scrollbar {
+    width: 0.4vw;
+}
+.trans_dashboard .invest_list .invest{
+    background-color: var(--secondary);
+    filter: brightness(1.2);
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.5s ease-in-out;
+}
+.trans_dashboard .invest_list .invest:hover{
+    transform: scale(1.01);
+    filter: brightness(1.4);
+}
+.trans_dashboard .invest_list .invest.heading:hover{
+    transform: scale(1);
+    filter: brightness(1.2);
+}
+.trans_dashboard .invest_list .invest .data{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

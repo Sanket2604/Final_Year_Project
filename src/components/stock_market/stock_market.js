@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import StockCard from '../cards/stock_card'
-import { company_logo } from './Stock_Symbols_Jeet_'
+import { stock_links } from './stock_links'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { useGetStockListQuery } from '../../services/stockListApi';
@@ -25,11 +25,12 @@ export default function StockMarket() {
     useEffect(() => {
         if (!isFetching) {
             let newData = stockData?.data.map((item) => 
-                Object.assign({}, item, {logo: company_logo[item.symbol]})
+                Object.assign({}, item, {logo: stock_links[item.symbol]?.[0], altlogo: stock_links[item.symbol]?.[1]})
             )
             setStockList(newData)
         }
     }, [stockData])
+
 
     useEffect(() => {
         if (searchTerm.length > 0) {
@@ -43,7 +44,7 @@ export default function StockMarket() {
     }, [searchTerm])
 
     return (
-        <div className="container stock_market mt-5 mb-5">
+        <div className="container stock_market pt-5 pb-5">
             <div className="row d-flex align-items-center">
                 <div className="col-6 heading">All Available Stocks</div>
                 <div className="col-2"></div>

@@ -1,0 +1,45 @@
+.cat_details .row > .heading{
+    font-size: 24px;
+}
+.cat_details .category_card{
+    padding: 10px 20px;
+    background-color: var(--secondary);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.5s ease-in-out;
+}
+.cat_details .category_card:hover{
+    filter: brightness(1.1);
+    transform: scale(1.005);
+}
+.cat_details .category_card .name{
+    font-size: 22px;
+}
+.cat_details .category_card .percentage{
+    font-size: 14px;
+    text-align: end;
+}
+.cat_details .category_card .status_bar{
+    position: relative;
+    background-color: var(--secondary);
+    filter: brightness(1.4);
+    border-radius: 50px;
+    height: 25px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.cat_details .category_card .status_bar .progress_bar{
+    background-color: var(--primary);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 50px;
+    /* border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px; */
+    transition: 0.25s ease-in-out;
+}
+.cat_details .category_card .amount{
+    font-size: 18px;
+    text-align: end;
+}

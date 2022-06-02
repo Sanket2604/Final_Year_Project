@@ -1,0 +1,51 @@
+.homepage .top_row .box{
+    /* margin-inline: 5px; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--secondary);
+    border: 2px solid var(--lineColour);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.25s ease-in-out;
+}
+.homepage .top_row .box:hover{
+    filter: brightness(1.2);
+}
+.homepage .top_row .box.order_activate{
+    background-color: green;
+}
+.homepage .top_row .box.order_deactivate{
+    background-color: rgb(143, 0, 0);
+}
+.homepage .top_row .box .content .text{
+    font-size: 18px;
+    text-align: end;
+}
+.homepage .top_row .box .content .subtext{
+    font-size: 14px;
+    text-align: end;
+}
+.homepage .top_row .box svg{
+    font-size: 28px;
+}
+.homepage .pie_charts .pie_cont{
+    padding: 20px;
+    border-radius: 5px;
+    margin-block: 15px;
+    background-color: var(--secondary);
+    transition: 0.25s ease-in-out;
+}
+.homepage .pie_charts .pie_cont:hover{
+    filter: brightness(1.1);
+}
+.homepage .pie_charts .pie_cont .heading_cont{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.homepage .pie_charts .pie_cont .heading{
+    font-size: 22px;
+}

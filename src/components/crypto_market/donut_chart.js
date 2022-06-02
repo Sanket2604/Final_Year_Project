@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState,useEffect} from 'react'
 import { Chart as ChartJs, Tooltip, Title, ArcElement, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 ChartJs.register(
@@ -7,6 +7,12 @@ ChartJs.register(
 
 export default function CryptoDonutChart() {
 
+    const [randomColors, setRandomColors]=useState()
+    const reRender = 0
+    useEffect(() => {
+        setRandomColors([generateRandomColor(),generateRandomColor(),generateRandomColor()])
+    }, [reRender])
+    
     function generateRandomColor() {
         var letters = '0123456789ABCDEF';
         var color = '#';
@@ -16,19 +22,12 @@ export default function CryptoDonutChart() {
         return color;
     }
 
-    console.log(generateRandomColor)
-
     const data = {
         datasets: [{
-            data: [10, 20, 30],
-            backgroundColor: [
-                generateRandomColor(),
-                generateRandomColor(),
-                generateRandomColor()
-            ]
+            data: [30, 30, 30],
+            backgroundColor: randomColors
         },
         ],
-        // These labels appear in the legend and in the tooltips when hovering different arcs
         labels: [
             'Coin Name 1',
             'Coin Name 2',

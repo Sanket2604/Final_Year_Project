@@ -55,14 +55,14 @@ export default function Nav(props) {
                             <div className="text">Dashboard</div>
                         </div>
                     </Link>
-                    <Link to="/user_transactions">
+                    <Link to="/transaction_dashboard">
                         <div className="nav_ele" id="2" onMouseOver={()=>navMouseOver()} onClick={()=>activeNavEle(2)}>
                             <FontAwesomeIcon icon={faMoneyBillTransfer} />
                             <div className="text">Transactions</div>
                         </div>
                     </Link>
-                    <Link to="/user_transactions">
-                        <div className="nav_ele" id="2" onMouseOver={()=>navMouseOver()} onClick={()=>activeNavEle(2)}>
+                    <Link to="/loan_dashboard">
+                        <div className="nav_ele" id="5" onMouseOver={()=>navMouseOver()} onClick={()=>activeNavEle(2)}>
                             <FontAwesomeIcon icon={faHandHoldingDollar} />
                             <div className="text">Loans Tracking</div>
                         </div>

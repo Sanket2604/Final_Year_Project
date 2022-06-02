@@ -1,12 +1,12 @@
-.stock_dashboard .row .heading_cont{
+.loan_dashboard .row .heading_cont{
     display: flex;
     justify-content: space-between;
 }
-.stock_dashboard .row .heading_cont .heading{
+.loan_dashboard .row .heading_cont .heading{
     font-size: 24px;
 }
 
-.stock_dashboard .invest_list{
+.loan_dashboard .invest_list{
     background-color: var(--secondary);
     padding-bottom: 10px;
     border-top-left-radius: 0px;
@@ -16,7 +16,7 @@
     max-height: 600px;
     overflow-y: scroll;
 }
-.stock_dashboard .invest_list.heading_sec{
+.loan_dashboard .invest_list.heading_sec{
     padding-bottom: 0;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -24,10 +24,10 @@
     border-bottom-right-radius: 0px;
     padding-top: 10px;
 }
-.stock_dashboard .invest_list::-webkit-scrollbar {
+.loan_dashboard .invest_list::-webkit-scrollbar {
     width: 0.4vw;
 }
-.stock_dashboard .invest_list .invest{
+.loan_dashboard .invest_list .invest{
     background-color: var(--secondary);
     filter: brightness(1.2);
     padding: 8px;
@@ -36,20 +36,20 @@
     cursor: pointer;
     transition: 0.5s ease-in-out;
 }
-.stock_dashboard .invest_list .invest:hover{
+.loan_dashboard .invest_list .invest:hover{
     transform: scale(1.01);
     filter: brightness(1.4);
 }
-.stock_dashboard .invest_list .invest.heading:hover{
+.loan_dashboard .invest_list .invest.heading:hover{
     transform: scale(1);
     filter: brightness(1.2);
 }
-.stock_dashboard .invest_list .invest .data{
+.loan_dashboard .invest_list .invest .data{
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.stock_dashboard .invest_list .invest .logo{
+.loan_dashboard .invest_list .invest .logo{
     height: 40px;
     min-width: 40px;
     border-radius: 100%;
@@ -57,34 +57,34 @@
     background-repeat: no-repeat;
     background-size: contain;
 }
-.stock_dashboard .invest_list .invest.heading .logo{
+.loan_dashboard .invest_list .invest.heading .logo{
     background-color: transparent;
     height: fit-content;
     width: fit-content;
 }
-.stock_dashboard .invest_list .invest .name{
+.loan_dashboard .invest_list .invest .name{
     font-size: 16px;
 }
-.stock_dashboard .invest_list .invest .change{
+.loan_dashboard .invest_list .invest .change{
     position: absolute;
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
     font-size: 14px;
 }
-.stock_dashboard .invest_list .invest .change svg{
+.loan_dashboard .invest_list .invest .change svg{
     margin-right: 3px;
     font-size: 15px;
 }
-.stock_dashboard .invest_list .invest .change .profit,
-.stock_dashboard .invest_list .invest .change .profit svg path{
+.loan_dashboard .invest_list .invest .change .profit,
+.loan_dashboard .invest_list .invest .change .profit svg path{
     color: var(--success);
 }
-.stock_dashboard .invest_list .invest .price_change .zero,
-.stock_dashboard .invest_list .invest .change .zero svg path{
+.loan_dashboard .invest_list .invest .price_change .zero,
+.loan_dashboard .invest_list .invest .change .zero svg path{
     color: var(--fontColour);
 }
-.stock_dashboard .invest_list .invest .change .loss,
-.stock_dashboard .invest_list .invest .change .loss svg path{
+.loan_dashboard .invest_list .invest .change .loss,
+.loan_dashboard .invest_list .invest .change .loss svg path{
     color: var(--danger);
 }

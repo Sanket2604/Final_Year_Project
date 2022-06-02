@@ -1,0 +1,31 @@
+.specific_cat .row > .heading{
+    font-size: 24px;
+}
+.specific_cat .data_sec .percentage{
+    font-size: 14px;
+    text-align: end;
+}
+.specific_cat .data_sec .status_bar{
+    position: relative;
+    background-color: var(--secondary);
+    filter: brightness(1.4);
+    border-radius: 50px;
+    height: 25px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.specific_cat .data_sec .status_bar .progress_bar{
+    background-color: var(--primary);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 50px;
+    /* border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px; */
+    transition: 0.25s ease-in-out;
+}
+.specific_cat .data_sec .amount{
+    font-size: 18px;
+    text-align: end;
+}

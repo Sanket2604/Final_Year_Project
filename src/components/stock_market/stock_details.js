@@ -6,7 +6,7 @@ import LineChart from './line_chart';
 import BarChartVolume from './bar_chart_volume';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons'
-import { company_logo } from './Stock_Symbols_Jeet_'
+import { stock_links } from './stock_links'
 import { useParams } from 'react-router-dom';
 import { Select } from 'antd';
 import { useGetStockDetailQuery } from '../../services/stockDetailApi';
@@ -163,7 +163,7 @@ export default function StockDetails() {
             <div className={"heading_cont" + (isFetching ? ' loading' : '')}>
                 {isFetching ?
                     <div className="image"></div> :
-                    <img src={company_logo[stockDetail?.symbol]}></img>
+                    <img src={stock_links[stockDetail?.symbol][0]} alt='Error'></img>
                 }
                 <div className="heading ms-2">{isFetching ? '' : `${stockDetail?.quoteType?.shortName}`}</div>
             </div>

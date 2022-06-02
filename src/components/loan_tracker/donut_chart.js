@@ -5,7 +5,7 @@ ChartJs.register(
     Tooltip, Title, ArcElement, Legend
 );
 
-export default function StockDonutChart() {
+export default function LoanDonutChart() {
 
     const [randomColors, setRandomColors]=useState()
     const reRender = 0
@@ -28,11 +28,10 @@ export default function StockDonutChart() {
             backgroundColor: randomColors
         },
         ],
-        // These labels appear in the legend and in the tooltips when hovering different arcs
         labels: [
-            'Stock Name 1',
-            'Stock Name 2',
-            'Stock Name 3'
+            'Loan Name 1',
+            'Loan Name 2',
+            'Loan Name 3'
         ],
     };
 

@@ -7,13 +7,24 @@
 }
 .crypto_dashboard .invest_list{
     background-color: var(--secondary);
-    padding-block: 10px;
-    border-radius: 5px;
+    padding-bottom: 10px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     max-height: 600px;
     overflow-y: scroll;
 }
+.crypto_dashboard .invest_list.heading_sec{
+    padding-bottom: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    padding-top: 10px;
+}
 .crypto_dashboard .invest_list::-webkit-scrollbar {
-    width: 0.3vw;
+    width: 0.4vw;
 }
 .crypto_dashboard .invest_list .invest{
     background-color: var(--secondary);

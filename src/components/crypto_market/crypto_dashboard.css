@@ -1,3 +1,6 @@
+.crypto_market .row .heading{
+    font-size: 24px;
+}
 .crypto_dashboard .row .heading_cont{
     display: flex;
     justify-content: space-between;

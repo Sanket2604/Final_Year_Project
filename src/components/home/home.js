@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import LoanDonutChart from '../loan_tracker/donut_chart'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHandHoldingDollar, faMoneyBill, faChartLine, faSackDollar, faChartSimple } from '@fortawesome/free-solid-svg-icons'
+import { faHandHoldingDollar, faMoneyBill, faChartLine, faSackDollar, faChartSimple, faPlus, faFileCircleCheck, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { faBitcoin } from '@fortawesome/free-brands-svg-icons'
 import './home.css'
 
@@ -33,40 +33,40 @@ export default function Home() {
                     </div>
                 </div>
                 <div className="col-2">
-                    <div className="box">
+                    <Link to="/borrower_details" className="box">
                         <FontAwesomeIcon icon={faSackDollar} />
                         <div className="content">
                             <div className="subtext">Money Borrowed</div>
                             <div className="text">₹ 10000</div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
                 <div className="col-2">
-                    <div className="box">
+                    <Link to="/lender_details" className="box">
                         <FontAwesomeIcon icon={faHandHoldingDollar} />
                         <div className="content">
                             <div className="subtext">Money Lent</div>
                             <div className="text">₹ 10000</div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
                 <div className="col-2">
-                    <div className="box">
+                    <Link to="/stock_dashboard" className="box">
                         <FontAwesomeIcon icon={faChartLine} />
                         <div className="content">
                             <div className="subtext">Stock Investment</div>
                             <div className="text">₹ 10000</div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
                 <div className="col-2">
-                    <div className="box">
+                    <Link to="/crypto_dashboard" className="box">
                         <FontAwesomeIcon icon={faBitcoin} />
                         <div className="content">
                             <div className="subtext">Crypto Investment</div>
                             <div className="text">₹ 10000</div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
                 <div className="col-2">
                     <div className="box">
@@ -78,7 +78,41 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div className="row pie_charts mt-4">
+            <div className="row middle_row my-5">
+                <div className="col-3">
+                    <div className="box">
+                        <FontAwesomeIcon icon={faPlus} />
+                        <div className="content">
+                            <div className="text">Add A New Transaction</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-3">
+                    <Link to="/transaction_details" className="box">
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                        <div className="content">
+                            <div className="text">Edit A Transaction</div>
+                        </div>
+                    </Link>
+                </div>
+                <div className="col-3">
+                    <div className="box">
+                        <FontAwesomeIcon icon={faFileCircleCheck} />
+                        <div className="content">
+                            <div className="text">View Porfolio Review</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-3">
+                    <div className="box">
+                        <FontAwesomeIcon icon={faMoneyBill} />
+                        <div className="content">
+                            <div className="text">₹ 10000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="row pie_charts">
                 <div className="col-6">
                     <div className="pie_cont">
                         <div className="heading_cont">

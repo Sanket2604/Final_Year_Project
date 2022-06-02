@@ -39,7 +39,10 @@ export default function StockMarket() {
                     stock.name?.toLowerCase().includes(searchTerm.toLowerCase()) || stock.symbol?.toLowerCase().includes(searchTerm.toLowerCase())
                 )
             })
-            setStockList(filtteredData)
+            let newData = filtteredData?.map((item) => 
+                Object.assign({}, item, {logo: stock_links[item.symbol]?.[0], altlogo: stock_links[item.symbol]?.[1]})
+            )
+            setStockList(newData)
         }
     }, [searchTerm])
 

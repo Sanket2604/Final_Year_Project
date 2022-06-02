@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react'
 import TransactionCard from '../cards/transaction_card'
 import { Form, Row, Label, Input, Col } from "reactstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import './transaction_details.css'
 
 export default function TransactionDetails() {
@@ -17,6 +19,10 @@ export default function TransactionDetails() {
 
     return (
         <div className="container trans_details py-5">
+            <div className="add_transaction_btn">
+                <FontAwesomeIcon icon={faPlus} />
+                <div className="text">Add A New Transaction</div>
+            </div>
             <div className="row">
                 <div className="col-12 heading mb-4">
                     <div className="heading">Show Data by Date</div>

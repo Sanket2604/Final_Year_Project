@@ -1,12 +1,18 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import LoanDonutChart from './donut_chart'
 import TransactionCard from '../cards/transaction_card';
+import { TransactionModal } from './transaction_modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Form, Row, Label, Input, Col } from "reactstrap";
 import { Link } from 'react-router-dom'
 import './transaction_dashboard.css'
 
 export default function TransactionDashboard() {
     
+    const [modalOpen, setModalOpen]=useState(false)
+    const [newTransaction, setNewTransaction]=useState(false)
+
     useEffect(()=>{
         document.title = `CDFYP | Transaction Tracker`
         window.scrollTo(0, 0)
@@ -17,8 +23,18 @@ export default function TransactionDashboard() {
         document.getElementById('2').classList.add('active')
     },[])
 
+    function triggerEditModal(add) {
+        setModalOpen(!modalOpen)
+        setNewTransaction(add)
+    }
+
     return (
         <div className="trans_dashboard container py-5">
+            <TransactionModal modalOpen={modalOpen} newTransaction={newTransaction} setModalOpen={setModalOpen} />
+            <div className="add_transaction_btn" onClick={()=>triggerEditModal(true)}>
+                <FontAwesomeIcon icon={faPlus} />
+                <div className="text">Add A New Transaction</div>
+            </div>
             <div className="row">
                 <div className="col-12 heading_cont mb-4">
                     <div className="heading">Show Data by Date</div>
@@ -78,7 +94,7 @@ export default function TransactionDashboard() {
                     <Link to="/transaction_details" className="btn_cont"><div className='btn_ btn_small'>View All</div></Link>
                 </div>
                 {[...Array(10)].map((j,i)=>
-                    <TransactionCard/>
+                    <TransactionCard triggerEditModal={triggerEditModal} />
                 )}
             </div>
         </div>

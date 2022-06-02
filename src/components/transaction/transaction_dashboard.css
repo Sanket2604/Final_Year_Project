@@ -1,3 +1,37 @@
+.add_transaction_btn{
+    position: fixed;
+    display: grid;
+    place-items: center;
+    bottom: 20px;
+    right: 20px;
+    height: 60px;
+    width: 60px;
+    border-radius: 100%;
+    font-size: 32px;
+    background-color: var(--secondary);
+    border: 2px solid var(--lineColour);
+    cursor: pointer;
+    z-index: 5;
+}
+.add_transaction_btn:hover{
+    filter: brightness(1.1);
+}
+.add_transaction_btn .text{
+    position: absolute;
+    width: max-content;
+    padding: 5px 10px;
+    background-color: var(--primary);
+    border: 2px solid var(--lineColour);
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-70%, 10px);
+    transition: 0.25s ease-in-out;
+}
+.add_transaction_btn:hover .text{
+    opacity: 1;
+    transform: translate(-70%, 0);
+}
 .trans_dashboard .row .heading_cont{
     display: flex;
     justify-content: space-between;
@@ -5,7 +39,6 @@
 .trans_dashboard .row .heading_cont .heading{
     font-size: 24px;
 }
-
 .trans_dashboard .invest_list{
     background-color: var(--secondary);
     padding-bottom: 10px;

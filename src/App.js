@@ -13,10 +13,12 @@ import BorrowerDetails from './components/loan_tracker/borrower_details';
 import StockDashboard from './components/stock_market/stock_dashboard';
 import StockNews from './components/stock_market/stock_news';
 import StockMarket from './components/stock_market/stock_market';
+import UserStock from './components/stock_market/user_stock';
 import StockDetails from './components/stock_market/stock_details';
 import CryptoDashboard from './components/crypto_market/crypto_dashboard';
 import CryptoCurrencies from './components/crypto_market/crypto_currencies';
 import CryptoCoinDetail from './components/crypto_market/coin_detail';
+import UserCrypto from './components/crypto_market/user_crypto';
 import CryptoCurrenciesNews from './components/crypto_market/crypto_news';
 
 function App() {
@@ -49,10 +51,12 @@ function App() {
             <Route exact path="/stock_dashboard" component={()=><StockDashboard />} />
             <Route exact path="/stock_news" component={()=><StockNews />} />
             <Route exact path="/stock_market" component={()=><StockMarket />} />
+            <Route exact path="/user_stock_investments" component={()=><UserStock />} />
             <Route exact path="/stock_market/:stockSymbol" component={()=><StockDetails />} />
             <Route exact path="/crypto_dashboard" component={()=><CryptoDashboard />} />
             <Route exact path="/crypto_market" component={()=><CryptoCurrencies />} />
             <Route exact path="/crypto_coin/:coinId" component={()=><CryptoCoinDetail />} />
+            <Route exact path="/user_crypto_investments" component={()=><UserCrypto />} />
             <Route exact path="/crypto_news" component={()=><CryptoCurrenciesNews />} />
             <Redirect to="/dashboard" />
         </Switch>

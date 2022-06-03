@@ -40,7 +40,7 @@ export default function StockDashboard() {
             <div className="row mb-4">
                 <div className="col-12 heading_cont mb-4">
                     <div className="heading">Your Stock Investment</div>
-                    <Link to="/crypto_investments" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
+                    <Link to="/user_stock_investments" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                 </div>
                 <div className="col-12 col-lg-6">
                     <StockDonutChart />
@@ -48,27 +48,21 @@ export default function StockDashboard() {
                 <div className="col-12 col-lg-6">
                     <div className="container-fluid invest_list heading_sec ms-1 mt-4 mt-lg-0">
                         <div className="row invest heading">
-                            <div className="col-3 data name ms-2">Name</div>
-                            <div className="col-3 data pos_price ms-2">Invest Price</div>
-                            <div className="col-1 data quantity ms-2">Qty</div>
-                            <div className="col-3 data total_money ms-2">Total Investment</div>
+                            <div className="col-1 data pos">Pos</div>
+                            <div className="col-3 data name">Name</div>
+                            <div className="col-3 data pos_price">Invest Price</div>
+                            <div className="col-2 data quantity">Qty</div>
+                            <div className="col-3 data total_money">Total</div>
                         </div>
                     </div>
                     <div className="container-fluid invest_list ms-1">
                         {[...Array(20)].map((j,i)=>
                             <div className="row invest my-2" key={i}>
-                                <div className="col-3 data name ms-2">Stock Name</div>
-                                <div className="col-3 data pos_price ms-2">₹ 10000</div>
-                                <div className="col-1 data quantity ms-2">x2</div>
-                                <div className="col-3 data total_money ms-2">₹ 20000
-                                    <div className='change ms-2'>
-                                    {true>0 ? 
-                                        (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{10}%</span>): 
-                                        (2===0 ? 
-                                            (<span className='zero'>{0}%</span>):
-                                            (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(10)}%</span>))}
-                                    </div>
-                                </div>
+                                <div className="col-1 "><div className="symbol sell">S</div></div>
+                                <div className="col-3 data name">Stock Name</div>
+                                <div className="col-3 data pos_price">₹ 10000</div>
+                                <div className="col-2 data quantity">x2</div>
+                                <div className="col-3 data total_money">₹ 20000</div>
                             </div>
                         )}
                     </div>

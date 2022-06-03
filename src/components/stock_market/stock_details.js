@@ -177,34 +177,30 @@ export default function StockDetails() {
             </div>
             <LineChart stockHistory={stockHistory} stockName={stockDetail?.quoteType?.shortName} timeperiod={timeperiod} isFetching={isFetching} inrValue={inrValue} />
             <BarChartVolume stockHistory={stockHistory} stockName={stockDetail?.quoteType?.shortName} timeperiod={timeperiod} isFetching={isFetching} />
-            <div className="row mt-4 mb-4 user_investment">
-                <div className="heading mb-3">Your Investment In {stockDetail?.quoteType?.shortName}</div>
+            <div className="row mt-5 user_investment">
                 <div className="container-fluid">
                     <div className="row title">
-                        <div className="col-2 data">Purchase</div>
-                        <div className="col-2 data">Amount</div>
+                        <div className="col-3 data">Investment</div>
                         <div className="col-2 data">Date</div>
                         <div className="col-2 data">Quantity</div>
+                        <div className="col-3 data">Current Value</div>
                         <div className="col-2 data">% Change</div>
-                        <div className="col-2 data">Current Value</div>
                     </div>
                     <div className="row invest_data">
-                        <div className="col-2 data">₹1000</div>
-                        <div className="col-2 data">₹1000</div>
+                        <div className="col-3 data">₹1000</div>
                         <div className="col-2 data">16/05/2022</div>
                         <div className="col-2 data">1</div>
-                        <div className="col-2 data"><span className='profit'><FontAwesomeIcon icon={faCaretUp} />10%</span></div>
-                        <div className="col-2 data">₹1100</div>
-                        <div className="symbol buy">Buy</div>
+                        <div className="col-3 data">₹1100</div>
+                        <div className="col-2 data"><span className='loss'><FontAwesomeIcon icon={faCaretDown} />10%</span></div>
+                        <div className="symbol sell">Sell</div>
                     </div>
                     <div className="row invest_data">
-                        <div className="col-2 data">₹1000</div>
-                        <div className="col-2 data">₹500</div>
-                        <div className="col-2 data">17/05/2022</div>
-                        <div className="col-2 data">2</div>
-                        <div className="col-2 data"><span className='loss'><FontAwesomeIcon icon={faCaretDown} />10%</span></div>
-                        <div className="col-2 data">₹900</div>
-                        <div className="symbol sell">Sell</div>
+                        <div className="col-3 data">₹1000</div>
+                        <div className="col-2 data">16/05/2022</div>
+                        <div className="col-2 data">1</div>
+                        <div className="col-3 data">₹1100</div>
+                        <div className="col-2 data"><span className='profit'><FontAwesomeIcon icon={faCaretUp} />10%</span></div>
+                        <div className="symbol buy">Buy</div>
                     </div>
                 </div>
                 <div className="bottom_footer pt-3">

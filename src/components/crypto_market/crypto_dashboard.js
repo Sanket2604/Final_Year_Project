@@ -30,8 +30,8 @@ export default function CryptoDashboard() {
         <div className="container crypto_dashboard pt-4 pb-5">
             <div className="row mb-4">
                 <div className="col-12 heading_cont mt-4 mb-4">
-                    <div className="heading">Your Cryptocurrency Investment</div>
-                    <Link to="/crypto_investments" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
+                    <div className="heading">Cryptocurrency Dashboard</div>
+                    <Link to="/user_crypto_investments" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                 </div>
                 <div className="col-12 col-lg-6">
                     <CryptoDonutChart />

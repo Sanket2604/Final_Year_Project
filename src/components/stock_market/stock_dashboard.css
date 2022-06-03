@@ -49,18 +49,23 @@
     justify-content: center;
     align-items: center;
 }
-.stock_dashboard .invest_list .invest .logo{
-    height: 40px;
-    min-width: 40px;
+.stock_dashboard .invest_list .invest .symbol{
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
+    font-size: 14px;
+    font-weight: 500;
 }
-.stock_dashboard .invest_list .invest.heading .logo{
-    background-color: transparent;
-    height: fit-content;
-    width: fit-content;
+.stock_dashboard .invest_list .invest .symbol.buy{
+    border: 2px solid var(--success);
+    background-color: var(--success);
+}
+.stock_dashboard .invest_list .invest .symbol.sell{
+    border: 2px solid var(--danger);
+    background-color: var(--danger);
 }
 .stock_dashboard .invest_list .invest .name{
     font-size: 16px;

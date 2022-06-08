@@ -13,7 +13,11 @@
     transition: 0.3s ease-in-out;
 }
 .modal .name_box:hover{
+    filter: brightness(1.2);
+}
+.modal .name_box.highlight{
     filter: brightness(1.4);
+    transform: scale(1.1);
 }
 .modal .name_box.add_name{
     border: 2px dashed var(--lineColour);
@@ -27,8 +31,10 @@
     border: 2px solid var(--danger);
     color: var(--danger);
     cursor: pointer;
+    transition: 0.3s ease-in-out;
 }
-.modal .active.highlight{
+.modal .active.highlight,
+.modal .active:hover{
     background-color: var(--danger);
     color: white;
 }
@@ -38,8 +44,10 @@
     border: 2px solid var(--success);
     color: var(--success);
     cursor: pointer;
+    transition: 0.3s ease-in-out;
 }
-.modal .completed.highlight{
+.modal .completed.highlight,
+.modal .completed:hover{
     background-color: var(--success);
     color: white;
 }
@@ -91,6 +99,9 @@
 }
 .debt_details .debt_table .data_row .data.name_sec:hover{
     cursor: pointer;
+}
+.debt_details .debt_table .data_row .data.name_sec.no_line:hover{
+    cursor: initial;
 }
 .debt_details .debt_table .data_row .data:hover .name::after{
     width: 100%;

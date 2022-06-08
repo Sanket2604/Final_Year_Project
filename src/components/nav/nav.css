@@ -124,9 +124,9 @@ input{
 
 .btn_cont .btn_ {
     background-color: var(--btnColour);
-    padding: 10px 30px;
+    padding: 7px 30px;
     border-radius: 50px;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
     transition: 0.5s ease-in-out;
 }
@@ -214,7 +214,16 @@ input{
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
-
+.form_error{
+    margin-top: 5px;
+    padding-left: 5px;
+    font-size: 13px;
+    color: var(--danger);
+    display: none;
+}
+.form_error.error{
+    display: block;
+}
 .nav_bar {
     position: fixed;
     border-left: 10px solid var(--primary);

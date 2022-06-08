@@ -75,6 +75,7 @@ export default function CryptoCoinDetail() {
         })
         document.getElementById('4').classList.add('active')
     },[])
+
     return (
         <div className="container coin_details pt-5 pb-5">
             <div className={"heading_cont"+(isFetching?' loading':'')}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHouseChimney, faRightFromBracket, faBell, faChartLine, faMoneyBillTransfer, faUserGear, faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons'
 import { faBitcoin } from '@fortawesome/free-brands-svg-icons'
@@ -44,7 +44,7 @@ export default function Nav(props) {
 
     return (
         <>
-            <div className={"nav_bar active"+ (props.navShow ? " hidden":"")} onMouseOver={()=>{addActive()}} onMouseOut={()=>navMouseOut()}>
+            <div className={"nav_bar active"+ (props.hideNav ? " hidden":"")} onMouseOver={()=>{addActive()}} onMouseOut={()=>navMouseOut()}>
                 <div className="brand">
                     <div className="logo"></div>
                 </div>

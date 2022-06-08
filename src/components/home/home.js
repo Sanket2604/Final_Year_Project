@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import LoanDonutChart from '../loan_tracker/donut_chart'
+import axios from 'axios'
+import { url } from '../../url'
 import { TransactionModal } from '../transaction/transaction_modal'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,6 +12,8 @@ import './home.css'
 export default function Home() {
 
     const [modalOpen, setModalOpen]=useState(false)
+    const [loanData, setLoanData] = useState([])
+    const token = JSON.parse(localStorage.getItem("profile"))?.token
 
     useEffect(() => {
         document.title = `CDFYP | Home`
@@ -19,6 +23,26 @@ export default function Home() {
             ele.classList.remove('active')
         })
         document.getElementById('1').classList.add('active')
+        if (token) {
+            try {
+                axios
+                    .get(url + '/loan/getLenderDetails', {
+                        headers: { 'authorization': `Bearer ${token}` }
+                    })
+                    .then((res) => {
+                        setLoanData(res.data.lenderDetails.loans)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+        else {
+            window.location.replace("/login")
+        }
     }, [])
 
     function triggerEditModal() {
@@ -146,19 +170,19 @@ export default function Home() {
                 <div className="col-6">
                     <div className="pie_cont">
                         <div className="heading_cont">
-                            <div className="heading">Borrowed Debt</div>
-                            <Link to="/borrower_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
+                            <div className="heading">Lender Loans</div>
+                            <Link to="/lender_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            <LoanDonutChart />
+                            <LoanDonutChart loans={loanData} />
                         </div>
                     </div>
                 </div>
                 <div className="col-6">
                     <div className="pie_cont">
                         <div className="heading_cont">
-                            <div className="heading">Lent Debt</div>
-                            <Link to="/lender_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
+                            <div className="heading">Borrower Loans</div>
+                            <Link to="/borrower_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
                             <LoanDonutChart />

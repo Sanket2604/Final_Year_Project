@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import Nav from './components/nav/nav';
 import DialogBox from './components/modal/modal';
+import Login from './components/acoount/login'
+import Signup from './components/acoount/signup'
 import Home from './components/home/home';
 import TransactionDashboard from './components/transaction/transaction_dashboard';
 import TransactionDetails from './components/transaction/transaction_details'
@@ -23,7 +25,7 @@ import CryptoCurrenciesNews from './components/crypto_market/crypto_news';
 
 function App() {
   const [modal, setModal] = useState({open: false, header: "", body: ""})
-
+  const [hideNav, setHideNav] = useState(false)
   function closeModal(){
     setModal({open: !modal.open})
   }
@@ -37,28 +39,30 @@ function App() {
   }
   return (
     <BrowserRouter>
-        <Nav /> 
+        <Nav hideNav={hideNav} /> 
         <DialogBox modal={modal} closeModal={closeModal} />
         <Switch>
-            <Route exact path="/dashboard" component={()=><Home />} />
-            <Route exact path="/transaction_dashboard" component={()=><TransactionDashboard />} />
-            <Route exact path="/transaction_details" component={()=><TransactionDetails />} />
-            <Route exact path="/category_details" component={()=><CategoryDetails />} />
-            <Route exact path="/category_details/:catName" component={()=><SpecificCategory />} />
-            <Route exact path="/loan_dashboard" component={()=><LoanDashboard />} />
-            <Route exact path="/lender_details" component={()=><LenderDetails />} />
-            <Route exact path="/borrower_details" component={()=><BorrowerDetails />} />
-            <Route exact path="/stock_dashboard" component={()=><StockDashboard />} />
-            <Route exact path="/stock_news" component={()=><StockNews />} />
-            <Route exact path="/stock_market" component={()=><StockMarket />} />
-            <Route exact path="/user_stock_investments" component={()=><UserStock />} />
-            <Route exact path="/stock_market/:stockSymbol" component={()=><StockDetails />} />
-            <Route exact path="/crypto_dashboard" component={()=><CryptoDashboard />} />
-            <Route exact path="/crypto_market" component={()=><CryptoCurrencies />} />
-            <Route exact path="/crypto_coin/:coinId" component={()=><CryptoCoinDetail />} />
-            <Route exact path="/user_crypto_investments" component={()=><UserCrypto />} />
-            <Route exact path="/crypto_news" component={()=><CryptoCurrenciesNews />} />
-            <Redirect to="/dashboard" />
+          <Route exact path="/login" component={()=><Login setHideNav={setHideNav} />} />
+          <Route exact path="/signup" component={()=><Signup setHideNav={setHideNav} />} />
+          <Route exact path="/dashboard" component={()=><Home />} />
+          <Route exact path="/transaction_dashboard" component={()=><TransactionDashboard />} />
+          <Route exact path="/transaction_details" component={()=><TransactionDetails />} />
+          <Route exact path="/category_details" component={()=><CategoryDetails />} />
+          <Route exact path="/category_details/:catName" component={()=><SpecificCategory />} />
+          <Route exact path="/loan_dashboard" component={()=><LoanDashboard />} />
+          <Route exact path="/lender_details" component={()=><LenderDetails />} />
+          <Route exact path="/borrower_details" component={()=><BorrowerDetails />} />
+          <Route exact path="/stock_dashboard" component={()=><StockDashboard />} />
+          <Route exact path="/stock_news" component={()=><StockNews />} />
+          <Route exact path="/stock_market" component={()=><StockMarket />} />
+          <Route exact path="/user_stock_investments" component={()=><UserStock />} />
+          <Route exact path="/stock_market/:stockSymbol" component={()=><StockDetails />} />
+          <Route exact path="/crypto_dashboard" component={()=><CryptoDashboard />} />
+          <Route exact path="/crypto_market" component={()=><CryptoCurrencies />} />
+          <Route exact path="/crypto_coin/:coinId" component={()=><CryptoCoinDetail />} />
+          <Route exact path="/user_crypto_investments" component={()=><UserCrypto />} />
+          <Route exact path="/crypto_news" component={()=><CryptoCurrenciesNews />} />
+          <Redirect to="/dashboard" />
         </Switch>
     </BrowserRouter>
   );

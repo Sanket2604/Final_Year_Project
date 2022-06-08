@@ -1,17 +1,37 @@
 import React, {useState,useEffect} from 'react'
 import { Chart as ChartJs, Tooltip, Title, ArcElement, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+
 ChartJs.register(
     Tooltip, Title, ArcElement, Legend
 );
 
-export default function LoanDonutChart() {
+export default function LoanDonutChart({loans}) {
 
     const [randomColors, setRandomColors]=useState()
     const reRender = 0
+    const [labels, setLabels] = useState([])
+    const [dataSet, setDataSet] = useState([])
     useEffect(() => {
         setRandomColors([generateRandomColor(),generateRandomColor(),generateRandomColor()])
     }, [reRender])
+
+    useEffect(()=>{
+        let tempLabel=[], tempDataSet=[]
+        let pos=-1
+        loans?.map(loan=>{
+            if(tempLabel.includes(loan.name)){
+                pos = tempLabel.indexOf(loan.name)
+                tempDataSet[pos]+=loan.total
+            }
+            else{
+                tempLabel.push(loan.name)
+                tempDataSet.push(loan.total)
+            }
+        })
+        setLabels(tempLabel)
+        setDataSet(tempDataSet)
+    }, [loans])
     
     function generateRandomColor() {
         var letters = '0123456789ABCDEF';
@@ -24,15 +44,11 @@ export default function LoanDonutChart() {
 
     const data = {
         datasets: [{
-            data: [30, 30, 30],
+            data: dataSet,
             backgroundColor: randomColors
         },
         ],
-        labels: [
-            'Loan Name 1',
-            'Loan Name 2',
-            'Loan Name 3'
-        ],
+        labels: labels,
     };
 
     return (

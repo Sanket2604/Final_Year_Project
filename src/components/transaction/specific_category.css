@@ -1,10 +1,6 @@
 .specific_cat .row > .heading{
     font-size: 24px;
 }
-.specific_cat .data_sec .percentage{
-    font-size: 14px;
-    text-align: end;
-}
 .specific_cat .data_sec .status_bar{
     position: relative;
     background-color: var(--secondary);
@@ -20,10 +16,19 @@
     top: 0;
     bottom: 0;
     left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     border-radius: 50px;
     /* border-top-right-radius: 0px;
     border-bottom-right-radius: 0px; */
     transition: 0.25s ease-in-out;
+}
+.specific_cat .data_sec .status_bar .progress_bar .percentage{
+    font-size: 14px;
+}
+.specific_cat .data_sec .status_bar .progress_bar .percentage.outside{
+    transform: translateX(60px);
 }
 .specific_cat .data_sec .amount{
     font-size: 18px;

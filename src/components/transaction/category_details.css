@@ -15,10 +15,6 @@
 .cat_details .category_card .name{
     font-size: 22px;
 }
-.cat_details .category_card .percentage{
-    font-size: 14px;
-    text-align: end;
-}
 .cat_details .category_card .status_bar{
     position: relative;
     background-color: var(--secondary);
@@ -34,10 +30,19 @@
     top: 0;
     bottom: 0;
     left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     border-radius: 50px;
     /* border-top-right-radius: 0px;
     border-bottom-right-radius: 0px; */
     transition: 0.25s ease-in-out;
+}
+.cat_details .category_card .status_bar .progress_bar .percentage{
+    font-size: 14px;
+}
+.cat_details .category_card .status_bar .progress_bar .percentage.outside{
+    transform: translateX(60px);
 }
 .cat_details .category_card .amount{
     font-size: 18px;

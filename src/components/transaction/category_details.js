@@ -24,9 +24,10 @@ export default function CategoryDetails() {
                     <Link to='/category_details/Bills' className="col-4 pt-3" key={i}>
                         <div className="category_card">
                             <div className="name">Bills</div>
-                            <div className="percentage">50%</div>
                             <div className="status_bar">
-                                <div className="progress_bar" style={{width: '50%'}}></div>
+                                <div className="progress_bar" style={{width: '50%'}}>
+                                    {/* <div className={"percentage"+( < 10 ? ' outside' : '')}>{ }%</div> */}
+                                </div>
                             </div>
                             <div className="amount">1000/2000</div>
                         </div>

@@ -20,6 +20,10 @@ export default function CryptoCard(props) {
         return(unitNum)
     }
 
+    function reset(){
+        window.location.reload()
+    }
+
     if(props.isFetching){
         return [...Array(24)].map((j,i)=>
             <div className="col-6 col-md-3 col-lg-2 p-0" key={i}>
@@ -55,8 +59,8 @@ export default function CryptoCard(props) {
         }
         else{
             return(
-                <div className="no_coin">
-                    Only Top 100 Cryptocurrency's Data Is Available.
+                <div className="no_stock" onClick={reset}>
+                    Error Click To Refresh
                 </div>
             )
         }

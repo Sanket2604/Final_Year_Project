@@ -11,8 +11,9 @@ import './home.css'
 
 export default function Home() {
 
-    const [modalOpen, setModalOpen]=useState(false)
-    const [loanData, setLoanData] = useState([])
+    const [modalOpen, setModalOpen] = useState(false)
+    const [lenderData, setLenderData] = useState([])
+    const [borrowerData, setBorrowerData] = useState([])
     const token = JSON.parse(localStorage.getItem("profile"))?.token
 
     useEffect(() => {
@@ -30,7 +31,17 @@ export default function Home() {
                         headers: { 'authorization': `Bearer ${token}` }
                     })
                     .then((res) => {
-                        setLoanData(res.data.lenderDetails.loans)
+                        setLenderData(res.data.lenderDetails.loans)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+                axios
+                    .get(url + '/loan/getBorrowerDetails', {
+                        headers: { 'authorization': `Bearer ${token}` }
+                    })
+                    .then((res) => {
+                        setBorrowerData(res.data.borrowerDetails.loans)
                     })
                     .catch((error) => {
                         console.log(error)
@@ -174,7 +185,7 @@ export default function Home() {
                             <Link to="/lender_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            <LoanDonutChart loans={loanData} />
+                            <LoanDonutChart loans={lenderData} />
                         </div>
                     </div>
                 </div>
@@ -185,7 +196,7 @@ export default function Home() {
                             <Link to="/borrower_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            <LoanDonutChart />
+                            <LoanDonutChart loans={borrowerData} />
                         </div>
                     </div>
                 </div>

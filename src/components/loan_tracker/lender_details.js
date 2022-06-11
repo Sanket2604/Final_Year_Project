@@ -9,17 +9,19 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, Row, Label, Input, Col } from "reactstrap";
 import './lender_details.css'
 
-function EditModalForm({ loanData, editModal, setEditModal, closeEditModal, token, setLoanData }) {
+function EditModalForm({ loanData, editModal, closeEditModal, token, setLoanData }) {
 
     const [formData, setFormData] = useState({
-        name: '',
-        startDate: '',
-        endDate: '',
-        amount: '',
-        intrest: '',
-        paid: '',
-        status: ''
+        id: editModal.loan?._id ? editModal.loan._id : '',
+        name: editModal.loan?.name ? editModal.loan.name : '',
+        startDate: editModal.loan?.startDate ? editModal.loan.startDate : '',
+        endDate: editModal.loan?.endDate ? editModal.loan.endDate : '',
+        amount: editModal.loan?.amount ? editModal.loan.amount : '',
+        intrest: editModal.loan?.intrest ? editModal.loan.intrest : '',
+        paid: editModal.loan?.paid ? editModal.loan.paid : '',
+        status: editModal.loan?.status ? editModal.loan.status : ''
     })
+
     const [errors, setErrors] = useState(formData)
     let newLenderName = ''
     const [nameForm, setNameForm] = useState(false)
@@ -61,13 +63,11 @@ function EditModalForm({ loanData, editModal, setEditModal, closeEditModal, toke
     }
     function changeLoanStatus(status) {
         if (status) {
-            setEditModal({ ...editModal, amount: true })
             document.querySelector('.completed').classList.remove('highlight')
             document.querySelector('.active').classList.add('highlight')
             setFormData({ ...formData, status: 'active' })
         }
         else {
-            setEditModal({ ...editModal, amount: false })
             document.querySelector('.active').classList.remove('highlight')
             document.querySelector('.completed').classList.add('highlight')
             setFormData({ ...formData, status: 'completed', paid: 0 })
@@ -114,7 +114,7 @@ function EditModalForm({ loanData, editModal, setEditModal, closeEditModal, toke
         return true;
     }
 
-    function submitForm() {
+    function submitAddLoan() {
         const valid = validateForm()
         if (!valid) return
         axios
@@ -130,8 +130,25 @@ function EditModalForm({ loanData, editModal, setEditModal, closeEditModal, toke
             })
     }
 
+    function submitEditLoan() {
+        const valid = validateForm()
+        if (!valid) return
+        axios
+            .put(url + '/loan/editLenderLoan', formData, {
+                headers: { 'authorization': `Bearer ${token}` }
+            })
+            .then(() => {
+                alert("Loan Edited")
+                window.location.reload()
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
     return (
         <>
+            <ModalHeader toggle={closeEditModal}>{editModal.add ? formData.status === 'active' ? 'Add Active' : 'Add Completed' : formData.status === 'active' ? 'Edit Active' : 'Edit Completed'} Debt</ModalHeader>
             <ModalBody>
                 <Form>
                     <Row>
@@ -142,7 +159,7 @@ function EditModalForm({ loanData, editModal, setEditModal, closeEditModal, toke
                                     {loanData.lenderList?.length > 0 ?
                                         loanData.lenderList.map((name, i) =>
                                             <div className="col-2 mb-3" key={i}>
-                                                <div className="name_box" onClick={() => selectName(`bankname_${i}`, name)} id={`bankname_${i}`} name={name}>{name}</div>
+                                                <div className={"name_box" + (name === formData.name ? " highlight" : "")} onClick={() => selectName(`bankname_${i}`, name)} id={`bankname_${i}`} name={name}>{name}</div>
                                             </div>
                                         )
                                         : <></>
@@ -162,48 +179,48 @@ function EditModalForm({ loanData, editModal, setEditModal, closeEditModal, toke
                         {nameForm ?
                             <Col md={12} className='mb-3'>
                                 <Label htmlFor="name">Enter A New Lender Name</Label>
-                                <Input type="text" id="name" name="loanAmount" placeholder="Lender Name" value={newLenderName} onChange={e => newLenderName = e.target.value} />
+                                <Input type="text" id="name" name="loanAmount" placeholder="Lender Name" onChange={e => newLenderName = e.target.value} />
                                 <div id="error_amount" className='form_error'></div>
                                 <div className="btn_cont mt-3"><div className="btn_ btn_small" onClick={postLenderName}>Add</div></div>
                             </Col> : <></>
                         }
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="start_date">Start Date</Label>
-                            <Input type="date" id="startDate" name="startDate" placeholder="startDate" onChange={handleChange} />
+                            <Input type="date" id="startDate" name="startDate" placeholder="startDate" onChange={handleChange} value={moment(formData.startDate).format('YYYY-MM-DD')} />
                             <div id="error_startDate" className='form_error'>{errors.startDate}</div>
                         </Col>
                         <Col md={6} className='mb-4'>
                             <Label htmlFor="end_date">End Date</Label>
-                            <Input type="date" id="endDate" name="endDate" placeholder="endDate" onChange={handleChange} />
+                            <Input type="date" id="endDate" name="endDate" placeholder="endDate" onChange={handleChange} value={moment(formData.endDate).format('YYYY-MM-DD')} />
                             <div id="error_endDate" className='form_error'>{errors.endDate}</div>
                         </Col>
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="amount">Loan Amount</Label>
-                            <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="amount" name="amount" placeholder="Total Loan Amount (in rupees)" onChange={handleChange} />
+                            <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="amount" name="amount" placeholder="Total Loan Amount (in rupees)" value={formData.amount} onChange={handleChange} />
                             <div id="error_amount" className='form_error'>{errors.amount}</div>
                         </Col>
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="intrest">Intrest</Label>
-                            <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="intrest" name="intrest" placeholder="Rate of Intrest (in percentage)" onChange={handleChange} />
+                            <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="intrest" name="intrest" placeholder="Rate of Intrest (in percentage)" value={formData.intrest} onChange={handleChange} />
                             <div id="error_intrest" className='form_error'>{errors.intrest}</div>
                         </Col>
-                        {editModal.amount ?
+                        {formData.status === 'active' ?
                             <Col md={6} className='mb-3'>
                                 <Label htmlFor="paid">Amount Paid</Label>
-                                <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="paid" name="paid" placeholder="Amount Already Paid (in rupees)" onChange={handleChange} />
+                                <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="paid" name="paid" placeholder="Amount Already Paid (in rupees)" value={formData.paid} onChange={handleChange} />
                                 <div id="error_paid" className='form_error'>{errors.paid}</div>
                             </Col> : <></>
                         }
                         <Col md={12} className='d-flex justify-content-center align-items-center'>
                             <span className='col_heading mx-2'>Debt Status:</span>
-                            <span className={'active mx-2' + (editModal.amount ? ' highlight' : '')} onClick={() => changeLoanStatus(true)}>Active</span>
-                            <span className={'completed mx-2' + (!editModal.amount ? ' highlight' : '')} onClick={() => changeLoanStatus(false)}>Completed</span>
+                            <span className={'active mx-2' + (formData.status === 'active' ? ' highlight' : '')} onClick={() => changeLoanStatus(true)}>Active</span>
+                            <span className={'completed mx-2' + (formData.status === 'completed' ? ' highlight' : '')} onClick={() => changeLoanStatus(false)}>Completed</span>
                         </Col>
                     </Row>
                 </Form>
             </ModalBody>
             <ModalFooter>
-                <button type="button" className="btn btn-success" onClick={submitForm}>{editModal?.add ? 'Add' : 'Edit'}</button>
+                <button type="button" className="btn btn-success" onClick={editModal?.add ? submitAddLoan : submitEditLoan}>{editModal?.add ? 'Add' : 'Edit'}</button>
                 <button type="button" className="btn btn-secondary" onClick={closeEditModal}>Cancel</button>
             </ModalFooter>
         </>
@@ -216,8 +233,19 @@ export default function LenderDetails() {
     const [editModal, setEditModal] = useState({
         open: false,
         add: false,
-        amount: false
+        amount: false,
+        loan: {
+            _id: '',
+            name: '',
+            startDate: '',
+            endDate: '',
+            amount: '',
+            intrest: '',
+            paid: '',
+            status: ''
+        }
     })
+    let debtDeleteId
     const [nameDetails, setNameDetails] = useState({
         loans: [],
         totalAmount: 0,
@@ -264,23 +292,43 @@ export default function LenderDetails() {
     function closeDeleteModal() {
         setDeleteModal(false)
     }
-    function triggerDeleteModal() {
+    function triggerDeleteModal(id) {
         setDeleteModal(!deleteModal)
+        debtDeleteId = id
     }
+    function deleteDebt() {
+        axios
+            .delete(url + '/loan/deleteLenderLoan/' + debtDeleteId, {
+                headers: { 'authorization': `Bearer ${token}` }
+            })
+            .then((res) => {
+                alert('Debt Successfully Deleted')
+                window.location.reload()
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
     function closeEditModal() {
         setEditModal({ ...editModal, open: false })
     }
-    function triggerEditModal(add, amount) {
-        setEditModal({ open: true, add: add, amount: amount })
+    function triggerEditModal(add, amount, loan) {
+        if (loan) {
+            setEditModal({ open: true, add: add, amount: amount, loan: loan })
+        }
+        else {
+            setEditModal({ open: true, add: add, amount: amount })
+        }
     }
 
     function DeleteModal() {
         return (
             <Modal isOpen={deleteModal} toggle={closeDeleteModal}>
                 <ModalHeader toggle={closeDeleteModal}>Delete Debt?</ModalHeader>
-                <ModalBody>Delete Modal</ModalBody>
+                <ModalBody>Are You Sure You Want To Delete This Debt?</ModalBody>
                 <ModalFooter>
-                    <button type="button" className="btn btn-danger">Delete</button>
+                    <button type="button" className="btn btn-danger" onClick={deleteDebt}>Delete</button>
                     <button type="button" className="btn btn-secondary" onClick={closeDeleteModal}>Cancel</button>
                 </ModalFooter>
             </Modal>
@@ -290,7 +338,6 @@ export default function LenderDetails() {
     function EditModal() {
         return (
             <Modal size="xl" isOpen={editModal?.open} toggle={closeEditModal}>
-                <ModalHeader toggle={closeEditModal}>{editModal.add ? editModal.amount ? 'Add Active' : 'Add Completed' : editModal.amount ? 'Edit Active' : 'Edit Completed'} Debt</ModalHeader>
                 <EditModalForm loanData={loanData} editModal={editModal} setEditModal={setEditModal} closeEditModal={closeEditModal} token={token} setLoanData={setLoanData} />
             </Modal>
         )
@@ -320,11 +367,13 @@ export default function LenderDetails() {
             <DeleteModal />
             <EditModal />
             <div className="row">
-                <div className="col-12 col-lg-6 p-4">
-                    <LoanDonutChart loans={loanData?.loans} />
+                <div className="col-12 col-lg-6 p-5">
+                    <div className="pie_heading">Total Amount</div>
+                    <LoanDonutChart loans={loanData?.loans} chartType="Total" />
                 </div>
-                <div className="col-12 col-lg-6 p-1">
-                    Line Chart
+                <div className="col-12 col-lg-6 p-5">
+                    <div className="pie_heading">Remaining Amount</div>
+                    <LoanDonutChart loans={loanData?.loans} chartType="Remaining" />
                 </div>
             </div>
             <div className="row my-4 debt_table">
@@ -362,8 +411,8 @@ export default function LenderDetails() {
                                         <div className="col-1 data">{((loan.paid / loan.total) * 100).toFixed(2)}%</div>
                                         <div className="col-1 data">₹ {loan.total}</div>
                                         <div className="col-1 data">
-                                            <div className="edit" onClick={() => triggerEditModal(false, true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <div className="delete" onClick={triggerDeleteModal}><FontAwesomeIcon icon={faTrashAlt} /></div>
+                                            <div className="edit" onClick={() => triggerEditModal(false, true, loan)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+                                            <div className="delete" onClick={() => triggerDeleteModal(loan._id)}><FontAwesomeIcon icon={faTrashAlt} /></div>
                                         </div>
                                     </div>
                                 )}
@@ -408,8 +457,8 @@ export default function LenderDetails() {
                                         <div className="col-1 data">{loan.intrest}%</div>
                                         <div className="col-3 data">₹ {loan.total}</div>
                                         <div className="col-1 data">
-                                            <div className="edit" onClick={() => triggerEditModal(false, false)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <div className="delete" onClick={triggerDeleteModal}><FontAwesomeIcon icon={faTrashAlt} /></div>
+                                            <div className="edit" onClick={() => triggerEditModal(false, false, loan)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+                                            <div className="delete" onClick={() => triggerDeleteModal(loan._id)}><FontAwesomeIcon icon={faTrashAlt} /></div>
                                         </div>
                                     </div>
                                 )}
@@ -431,6 +480,16 @@ export default function LenderDetails() {
                         <div className="col-12">
                             <div className="details_cont container_fluid">
                                 <div className="row">
+                                    <div className="col-12 data_sec mt-2 mb-3">
+                                        <div className="status_bar">
+                                            <div className="progress_bar" style={{ width: ((nameDetails.totalPaid)/nameDetails.totalAmount)*100+'%' }}>
+                                                <div className={"percentage"+(((nameDetails.totalPaid)/nameDetails.totalAmount)*100 < 10 ? ' outside' : '')}>{(((nameDetails.totalPaid)/nameDetails.totalAmount)*100).toFixed(2)}%</div>
+                                            </div>
+                                        </div>
+                                        <div className="amount">₹ {nameDetails.totalPaid} / ₹ {nameDetails.totalAmount}</div>
+                                    </div>
+                                </div>
+                                <div className="row">
                                     <div className="col-3">
                                         <div className="detail my-2">
                                             <div className="title">Total Amount</div>
@@ -446,7 +505,7 @@ export default function LenderDetails() {
                                     <div className="col-3">
                                         <div className="detail my-2">
                                             <div className="title">Amount Remaining</div>
-                                            <div className="value">₹ {nameDetails.totalAmount-nameDetails.totalPaid}</div>
+                                            <div className="value">₹ {nameDetails.totalAmount - nameDetails.totalPaid}</div>
                                         </div>
                                     </div>
                                     <div className="col-3">
@@ -484,12 +543,12 @@ export default function LenderDetails() {
                                         <div className="col-1 data">{moment(loan.endDate).format('DD/MM/YYYY')}</div>
                                         <div className="col-2 data">₹ {loan.amount}</div>
                                         <div className="col-1 data">{loan.intrest}%</div>
-                                        <div className="col-2 data">₹ {loan.paid} (₹ {(loan.total-loan.paid).toFixed(2)})</div>
+                                        <div className="col-2 data">₹ {loan.paid} (₹ {(loan.total - loan.paid).toFixed(2)})</div>
                                         <div className="col-1 data">{((loan.paid / loan.total) * 100).toFixed(2)}%</div>
                                         <div className="col-1 data">₹ {loan.total}</div>
                                         <div className="col-1 data">
-                                            <div className="edit" onClick={() => triggerEditModal(false)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <div className="delete" onClick={triggerDeleteModal}><FontAwesomeIcon icon={faTrashAlt} /></div>
+                                            <div className="edit" onClick={() => triggerEditModal(false, false, loan)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+                                            <div className="delete" onClick={() => triggerDeleteModal(loan._id)}><FontAwesomeIcon icon={faTrashAlt} /></div>
                                         </div>
                                     </div>
                                 )}
@@ -498,7 +557,7 @@ export default function LenderDetails() {
                         <div className="col-12 total_sec pt-3">
                             <div>Borrowed: ₹ {nameDetails.totalBorrowed}</div>
                             <div>Total Repayment: ₹ {nameDetails.totalAmount}</div>
-                            <div>Extra: ₹ {(nameDetails.totalAmount-nameDetails.totalBorrowed).toFixed(2)}</div>
+                            <div>Extra: ₹ {(nameDetails.totalAmount - nameDetails.totalBorrowed).toFixed(2)}</div>
                         </div>
                     </div>
                 </>

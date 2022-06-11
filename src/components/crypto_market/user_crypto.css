@@ -1,5 +1,12 @@
+.modal .ant-select {
+    float: none;
+    width: 200px;
+    background-color: var(--primary);
+    margin-left: 20px;
+}
 .crypto_stock .row > .heading{
     font-size: 24px;
+    text-align: center;
 }
 .crypto_stock .user_investment .heading{
     font-size: 22px;
@@ -26,27 +33,19 @@
     position: relative;
 }
 .crypto_stock .user_investment .invest_data .symbol{
-    position: absolute;
-    top: 50%;
-    left: 5px;
-    transform: translateY(-50%);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;   
+    height: 50px;
+    width: 50px;
+}
+.crypto_stock .user_investment .data .status{
     font-size: 12px;
-    padding: 2px 10px;
-    width: fit-content;
-    border-radius: 5px;
-}
-.crypto_stock .user_investment .invest_data .symbol.buy{
-    border: 2px solid var(--success);
-    background-color: var(--success);
-}
-.crypto_stock .user_investment .invest_data .symbol.sell{
-    border: 2px solid var(--danger);
-    background-color: var(--danger);
 }
 .crypto_stock .user_investment .data .profit svg,
 .crypto_stock .user_investment .data .loss svg,
 .crypto_stock .user_investment .data .zero svg{
-    margin-right: 5px;
+    margin-right: 2px;
 }
 .crypto_stock .user_investment .data .profit,
 .crypto_stock .user_investment .data .profit svg path{
@@ -70,10 +69,10 @@
     transition: 0.5s ease-in-out;
 }
 .crypto_stock .user_investment .invest_data .modify.edit{
-    top: 0px;
+    top: 8px;
 }
 .crypto_stock .user_investment .invest_data .modify.delete{
-    bottom: 0px;
+    bottom: 8px;
 }
 .crypto_stock .user_investment .invest_data:hover .modify{
     opacity: 1;

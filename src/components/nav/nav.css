@@ -99,6 +99,7 @@ input{
 .ant-select-selector {
     background-color: var(--secondary) !important;
     border: none !important;
+    filter: brightness(1.2);
 }
 .ant-select-item-option-active {
     background-color: var(--secondary) !important;

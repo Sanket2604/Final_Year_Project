@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import CryptoNewsCard from '../cards/crypto_news';
-import { Select } from 'antd';
 import { useGetCryptosQuery } from '../../services/cryptoApi';
 import { useGetCryptoNewsQuery } from '../../services/cryptoNewsApi'
+import { Select } from 'antd';
 import 'antd/dist/antd.css'
 
 export default function CryptoCurrenciesNews() {

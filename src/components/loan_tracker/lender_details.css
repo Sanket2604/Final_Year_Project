@@ -51,8 +51,31 @@
     background-color: var(--success);
     color: white;
 }
+.no_data{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    border: 2px dashed var(--lineColour);
+    border-radius: 5px;
+    height: 29vh;
+}
+.modal_calculations{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal_calculations.fullrow{
+    justify-content: space-evenly;
+}
 .debt_details > .heading{
     font-size: 28px;
+    text-align: center;
+}
+.debt_details .pie_heading{
+    font-size: 20px;
+    margin-bottom: 40px;
+    text-align: center;
 }
 .debt_details .sub_heading{
     font-size: 24px;
@@ -126,6 +149,40 @@
 }
 .debt_details .debt_table .total_sec div{
     margin-left: 10px;
+}
+.debt_details .data_sec .status_bar{
+    position: relative;
+    background-color: var(--secondary);
+    filter: brightness(1.4);
+    border-radius: 50px;
+    height: 25px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.debt_details .data_sec .status_bar .progress_bar{
+    background-color: var(--primary);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-radius: 50px;
+    padding-right: 10px;
+    /* border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px; */
+    transition: 0.25s ease-in-out;
+}
+.debt_details .data_sec .status_bar .progress_bar .percentage{
+    font-size: 14px;
+}
+.debt_details .data_sec .status_bar .progress_bar .percentage.outside{
+    transform: translateX(60px);
+}
+.debt_details .data_sec .amount{
+    font-size: 18px;
+    text-align: end;
 }
 .debt_details .details_cont .col-3{
     padding-inline: 5px;

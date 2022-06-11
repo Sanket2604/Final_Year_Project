@@ -6,7 +6,7 @@ ChartJs.register(
     Tooltip, Title, ArcElement, Legend
 );
 
-export default function LoanDonutChart({loans}) {
+export default function LoanDonutChart({loans, chartType}) {
 
     const [randomColors, setRandomColors]=useState()
     const reRender = 0
@@ -19,16 +19,34 @@ export default function LoanDonutChart({loans}) {
     useEffect(()=>{
         let tempLabel=[], tempDataSet=[]
         let pos=-1
-        loans?.map(loan=>{
-            if(tempLabel.includes(loan.name)){
-                pos = tempLabel.indexOf(loan.name)
-                tempDataSet[pos]+=loan.total
-            }
-            else{
-                tempLabel.push(loan.name)
-                tempDataSet.push(loan.total)
-            }
-        })
+        if(chartType=='Remaining'){
+            loans?.map(loan=>{
+                if(loan.status==='active'){
+                    if(tempLabel.includes(loan.name)){
+                        pos = tempLabel.indexOf(loan.name)
+                        tempDataSet[pos]=parseFloat(tempDataSet[pos])+parseFloat((loan.total - loan.paid).toFixed(2))
+                    }
+                    else{
+                        tempLabel.push(loan.name)
+                        tempDataSet.push((loan.total - loan.paid).toFixed(2))
+                    }
+                }
+            })
+        }
+        if(chartType==='Total'){
+            loans?.map(loan=>{
+                if(loan.status==='active'){
+                    if(tempLabel.includes(loan.name)){
+                        pos = tempLabel.indexOf(loan.name)
+                        tempDataSet[pos]+=loan.total
+                    }
+                    else{
+                        tempLabel.push(loan.name)
+                        tempDataSet.push(loan.total)
+                    }
+                }
+            })
+        }
         setLabels(tempLabel)
         setDataSet(tempDataSet)
     }, [loans])

@@ -80,6 +80,7 @@ export default function LineChart({ coinHistory, currentPrice, coinName, timeper
                             return new Intl.NumberFormat('en-IN',{
                                 style: 'currency',
                                 currency: 'INR',
+                                minimumFractionDigits: 5
                             }).format(value)
                         } 
                     },

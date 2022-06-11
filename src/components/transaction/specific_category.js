@@ -23,9 +23,10 @@ export default function SpecificCategory() {
             </div>
             <div className="row">
                 <div className="col-12 data_sec mt-2 mb-3">
-                    <div className="percentage">50%</div>
                     <div className="status_bar">
-                        <div className="progress_bar" style={{width: '50%'}}></div>
+                        <div className="progress_bar" style={{width: '50%'}}>
+                            {/* <div className={"percentage"+( < 10 ? ' outside' : '')}>{ }%</div> */}
+                        </div>
                     </div>
                     <div className="amount">1000/2000</div>
                 </div>

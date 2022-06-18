@@ -36,8 +36,7 @@
 }
 .coin_details .user_investment{
     background-color: var(--secondary);
-    padding: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 .coin_details .user_investment .heading{
     font-size: 22px;
@@ -53,7 +52,40 @@
 .coin_details .user_investment .data{
     display: flex;
     justify-content: center;
+    align-items: center;
     padding-block: 10px;
+    position: relative;
+}
+.coin_details .user_investment .data .stock_symbol{
+    font-size: 12px;
+}
+.coin_details .user_investment .data.date{
+    flex-direction: column;
+}
+.coin_details .user_investment .invest_data{
+    position: relative;
+}
+.coin_details .user_investment .invest_data .symbol{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;   
+    height: 40px;
+    width: 40px;
+}
+.coin_details .user_investment .data .status{
+    font-size: 12px;
+    position: absolute;
+    bottom: 10%;
+    left: 48%;
+    transform: translate(-50%,50%);
+}
+.coin_details .user_investment .data .status.big{
+    bottom: 23%;
+}
+.coin_details .user_investment .data .profit svg,
+.coin_details .user_investment .data .loss svg,
+.coin_details .user_investment .data .zero svg{
+    margin-right: 2px;
 }
 .coin_details .user_investment .data .profit,
 .coin_details .user_investment .data .profit svg path{
@@ -67,12 +99,51 @@
 .coin_details .user_investment .data .loss svg path{
     color: var(--danger);
 }
+.coin_details .user_investment .invest_data .modify{
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    padding: 5px;
+    opacity: 0;
+    width: max-content;
+    transition: 0.5s ease-in-out;
+}
+.coin_details .user_investment .invest_data .modify.edit{
+    top: 10%;
+}
+.coin_details .user_investment .invest_data .modify.delete{
+    bottom: 10%;
+}
+.coin_details .user_investment .invest_data .modify.edit.big{
+    top: 15%;
+}
+.coin_details .user_investment .invest_data .modify.delete.big{
+    bottom: 15%;
+}
+.coin_details .user_investment .invest_data:hover .modify{
+    opacity: 1;
+}
 .coin_details .user_investment .bottom_footer{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     font-size: 18px;
     border-top: 1px solid var(--lineColour);
+}
+.coin_details .user_investment .bottom_footer .change .profit,
+.coin_details .user_investment .bottom_footer .change .profit svg path{
+    color: var(--success);
+}
+.coin_details .user_investment .bottom_footer .change .loss,
+.coin_details .user_investment .bottom_footer .change .loss svg path{
+    color: var(--danger);
+}
+.coin_details .user_investment .bottom_footer .change .profit .changePercentage,
+.coin_details .user_investment .bottom_footer .change .loss .changePercentage{
+    position: relative;
+    font-size: 14px;
+    margin-left: 5px;
+    color: inherit;
 }
 .coin_details .details_cont{
     padding: 5px 10px;
@@ -222,4 +293,12 @@
     width: 150px;
     background-color: var(--secondary);
     animation: pulse 0.5s alternate infinite ease-in-out;
+}
+.coin_details .news_sec .heading_cont{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.coin_details .news_sec .heading_cont .heading{
+    font-size: 24px;
 }

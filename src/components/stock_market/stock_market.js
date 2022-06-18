@@ -22,16 +22,10 @@ export default function StockMarket() {
         document.getElementById('3').classList.add('active')
     }, [])
 
-    useEffect(() => {
-        if (!isFetching) {
-            let newData = stockData?.data.map((item) => 
-                Object.assign({}, item, {logo: stock_links[item.symbol]?.[0], altlogo: stock_links[item.symbol]?.[1]})
-            )
-            setStockList(newData)
-        }
+    useEffect(()=>{
+        setStockList(stockData?.data)
     }, [stockData])
-
-
+    
     useEffect(() => {
         if (searchTerm.length > 0) {
             const filtteredData = stockData?.data?.filter((stock) => {

@@ -1,6 +1,12 @@
 .modal label{
     font-size: 18px;
 }
+.modal .modal_logo{
+    height: 30px;
+    width: 30px;
+    object-fit: contain;
+    object-position: center;
+}
 .modal .name_box{
     padding: 5px;
     background-color: var(--secondary);
@@ -58,7 +64,7 @@
     font-size: 18px;
     border: 2px dashed var(--lineColour);
     border-radius: 5px;
-    height: 29vh;
+    height: 25vh;
 }
 .modal_calculations{
     display: flex;

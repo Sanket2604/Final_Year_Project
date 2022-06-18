@@ -5,35 +5,41 @@ ChartJs.register(
     Tooltip, Title, ArcElement, Legend
 );
 
-export default function StockDonutChart() {
+export default function StockDonutChart({investments}) {
 
-    const [randomColors, setRandomColors]=useState()
+    const [randomColors, setRandomColors]=useState([])
+    const [dataset, setDataset]=useState([])
+    const [labels, setLabels]=useState([])
+    const colors=['#800000','#9A6324','#808000','#469990','#000075','#e6194B','#f58231','#ffe119','#bfef45','#3cb44b','#42d4f4','#4363d8','#911eb4','#f032e6','#a9a9a9','#fabed4','#ffd8b1','#fffac8','#aaffc3','#dcbeff']
     const reRender = 0
     useEffect(() => {
-        setRandomColors([generateRandomColor(),generateRandomColor(),generateRandomColor()])
-    }, [reRender])
-    
-    function generateRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
+        let randomColorTemp=[]
+        for(let i=0; i<investments?.length; i++){
+            let index = Math.floor(Math.random() * (20))
+            if(randomColorTemp.includes(colors[index])){
+                index = Math.floor(Math.random() * (20))
+            }
+            randomColorTemp.push(colors[index])
         }
-        return color;
-    }
+        setRandomColors(randomColorTemp)
+    }, [reRender])
+
+    useEffect(()=>{
+        let tempDataSet=[], tempLabels=[]
+        investments?.map(invst=>{
+            tempDataSet.push(invst.investment)
+            tempLabels.push(invst.name)
+        })
+        setLabels(tempLabels)
+        setDataset(tempDataSet)
+    },[investments])
 
     const data = {
+        labels, 
         datasets: [{
-            data: [30, 30, 30],
+            data: dataset,
             backgroundColor: randomColors
-        },
-        ],
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Stock Name 1',
-            'Stock Name 2',
-            'Stock Name 3'
-        ],
+        }]
     };
 
     return (

@@ -21,13 +21,16 @@
 }
 .crypto_stock .user_investment .data{
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding-block: 10px;
+    position: relative;
 }
 .crypto_stock .user_investment .data .stock_symbol{
     font-size: 12px;
+}
+.crypto_stock .user_investment .data.date{
+    flex-direction: column;
 }
 .crypto_stock .user_investment .invest_data{
     position: relative;
@@ -36,11 +39,18 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;   
-    height: 50px;
-    width: 50px;
+    height: 40px;
+    width: 40px;
 }
 .crypto_stock .user_investment .data .status{
     font-size: 12px;
+    position: absolute;
+    bottom: 10%;
+    left: 48%;
+    transform: translate(-50%,50%);
+}
+.crypto_stock .user_investment .data .status.big{
+    bottom: 23%;
 }
 .crypto_stock .user_investment .data .profit svg,
 .crypto_stock .user_investment .data .loss svg,
@@ -69,10 +79,16 @@
     transition: 0.5s ease-in-out;
 }
 .crypto_stock .user_investment .invest_data .modify.edit{
-    top: 8px;
+    top: 10%;
 }
 .crypto_stock .user_investment .invest_data .modify.delete{
-    bottom: 8px;
+    bottom: 10%;
+}
+.crypto_stock .user_investment .invest_data .modify.edit.big{
+    top: 15%;
+}
+.crypto_stock .user_investment .invest_data .modify.delete.big{
+    bottom: 15%;
 }
 .crypto_stock .user_investment .invest_data:hover .modify{
     opacity: 1;
@@ -83,4 +99,19 @@
     align-items: center;
     font-size: 18px;
     border-top: 1px solid var(--lineColour);
+}
+.crypto_stock .user_investment .bottom_footer .change .profit,
+.crypto_stock .user_investment .bottom_footer .change .profit svg path{
+    color: var(--success);
+}
+.crypto_stock .user_investment .bottom_footer .change .loss,
+.crypto_stock .user_investment .bottom_footer .change .loss svg path{
+    color: var(--danger);
+}
+.crypto_stock .user_investment .bottom_footer .change .profit .changePercentage,
+.crypto_stock .user_investment .bottom_footer .change .loss .changePercentage{
+    position: relative;
+    font-size: 14px;
+    margin-left: 5px;
+    color: inherit;
 }

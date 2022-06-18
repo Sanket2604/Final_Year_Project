@@ -8,20 +8,18 @@ ChartJs.register(
 
 export default function LoanDonutChart({loans, chartType}) {
 
-    const [randomColors, setRandomColors]=useState()
-    const reRender = 0
+    const [randomColors, setRandomColors]=useState([])
     const [labels, setLabels] = useState([])
     const [dataSet, setDataSet] = useState([])
-    useEffect(() => {
-        setRandomColors([generateRandomColor(),generateRandomColor(),generateRandomColor()])
-    }, [reRender])
+    
 
     useEffect(()=>{
-        let tempLabel=[], tempDataSet=[]
+        let tempLabel=[], tempDataSet=[], colourSet=[]
         let pos=-1
         if(chartType=='Remaining'){
             loans?.map(loan=>{
                 if(loan.status==='active'){
+                    colourSet.push(generateRandomColor())
                     if(tempLabel.includes(loan.name)){
                         pos = tempLabel.indexOf(loan.name)
                         tempDataSet[pos]=parseFloat(tempDataSet[pos])+parseFloat((loan.total - loan.paid).toFixed(2))
@@ -36,6 +34,7 @@ export default function LoanDonutChart({loans, chartType}) {
         if(chartType==='Total'){
             loans?.map(loan=>{
                 if(loan.status==='active'){
+                    colourSet.push(generateRandomColor())
                     if(tempLabel.includes(loan.name)){
                         pos = tempLabel.indexOf(loan.name)
                         tempDataSet[pos]+=loan.total
@@ -47,6 +46,7 @@ export default function LoanDonutChart({loans, chartType}) {
                 }
             })
         }
+        setRandomColors(colourSet)
         setLabels(tempLabel)
         setDataSet(tempDataSet)
     }, [loans])
@@ -64,8 +64,7 @@ export default function LoanDonutChart({loans, chartType}) {
         datasets: [{
             data: dataSet,
             backgroundColor: randomColors
-        },
-        ],
+        }],
         labels: labels,
     };
 

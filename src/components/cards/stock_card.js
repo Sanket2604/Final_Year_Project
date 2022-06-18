@@ -59,7 +59,7 @@ export default function StockCard(props) {
                     stock?.shortName && !/^\d+$/.test(stock?.shortName) && stock?.symbol && !/[^a-zA-Z]/.test(stock?.symbol) && stock_links[stock?.symbol] && count<=10 ? (
                         <div className="col-12 col-lg-3 p-0" key={i}>
                             <Link to={`/stock_market/${stock.symbol}`} className="stock_card m-1">
-                                <img src={stock.logo} alt="Error" />
+                                <img src={stock_links[stock?.symbol][0]} alt="Error" />
                                 <div className="name">{stock.shortName}</div>
                                 <div className="symbol">Ticker: {stock.symbol}</div>
                                 <div className="hidden" style={{display: 'none'}}>{count+=1}</div>
@@ -77,7 +77,7 @@ export default function StockCard(props) {
                     stock?.name && !/^\d+$/.test(stock?.name) && stock?.symbol && !/[^a-zA-Z]/.test(stock?.symbol) && stock_links[stock?.symbol] ? (
                         <div className="col-12 col-lg-3 p-0" key={i}>
                             <Link to={`/stock_market/${stock.symbol}`} className="stock_card m-1">
-                                <img src={stock.logo} alt="Error" />
+                                <img src={stock_links[stock?.symbol][0]} alt="Error" />
                                 <div className="name">{stock.name}</div>
                                 <div className="symbol">Ticker: {stock.symbol}</div>
                             </Link>
@@ -105,7 +105,7 @@ export default function StockCard(props) {
                         stock?.name && !/^\d+$/.test(stock?.name) && stock?.symbol && !/[^a-zA-Z]/.test(stock?.symbol) && stock_links[stock?.symbol] ? (
                             <div className="col-12 col-lg-3 p-0" key={i}>
                                 <Link to={`/stock_market/${stock.symbol}`} className="stock_card m-1">
-                                    <img src={stock.logo} alt="Error" />
+                                    <img src={stock_links[stock?.symbol][0]} alt="Error" />
                                     <div className="name">{stock.name}</div>
                                     <div className="symbol">Ticker: {stock.symbol}</div>
                                 </Link>

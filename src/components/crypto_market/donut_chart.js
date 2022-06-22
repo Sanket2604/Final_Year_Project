@@ -10,12 +10,17 @@ export default function CryptoDonutChart(props) {
     const [randomColors, setRandomColors] = useState()
     const [labels, setLabels] = useState([])
     const [dataSet, setDataSet] = useState([])
+    const colors = ['#800000', '#9A6324', '#808000', '#469990', '#000075', '#e6194B', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6', '#a9a9a9', '#fabed4', '#ffd8b1', '#fffac8', '#aaffc3', '#dcbeff']
 
     useEffect(() => {
-        let tempLabel = [], tempDataSet = [], colourSet=[]
-        let pos = -1
+        let tempLabel = [], tempDataSet = [], colourSet = []
+        let pos = -1, index
         props.investments?.map(invst => {
-            colourSet.push(generateRandomColor())
+            index = Math.floor(Math.random() * (20))
+            while (colourSet.includes(colors[index])) {
+                index = Math.floor(Math.random() * (20))
+            }
+            colourSet.push(colors[index])
             if (tempLabel.includes(invst.name)) {
                 pos = tempLabel.indexOf(invst.name)
                 tempDataSet[pos] += invst.investment
@@ -30,16 +35,6 @@ export default function CryptoDonutChart(props) {
         setDataSet(tempDataSet)
     }, [props.investments])
 
-
-    function generateRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
-
     const data = {
         datasets: [{
             data: dataSet,
@@ -48,7 +43,26 @@ export default function CryptoDonutChart(props) {
         labels: labels,
     };
 
+    const options = {
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function (context) {
+                        let label = context.label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.raw !== null) {
+                            label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.raw);
+                        }
+                        return label;
+                    }
+                }
+            }
+        }
+    }
+
     return (
-        <Doughnut data={data} />
+        <Doughnut data={data} options={options} />
     )
 }

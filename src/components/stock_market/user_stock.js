@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faCaretUp, faPenToSquare, faTrashCan, faPlus, faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, Row, Label, Input, Col } from "reactstrap";
-import { Select } from 'antd';
+import { Select } from 'antd'
 import 'antd/dist/antd.css'
 import './user_stock.css'
 import StockDonutChart from './donut_chart'
@@ -18,33 +18,32 @@ import StockDonutChart from './donut_chart'
 function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, stockData, editInvestment }) {
 
     const [formData, setFormData] = useState({
-        id: editInvestment?._id ? editInvestment._id : '',
-        logo: editInvestment?.logo ? editInvestment.logo : '',
-        symbol: editInvestment?.symbol ? editInvestment.symbol : '',
-        name: editInvestment?.name ? editInvestment.name : '',
-        startDate: editInvestment?.startDate ? editInvestment.startDate : '',
-        endDate: editInvestment?.endDate ? editInvestment.endDate : '',
-        boughtAt: editInvestment?.boughtAt ? editInvestment.boughtAt : '',
-        quantity: editInvestment?.quantity ? editInvestment.quantity : '',
-        investment: editInvestment?.investment ? editInvestment.investment : '',
-        closedAt: editInvestment?.closedAt ? editInvestment.closedAt : '',
-        status: editInvestment?.status ? editInvestment.status : 'active'
+        id: '',
+        symbol: '',
+        name: '',
+        startDate: '',
+        endDate: '',
+        boughtAt: '',
+        quantity: '',
+        investment: '',
+        closedAt: '',
+        status: ''
     })
+    const [errors, setErrors] = useState(formData)
     const { Option } = Select;
 
     useEffect(() => {
         setFormData({
-            id: editInvestment?._id,
-            logo: editInvestment?.logo,
-            symbol: editInvestment?.symbol,
-            name: editInvestment?.name,
-            startDate: editInvestment?.startDate,
-            endDate: editInvestment?.endDate,
-            boughtAt: editInvestment?.boughtAt,
-            quantity: editInvestment?.quantity,
-            investment: editInvestment?.investment,
-            closedAt: editInvestment?.closedAt,
-            status: editInvestment?.status ? editInvestment.status : 'active'
+            id: editInvestment?._id ? editInvestment?._id : '',
+            symbol: editInvestment?.symbol ? editInvestment?.symbol : '',
+            name: editInvestment?.name ? editInvestment?.name : '',
+            startDate: editInvestment?.startDate ? editInvestment?.startDate : '',
+            endDate: editInvestment?.endDate ? editInvestment?.endDate : '',
+            boughtAt: editInvestment?.boughtAt ? editInvestment?.boughtAt : '',
+            quantity: editInvestment?.quantity ? editInvestment?.quantity : '',
+            investment: editInvestment?.investment ? editInvestment?.investment : '',
+            closedAt: editInvestment?.closedAt ? editInvestment?.closedAt : '',
+            status: editInvestment?.status ? editInvestment?.status : 'active'
         })
     }, [editInvestment])
 
@@ -70,7 +69,81 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, stoc
         }
     }
 
+    
+    function validateForm() {
+        let duration
+        const nodeList = document.querySelectorAll('.form_error')
+        for (let i = 0; i < nodeList.length; i++) {
+            nodeList[i].classList.remove('error')
+        }
+        if (formData.name === '') {
+            setErrors({ ...errors, name: 'Select A Stock' })
+            document.getElementById('error_name').classList.add('error')
+            return false
+        }
+        if (formData.boughtAt === '') {
+            setErrors({ ...errors, boughtAt: 'Enter Stock Buy Price' })
+            document.getElementById('error_boughtAt').classList.add('error')
+            return false
+        }
+        if (formData.boughtAt>100000000 || formData.boughtAt<1) {
+            setErrors({ ...errors, boughtAt: 'Enter A Valid Stock Buy Price' })
+            document.getElementById('error_boughtAt').classList.add('error')
+            return false
+        }
+        if (formData.quantity === '') {
+            setErrors({ ...errors, quantity: 'Enter The Number Of Stocks Bought' })
+            document.getElementById('error_quantity').classList.add('error')
+            return false
+        }
+        if (formData.quantity >1000 || formData.quantity<1) {
+            setErrors({ ...errors, quantity: 'Enter Quantity Between 1 and 1000' })
+            document.getElementById('error_quantity').classList.add('error')
+            return false
+        }
+        if (formData.startDate === '') {
+            document.getElementById('error_startDate').classList.add('error')
+            setErrors({ ...errors, startDate: 'Select A Start Date' })
+            return false
+        }
+        duration = moment(formData.startDate).diff(moment(), 'days')
+        if (duration>0) {
+            document.getElementById('error_startDate').classList.add('error')
+            setErrors({ ...errors, startDate: 'Start Date Can Not Be In Future' })
+            return false
+        }
+        if (formData.endDate === '' && formData.status === 'completed') {
+            setErrors({ ...errors, endDate: 'Select An End Date' })
+            document.getElementById('error_endDate').classList.add('error')
+            return false
+        }
+        duration = moment(formData.endDate).diff(moment(), 'days')
+        if (duration>0) {
+            document.getElementById('error_endDate').classList.add('error')
+            setErrors({ ...errors, endDate: 'End Date Can Not Be In Future' })
+            return false
+        }
+        duration = moment(formData.endDate).diff(moment(formData.startDate), 'days')
+        if (duration < 1) {
+            setErrors({ ...errors, startDate: 'Start Date Can Not be After End Date' })
+            document.getElementById('error_startDate').classList.add('error')
+            return false
+        }
+        if (formData.closedAt === '' && formData.status === 'completed') {
+            setErrors({ ...errors, closedAt: 'Enter Stock Sell Price' })
+            document.getElementById('error_closedAt').classList.add('error')
+            return false
+        }
+        if ((formData.closedAt>100000000 || formData.closedAt<1) && formData.status === 'completed') {
+            setErrors({ ...errors, closedAt: 'Enter A Valid Stock Sell Price' })
+            document.getElementById('error_closedAt').classList.add('error')
+            return false
+        }
+        return true;
+    }
+
     function postStockInvestment() {
+        if(!validateForm()) return
         axios
             .post(url + '/stock/postStockInvestment', {
                 logo: formData.logo,
@@ -96,7 +169,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, stoc
     }
 
     function putStockInvestment() {
-        console.log(formData)
+        if(!validateForm()) return
         axios
             .put(url + '/stock/editStockInvestment', {
                 id: formData.id,
@@ -128,8 +201,9 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, stoc
             <ModalBody>
                 <Form>
                     <Row form>
-                        <Col md={6} className='mb-3'>
-                            <Label htmlFor="name">Select Stock</Label>
+                        <Col md={6} className='mb-3 d-flex flex-column justify-content-center'>
+                            <div>
+                            <Label htmlFor="name">Select A Stock</Label>
                             <Select
                                 showSearch
                                 dropdownStyle={{ backgroundColor: 'var(--secondary)' }}
@@ -141,53 +215,54 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, stoc
                             >
                                 {stockData?.data?.map((stock, i) => <Option value={`${stock.name}+${stock.symbol}`} key={i}>{stock.name}</Option>)}
                             </Select>
-                            <div className="details mt-1"><span style={{ fontSize: '18px' }}>Selected Stock:</span> {formData.name}</div>
-                            <div id="error_name" className='form_error'></div>
+                            </div>
+                            {formData.name ? <>
+                                <div className="details mt-1"><span style={{ fontSize: '16px' }}>Selected Stock:</span> {formData.name}</div>
+                                <div className="details mt-1"><span style={{ fontSize: '16px' }}>Stock Symbol:</span> {formData.symbol}</div>
+                            </>:<></>}
+                            <div id="error_name" className='form_error'>{errors.name}</div>
                         </Col>
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="name">Investment Amount</Label>
                             <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="name" name="investment" placeholder="Investment Amount (in rupees)" value={(formData.boughtAt * formData.quantity).toFixed(2)} disabled />
-                            <div id="error_investment" className='form_error'></div>
                         </Col>
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="name">Buy Price</Label>
                             <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="name" name="boughtAt" placeholder="Stock Price (in rupees)" value={formData.boughtAt} onChange={handleChange} />
-                            <div id="error_boughtAt" className='form_error'></div>
+                            <div id="error_boughtAt" className='form_error'>{errors.boughtAt}</div>
                         </Col>
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="name">Quantity</Label>
                             <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="name" name="quantity" placeholder="Quantity" value={formData.quantity} onChange={handleChange} />
-                            <div id="error_quantity" className='form_error'></div>
+                            <div id="error_quantity" className='form_error'>{errors.quantity}</div>
                         </Col>
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="name">Investment Start Date</Label>
                             <Input type="date" id="name" name="startDate" value={moment(formData.startDate).format('YYYY-MM-DD')} onChange={handleChange} />
-                            <div id="error_startDate" className='form_error'></div>
+                            <div id="error_startDate" className='form_error'>{errors.startDate}</div>
                         </Col>
                         {formData.status === 'active' ?
                             <></> :
                             <Col md={6} className='mb-3'>
                                 <Label htmlFor="name">Investment End Date</Label>
                                 <Input type="date" id="name" name="endDate" value={moment(formData.endDate).format('YYYY-MM-DD')} onChange={handleChange} />
-                                <div id="error_endDate" className='form_error'></div>
+                                <div id="error_endDate" className='form_error'>{errors.endDate}</div>
                             </Col>
                         }
                         {formData.status === 'active' ? <></> :
                             <Col md={6} className='mb-3'>
                                 <Label htmlFor="name">Sell Price</Label>
                                 <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="name" name="closedAt" placeholder="Closing Price (in rupees)" value={formData.closedAt} onChange={handleChange} />
-                                <div id="error_closedAt" className='form_error'></div>
+                                <div id="error_closedAt" className='form_error'>{errors.closedAt}</div>
                             </Col>
                         }
-                        {/* <Col md={6} className='d-flex justify-content-center align-items-center'>
-                            <span className='col_heading'>Position:</span>
-                            <span className='completed mx-3'>Buy</span>
-                            <span className='active'>Sell</span>
-                        </Col> */}
-                        <Col md={12} className='d-flex justify-content-center align-items-center mt-2'>
+                        <Col md={12} className='d-flex flex-coloumn justify-content-center align-items-center mt-2'>
+                            <div className='d-flex justify-content-center align-items-center'>
                             <span className='col_heading'>Investment Status:</span>
                             <span className={'active mx-3' + (formData.status === 'active' ? ' highlight' : '')} onClick={() => investmentStatus(true)}>Active</span>
                             <span className={'completed ' + (formData.status === 'completed' ? ' highlight' : '')} onClick={() => investmentStatus(false)}>Completed</span>
+                            </div>
+                            <div id="error_status" className='form_error'>{errors.closedAt}</div>
                         </Col>
                     </Row>
                 </Form>
@@ -315,10 +390,7 @@ export default function UserStock() {
             </div>
             {activeInvestment?.investments?.length > 0 ?
                 <div className="row mb-5">
-                    <div className="col-6">
-                        <StockDonutChart investments={activeInvestment?.investments} />
-                    </div>
-                    <div className="col-6">
+                    <div className="col-12">
                         <HorizontalBarGraph investments={activeInvestment?.investments} />
                     </div>
                 </div>

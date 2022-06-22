@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import LoanDonutChart from '../loan_tracker/donut_chart'
+import StockDonutChart from '../stock_market/donut_chart'
+import CryptoDonutChart from '../crypto_market/donut_chart'
 import axios from 'axios'
 import { url } from '../../url'
 import { TransactionModal } from '../transaction/transaction_modal'
@@ -12,8 +14,7 @@ import './home.css'
 export default function Home() {
 
     const [modalOpen, setModalOpen] = useState(false)
-    const [lenderData, setLenderData] = useState([])
-    const [borrowerData, setBorrowerData] = useState([])
+    const [data, setData]=useState()
     const token = JSON.parse(localStorage.getItem("profile"))?.token
 
     useEffect(() => {
@@ -27,21 +28,11 @@ export default function Home() {
         if (token) {
             try {
                 axios
-                    .get(url + '/loan/getLenderDetails', {
+                    .get(url + '/account/getMainDashboard', {
                         headers: { 'authorization': `Bearer ${token}` }
                     })
                     .then((res) => {
-                        setLenderData(res.data.lenderDetails.loans)
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-                axios
-                    .get(url + '/loan/getBorrowerDetails', {
-                        headers: { 'authorization': `Bearer ${token}` }
-                    })
-                    .then((res) => {
-                        setBorrowerData(res.data.borrowerDetails.loans)
+                        setData(res.data)
                     })
                     .catch((error) => {
                         console.log(error)
@@ -60,6 +51,26 @@ export default function Home() {
         setModalOpen(!modalOpen)
     }
 
+    function customUnits(num) {
+        let unitNum = parseFloat(num)
+        if (unitNum > 10000000) {
+            let tempnum = num / 10000000
+            unitNum = tempnum.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+            unitNum += " Cr"
+        }
+        if (unitNum > 1000) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+        else if (unitNum > 100) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 5 });
+        }
+        else {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 10 });
+        }
+
+        return (unitNum)
+    }
+
     return (
         <div className="container homepage py-5">
             <TransactionModal modalOpen={modalOpen} newTransaction={true} setModalOpen={setModalOpen} />
@@ -69,7 +80,7 @@ export default function Home() {
                         <FontAwesomeIcon icon={faMoneyBill} />
                         <div className="content">
                             <div className="subtext">Monthly Earning</div>
-                            <div className="text">₹ 10000</div>
+                            <div className="text">₹ {data?.income?customUnits(data?.income):0}</div>
                         </div>
                     </div>
                 </div>
@@ -78,7 +89,7 @@ export default function Home() {
                         <FontAwesomeIcon icon={faSackDollar} />
                         <div className="content">
                             <div className="subtext">Money Borrowed</div>
-                            <div className="text">₹ 10000</div>
+                            <div className="text">₹ {data?.borrow?.total?customUnits(data?.borrow?.total):0}</div>
                         </div>
                     </Link>
                 </div>
@@ -87,7 +98,7 @@ export default function Home() {
                         <FontAwesomeIcon icon={faHandHoldingDollar} />
                         <div className="content">
                             <div className="subtext">Money Lent</div>
-                            <div className="text">₹ 10000</div>
+                            <div className="text">₹ {data?.loan?.total?customUnits(data?.loan?.total):0}</div>
                         </div>
                     </Link>
                 </div>
@@ -96,7 +107,7 @@ export default function Home() {
                         <FontAwesomeIcon icon={faChartLine} />
                         <div className="content">
                             <div className="subtext">Stock Investment</div>
-                            <div className="text">₹ 10000</div>
+                            <div className="text">₹ {data?.stock?.total?customUnits(data?.stock?.total):0}</div>
                         </div>
                     </Link>
                 </div>
@@ -105,7 +116,7 @@ export default function Home() {
                         <FontAwesomeIcon icon={faBitcoin} />
                         <div className="content">
                             <div className="subtext">Crypto Investment</div>
-                            <div className="text">₹ 10000</div>
+                            <div className="text">₹ {data?.crypto?.total?customUnits(data?.crypto?.total):0}</div>
                         </div>
                     </Link>
                 </div>
@@ -161,7 +172,10 @@ export default function Home() {
                             <Link to="/user_stock_investments" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            <LoanDonutChart />
+                            {data?.stock?.list?.length>0 ? 
+                                <StockDonutChart investments={data?.stock?.list} />:
+                                <div className="no_data">No Data Available</div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -172,7 +186,10 @@ export default function Home() {
                             <Link to="/user_crypto_investments" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            <LoanDonutChart />
+                            {data?.crypto?.list?.length>0 ?
+                                <CryptoDonutChart investments={data?.crypto?.list} />:
+                                <div className="no_data">No Data Available</div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -185,7 +202,10 @@ export default function Home() {
                             <Link to="/lender_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            <LoanDonutChart loans={lenderData} />
+                            {data?.loan?.list?.length>0 ?
+                                <LoanDonutChart loans={data?.loan?.list} chartType="Total" />:
+                                <div className="no_data">No Data Available</div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -196,7 +216,9 @@ export default function Home() {
                             <Link to="/borrower_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            <LoanDonutChart loans={borrowerData} />
+                            {data?.borrow?.list?.length>0 ?
+                                <LoanDonutChart loans={data?.borrow?.list} chartType="Total" />:
+                                <div className="no_data">No Data Available</div>}
                         </div>
                     </div>
                 </div>

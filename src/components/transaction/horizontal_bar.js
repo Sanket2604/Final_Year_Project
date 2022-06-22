@@ -21,44 +21,35 @@ ChartJS.register(
 
 
 export default function HorizontalBarGraph(props) {
-
-    const [randomColors, setRandomColors] = useState([])
     const [labels, setLabels] = useState([])
     const [investemntDataSet, setInvestemntDataSet] = useState([])
-    const colors = ['#800000', '#9A6324', '#808000', '#469990', '#000075', '#e6194B', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6', '#a9a9a9', '#fabed4', '#ffd8b1', '#fffac8', '#aaffc3', '#dcbeff']
-    const reRender = 0
+    const [currentValueDataSet, setCurrentValueDataSet] = useState([])
+    const [profitLossColor, setProfitLossColor]=useState([])
+    const [borderColor, setBorderColor]=useState([])
 
     useEffect(() => {
-        let randomColorTemp = []
-        for (let i = 0; i < props.investments?.length; i++) {
-            let index = Math.floor(Math.random() * (20))
-            while (randomColorTemp.includes(colors[index])) {
-                index = Math.floor(Math.random() * (20))
+        let tempProfitLossColor=[], tempBorderColor=[]
+        for(let i=0; i<props.barGraphData?.expenditure?.length;i++){
+            if(props.barGraphData?.expenditure[i]<props.barGraphData?.catTotal[i]){
+                tempProfitLossColor.push('rgba(23,203,73,0.5)')
+                tempBorderColor.push('rgb(23,203,73)')
             }
-            randomColorTemp.push(colors[index])
+            else{
+                tempProfitLossColor.push('rgba(235,36,42,0.69)')
+                tempBorderColor.push('rgb(235,36,42)')
+            }
         }
-        setRandomColors(randomColorTemp)
-    }, [reRender])
-
-    useEffect(() => {
-        let tempLabel = [], tempDataSet = [], pos = -1
-        props.investments?.map(invst => {
-            if (tempLabel.includes(invst.name)) {
-                pos = tempLabel.indexOf(invst.name)
-                tempDataSet[pos] += invst.investment
-            }
-            else {
-                tempLabel.push(invst.name)
-                tempDataSet.push(invst.investment)
-            }
-        })
-        setLabels(tempLabel)
-        setInvestemntDataSet(tempDataSet)
-    }, [props.investments, props.coinData])
+        setLabels(props.barGraphData?.label)
+        setInvestemntDataSet(props.barGraphData?.catTotal)
+        setCurrentValueDataSet(props.barGraphData?.expenditure)
+        setProfitLossColor(tempProfitLossColor)
+        setBorderColor(tempBorderColor)
+    }, [props.barGraphData])
 
     const options = {
         indexAxis: 'y',
         barPercentage: 1,
+        maintainAspectRatio: false,
         elements: {
             bar: {
                 borderWidth: 2,
@@ -69,9 +60,9 @@ export default function HorizontalBarGraph(props) {
                 display: false
             },
             tooltip: {
-                callbacks: {
-                    label: function (context) {
-                        let label = context.label || '';
+                callbacks: {  
+                    label: function(context) {
+                        let label = context.dataset.label || context.label;
                         if (label) {
                             label += ': ';
                         }
@@ -106,21 +97,27 @@ export default function HorizontalBarGraph(props) {
                     },
                 },
             },
-            responsive: true,
-        }
+        },
+        responsive: true,
     }
 
     const data = {
-            labels,
-            datasets: [
-                {
-                    label: 'Investment',
-                    data: investemntDataSet,
-                    borderColor: ['rgba(255,255,255,0.69)'],
-                    backgroundColor: randomColors,
-                },
-            ],
-        }
-
-    return<Bar options = { options } data = { data } />;
+        labels,
+        datasets: [
+            {
+                label: 'Budget',
+                data: investemntDataSet,
+                borderColor: 'rgb(0,113,189)',
+                backgroundColor: 'rgb(0,113,189,0.75)',
+            },
+            {
+                label: 'Expense',
+                data: currentValueDataSet,
+                borderColor: borderColor,
+                backgroundColor: profitLossColor,
+            },
+        ],
+    }
+    
+    return <Bar options={options} data={data} />;
 }

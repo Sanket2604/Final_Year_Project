@@ -182,9 +182,10 @@
 }
 .debt_details .data_sec .status_bar .progress_bar .percentage{
     font-size: 14px;
+    transform: translateX(-10%);
 }
 .debt_details .data_sec .status_bar .progress_bar .percentage.outside{
-    transform: translateX(60px);
+    transform: translateX(140%);
 }
 .debt_details .data_sec .amount{
     font-size: 18px;

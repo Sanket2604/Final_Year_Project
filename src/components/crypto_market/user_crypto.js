@@ -13,36 +13,39 @@ import { Select } from 'antd';
 import 'antd/dist/antd.css'
 import './user_crypto.css'
 
-function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryptoCoins, editInvestment }) {
+function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryptoCoins, editInvestment, customUnits }) {
 
     const [formData, setFormData] = useState({
-        id: editInvestment?._id ? editInvestment._id : '',
-        logo: editInvestment?.logo ? editInvestment.logo : '',
-        cryptoId: editInvestment?.cryptoId ? editInvestment.cryptoId : '',
-        name: editInvestment?.name ? editInvestment.name : '',
-        startDate: editInvestment?.startDate ? editInvestment.startDate : '',
-        endDate: editInvestment?.endDate ? editInvestment.endDate : '',
-        boughtAt: editInvestment?.boughtAt ? editInvestment.boughtAt : '',
-        quantity: editInvestment?.quantity ? editInvestment.quantity : '',
-        investment: editInvestment?.investment ? editInvestment.investment : '',
-        closedAt: editInvestment?.closedAt ? editInvestment.closedAt : '',
-        status: editInvestment?.status ? editInvestment.status : 'active'
+        id: '',
+        logo: '',
+        cryptoId: '',
+        name: '',
+        startDate: '',
+        endDate: '',
+        boughtAt: '',
+        quantity: '',
+        investment: '',
+        closedAt: '',
+        status: '',
+        price: 0
     })
+    const [errors, setErrors] = useState(formData)
     const { Option } = Select;
 
     useEffect(()=>{
         setFormData({
-            id: editInvestment?._id,
-            logo: editInvestment?.logo,
-            cryptoId: editInvestment?.cryptoId,
-            name: editInvestment?.name,
-            startDate: editInvestment?.startDate,
-            endDate: editInvestment?.endDate,
-            boughtAt: editInvestment?.boughtAt,
-            quantity: editInvestment?.quantity,
-            investment: editInvestment?.investment,
-            closedAt: editInvestment?.closedAt,
-            status: editInvestment?.status
+            id: editInvestment?._id ? editInvestment._id : '',
+            logo: editInvestment?.logo ? editInvestment.logo : '',
+            cryptoId: editInvestment?.cryptoId ? editInvestment.cryptoId : '',
+            name: editInvestment?.name ? editInvestment.name : '',
+            startDate: editInvestment?.startDate ? editInvestment.startDate : '',
+            endDate: editInvestment?.endDate ? editInvestment.endDate : '',
+            boughtAt: editInvestment?.boughtAt ? editInvestment.boughtAt : '',
+            quantity: editInvestment?.quantity ? editInvestment.quantity : '',
+            investment: editInvestment?.investment ? editInvestment.investment : '',
+            closedAt: editInvestment?.closedAt ? editInvestment.closedAt : '',
+            status: editInvestment?.status ? editInvestment.status : 'active',
+            price : 0
         })
     },[editInvestment])
 
@@ -56,7 +59,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
 
     function setCoinName(value) {
         let tempArray = value.split('+')
-        setFormData({ ...formData, name: tempArray[0], cryptoId: tempArray[1], logo: tempArray[2] })
+        setFormData({ ...formData, name: tempArray[0], cryptoId: tempArray[1], logo: tempArray[2], price: tempArray[3] })
     }
 
     function investmentStatus(status) {
@@ -68,7 +71,80 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
         }
     }
 
+    function validateForm() {
+        let duration
+        const nodeList = document.querySelectorAll('.form_error')
+        for (let i = 0; i < nodeList.length; i++) {
+            nodeList[i].classList.remove('error')
+        }
+        if (formData.name === '') {
+            setErrors({ ...errors, name: 'Select A Crypto Coin' })
+            document.getElementById('error_name').classList.add('error')
+            return false
+        }
+        if (formData.boughtAt === '') {
+            setErrors({ ...errors, boughtAt: 'Enter Crypto Buy Price' })
+            document.getElementById('error_boughtAt').classList.add('error')
+            return false
+        }
+        if (formData.boughtAt>100000000 || formData.boughtAt<1) {
+            setErrors({ ...errors, boughtAt: 'Enter A Valid Crypto Buy Price' })
+            document.getElementById('error_boughtAt').classList.add('error')
+            return false
+        }
+        if (formData.investment === '') {
+            setErrors({ ...errors, investment: 'Enter The Amout Invested' })
+            document.getElementById('error_investment').classList.add('error')
+            return false
+        }
+        if (formData.investment >100000000 || formData.investment<1) {
+            setErrors({ ...errors, investment: 'Enter Investment Between 1 and 10,00,00,000' })
+            document.getElementById('error_investment').classList.add('error')
+            return false
+        }
+        if (formData.startDate === '') {
+            document.getElementById('error_startDate').classList.add('error')
+            setErrors({ ...errors, startDate: 'Select A Buy Date' })
+            return false
+        }
+        duration = moment(formData.startDate).diff(moment(), 'days')
+        if (duration>0) {
+            document.getElementById('error_startDate').classList.add('error')
+            setErrors({ ...errors, startDate: 'Start Date Can Not Be In Future' })
+            return false
+        }
+        if (formData.endDate === '' && formData.status === 'completed') {
+            setErrors({ ...errors, endDate: 'Select An Sell Date' })
+            document.getElementById('error_endDate').classList.add('error')
+            return false
+        }
+        duration = moment(formData.endDate).diff(moment(), 'days')
+        if (duration>0) {
+            document.getElementById('error_endDate').classList.add('error')
+            setErrors({ ...errors, endDate: 'End Date Can Not Be In Future' })
+            return false
+        }
+        duration = moment(formData.endDate).diff(moment(formData.startDate), 'days')
+        if (duration < 1) {
+            setErrors({ ...errors, startDate: 'Start Date Can Not be After End Date' })
+            document.getElementById('error_startDate').classList.add('error')
+            return false
+        }
+        if (formData.closedAt === '' && formData.status === 'completed') {
+            setErrors({ ...errors, closedAt: 'Enter Crypto Sell Price' })
+            document.getElementById('error_closedAt').classList.add('error')
+            return false
+        }
+        if ((formData.closedAt>100000000 || formData.closedAt<1) && formData.status === 'completed') {
+            setErrors({ ...errors, closedAt: 'Enter A Valid Crypto Sell Price' })
+            document.getElementById('error_closedAt').classList.add('error')
+            return false
+        }
+        return true;
+    }
+
     function postCryptoInvestment() {
+        if(!validateForm()) return
         axios
             .post(url + '/crypto/postCryptoInvestment', {
                 logo: formData.logo,
@@ -94,7 +170,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
     }
 
     function putCryptoInvestment(){
-        console.log(formData)
+        if(!validateForm()) return
         axios
             .put(url + '/crypto/editCryptoInvestment', {
                 id: formData.id,
@@ -122,67 +198,66 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
 
     return (
         <Modal size="xl" isOpen={editModalOpen} toggle={closeEditModal}>
-            <ModalHeader toggle={closeEditModal}>{newInvestment ? 'Add' : 'Edit'} Investment</ModalHeader>
+            <ModalHeader toggle={closeEditModal}><img className='modal_logo me-2' src={formData.logo ? formData.logo:'https://icons.veryicon.com/png/o/miscellaneous/color-work-icon/blockchain-2.png'} />{newInvestment ? 'Add' : 'Edit'} Investment {formData.name ? `in ${formData.name}`:''}</ModalHeader>
             <ModalBody>
                 <Form>
-                    <Row form>
-                        <Col md={6} className='mb-3'>
-                            <Label htmlFor="name">Select Crypto Coin</Label>
-                            <Select
-                                showSearch
-                                dropdownStyle={{ backgroundColor: 'var(--secondary)' }}
-                                className="select-news"
-                                placeholder="Select a Cryptocurrency"
-                                optionFilterProp="children"
-                                onChange={(value) => setCoinName(value)}
-                                filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            >
-                                <Option value="Cryptocurency">All Cryptocurrency</Option>
-                                {cryptoCoins?.data?.coins?.map((currency, i) => <Option value={`${currency.name}+${currency.uuid}+${currency.iconUrl}`} key={i}>{currency.name}</Option>)}
-                            </Select>
-                            <div className="details mt-1"><span style={{ fontSize: '18px' }}>Selected Coin:</span> {formData.name}</div>
-                            <div id="error_name" className='form_error'></div>
+                    <Row>
+                        <Col md={6} className='mb-3 d-flex flex-column justify-content-center'>
+                            <div>
+                                <Label htmlFor="name">Select Crypto Coin</Label>
+                                <Select
+                                    showSearch
+                                    dropdownStyle={{ backgroundColor: 'var(--secondary)' }}
+                                    className="select-news"
+                                    placeholder="Select a Cryptocurrency"
+                                    optionFilterProp="children"
+                                    onChange={(value) => setCoinName(value)}
+                                    filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                >
+                                    <Option value="Cryptocurency">All Cryptocurrency</Option>
+                                    {cryptoCoins?.data?.coins?.map((currency, i) => <Option value={`${currency.name}+${currency.uuid}+${currency.iconUrl}+${parseFloat(currency.price)}`} key={i}>{currency.name}</Option>)}
+                                </Select>
+                            </div>
+                            {formData.name ? <>
+                                <div className="details mt-1"><span style={{ fontSize: '16px' }}>Selected Coin:</span> {formData.name}</div>
+                                <div className="details mt-1"><span style={{ fontSize: '16px' }}>Current Coin Price:</span> ₹ {customUnits(formData.price)}</div>
+                            </>:<></>}
+                            <div id="error_name" className='form_error'>{errors.name}</div>
                         </Col>
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="name">Quantity</Label>
                             <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="name" name="quantity" placeholder="Quantity" value={(formData.investment / formData.boughtAt).toFixed(2)} disabled />
-                            <div id="error_quantity" className='form_error'></div>
                         </Col>
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="name">Bought At</Label>
                             <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="name" name="boughtAt" placeholder="Crypto Coin Price (in rupees)" value={formData.boughtAt} onChange={handleChange} />
-                            <div id="error_boughtAt" className='form_error'></div>
+                            <div id="error_boughtAt" className='form_error'>{errors.boughtAt}</div>
                         </Col>
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="name">Investment Amount</Label>
                             <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="name" name="investment" placeholder="Investment Amount (in rupees)" value={formData.investment} onChange={handleChange} />
-                            <div id="error_investment" className='form_error'></div>
+                            <div id="error_investment" className='form_error'>{errors.investment}</div>
                         </Col>
                         <Col md={6} className='mb-3'>
                             <Label htmlFor="name">Investment Start Date</Label>
                             <Input type="date" id="name" name="startDate" value={moment(formData.startDate).format('YYYY-MM-DD')} onChange={handleChange} />
-                            <div id="error_startDate" className='form_error'></div>
+                            <div id="error_startDate" className='form_error'>{errors.startDate}</div>
                         </Col>
                         {formData.status === 'active' ?
                             <></> :
                             <Col md={6} className='mb-3'>
                                 <Label htmlFor="name">Investment End Date</Label>
                                 <Input type="date" id="name" name="endDate" value={moment(formData.endDate).format('YYYY-MM-DD')} onChange={handleChange} />
-                                <div id="error_endDate" className='form_error'></div>
+                                <div id="error_endDate" className='form_error'>{errors.endDate}</div>
                             </Col>
                         }
                         {formData.status === 'active' ? <></> :
                             <Col md={6} className='mb-3'>
                                 <Label htmlFor="name">Closed At</Label>
                                 <Input type="number" onKeyDown={e => (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()} id="name" name="closedAt" placeholder="Closing Price (in rupees)" value={formData.closedAt} onChange={handleChange} />
-                                <div id="error_closedAt" className='form_error'></div>
+                                <div id="error_closedAt" className='form_error'>{errors.closedAt}</div>
                             </Col>
                         }
-                        {/* <Col md={6} className='d-flex justify-content-center align-items-center'>
-                            <span className='col_heading'>Position:</span>
-                            <span className='completed mx-3'>Buy</span>
-                            <span className='active'>Sell</span>
-                        </Col> */}
                         <Col md={12} className='d-flex justify-content-center align-items-center mt-2'>
                             <span className='col_heading'>Investment Status:</span>
                             <span className={'active mx-3' + (formData.status === 'active' ? ' highlight' : '')} onClick={() => investmentStatus(true)}>Active</span>
@@ -199,7 +274,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
     )
 }
 
-export default function UserStock() {
+export default function UserCrypto() {
 
     const { data } = useGetCryptosQuery(100);
     const [editModalOpen, setEditModalOpen] = useState(false)
@@ -228,7 +303,6 @@ export default function UserStock() {
                         headers: { 'authorization': `Bearer ${token}` }
                     })
                     .then((res) => {
-                        console.log(res.data)
                         setActiveInvestment(res.data.activeInvestment)
                         setCompletedInvestment(res.data.completedInvestment)
                     })
@@ -245,9 +319,29 @@ export default function UserStock() {
         }
     }, [])
 
+    function customUnits(num) {
+        let unitNum = parseFloat(num)
+        if (unitNum > 10000000) {
+            let tempnum = num / 10000000
+            unitNum = tempnum.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+            unitNum += " Cr"
+        }
+        if (unitNum > 1000) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+        else if (unitNum > 100) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 5 });
+        }
+        else {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 10 });
+        }
+        return (unitNum)
+    }
+
     function CryptoTotalInvestment({ changeToken }) {
         const [currentTotal, setCurrentTotal] = useState(0)
         const [change, setChange] = useState(0)
+
         useEffect(() => {
             let coins = [], total = 0
             activeInvestment.investments.map(invst => {
@@ -274,16 +368,19 @@ export default function UserStock() {
         })
         if (changeToken) {
             return (
-                <span className={change > 0 ? 'profit' : 'loss'}>
-                    {Math.abs(currentTotal-activeInvestment.investedAmount).toFixed(2)}
-                    <span className='changePercentage'><FontAwesomeIcon icon={change > 0 ? faCaretUp : faCaretDown} /> {Math.abs(change)} %</span>
-                </span>
+                <>
+                    Total {change > 0 ? 'Profit' : 'Loss'}: ₹ 
+                    <span className={change > 0 ? 'profit ms-1' : 'loss ms-1'}>
+                        {customUnits(Math.abs(currentTotal-activeInvestment.investedAmount).toFixed(2))}
+                        <span className='changePercentage'><FontAwesomeIcon icon={change > 0 ? faCaretUp : faCaretDown} /> {customUnits(Math.abs(change))} %</span>
+                    </span>
+                </>
             )
         }
 
-        return <>₹ {currentTotal}</>
+        return <>₹ {customUnits(currentTotal)}</>
     }
-    
+
     function CryptoPrice({ id, qty, total }) {
         const [coinPrice, setCoinPrice] = useState([])
 
@@ -296,10 +393,10 @@ export default function UserStock() {
             })
         }, [])
 
-        if (total) return <>₹ {totalActiveInvestment}</>
+        if (total) return <>₹ {customUnits(totalActiveInvestment)}</>
 
         return (
-            <>₹ {((parseFloat(coinPrice)) * qty).toFixed(2)}</>
+            <>₹ {customUnits(((parseFloat(coinPrice)) * qty).toFixed(2))}</>
         )
     }
 
@@ -318,7 +415,7 @@ export default function UserStock() {
 
         return (
             <div className={'status ms-2' + (priceChange > 0 ? ' profit' : ' loss')}>
-                <FontAwesomeIcon icon={priceChange > 0 ? faCaretUp : faCaretDown} />{Math.abs(priceChange)}%
+                <FontAwesomeIcon icon={priceChange > 0 ? faCaretUp : faCaretDown} />{customUnits(Math.abs(priceChange))}%
             </div>
         )
     }
@@ -363,7 +460,7 @@ export default function UserStock() {
     }
     return (
         <div className='container crypto_stock py-5'>
-            <EditModal editModalOpen={editModalOpen} token={token} newInvestment={newInvestment} setEditModalOpen={setEditModalOpen} cryptoCoins={data} editInvestment={editInvestment} />
+            <EditModal editModalOpen={editModalOpen} token={token} newInvestment={newInvestment} setEditModalOpen={setEditModalOpen} cryptoCoins={data} editInvestment={editInvestment} customUnits={customUnits} />
             <DeleteModal />
             <div className="add_transaction_btn" onClick={() => triggerEditModal(true)}>
                 <FontAwesomeIcon icon={faPlus} />
@@ -399,10 +496,10 @@ export default function UserStock() {
                                     {invst.name}
                                 </Link>
                                 <div className="col-1 data">{moment(invst.startDate).format('DD/MM/YYYY')}</div>
-                                <div className="col-2 data">₹ {invst.boughtAt}</div>
+                                <div className="col-2 data">₹ {customUnits(invst.boughtAt)}</div>
                                 <div className="col-2 data"><CryptoPrice id={invst.cryptoId} qty={1} /></div>
-                                <div className="col-1 data">{invst.investedAmount>100000?(invst.quantity).toFixed(4):(invst.quantity).toFixed(2)}</div>
-                                <div className="col-2 data">₹ {invst.investment}</div>
+                                <div className="col-1 data">{invst.investedAmount>100000?customUnits((invst.quantity).toFixed(4)):customUnits((invst.quantity).toFixed(2))}</div>
+                                <div className="col-2 data">₹ {customUnits(invst.investment)}</div>
                                 <div className="col-2 data">
                                     <div className="value"><CryptoPrice id={invst.cryptoId} qty={invst.quantity} /></div>
                                     <CryptoChange id={invst.cryptoId} boughtAt={invst.boughtAt} />
@@ -412,9 +509,9 @@ export default function UserStock() {
                             </div>)}
                     </div>
                     <div className="bottom_footer pt-3">
-                        <span className="total_investment">Total Invested: ₹ {activeInvestment.investedAmount}</span>
+                        <span className="total_investment">Total Invested: ₹ {customUnits(activeInvestment.investedAmount)}</span>
                         <span className="total_currentvalue mx-4">Total Current Value: <CryptoTotalInvestment /></span>
-                        <span className="change">Total Change: ₹ <CryptoTotalInvestment changeToken={true} /></span>
+                        <span className="change"><CryptoTotalInvestment changeToken={true} /></span>
                     </div>
                 </div> : <div className="no_data mt-3">No Data Available</div>}
             <div className="row mt-5">
@@ -439,14 +536,14 @@ export default function UserStock() {
                                     {invst.name}
                                 </Link>
                                 <div className="col-1 data date">{moment(invst.startDate).format('DD/MM/YYYY')} <FontAwesomeIcon icon={faAngleDown} /> {moment(invst.endDate).format('DD/MM/YYYY')}</div>
-                                <div className="col-2 data">₹ {invst.boughtAt}</div>
+                                <div className="col-2 data">₹ {customUnits(invst.boughtAt)}</div>
                                 <div className="col-1 data">{invst.quantity.toFixed(2)}</div>
-                                <div className="col-2 data">₹ {invst.closedAt}</div>
-                                <div className="col-2 data">₹ {invst.investment}</div>
+                                <div className="col-2 data">₹ {customUnits(invst.closedAt)}</div>
+                                <div className="col-2 data">₹ {customUnits(invst.investment)}</div>
                                 <div className="col-2 data">
-                                    <div className="value">₹ {(invst.quantity*invst.closedAt).toFixed(2)}</div>
+                                    <div className="value">₹ {customUnits((invst.quantity*invst.closedAt).toFixed(2))}</div>
                                     <div className={'status big ms-2' + ((invst.quantity*invst.closedAt)*100/invst.investment > 100 ? ' profit' : ' loss')}>
-                                        <FontAwesomeIcon icon={(invst.quantity*invst.closedAt)*100/invst.investment > 100 ? faCaretUp : faCaretDown} />{Math.abs((100-((invst.quantity*invst.closedAt)*100/invst.investment)).toFixed(2))}%
+                                        <FontAwesomeIcon icon={(invst.quantity*invst.closedAt)*100/invst.investment > 100 ? faCaretUp : faCaretDown} />{customUnits(Math.abs((100-((invst.quantity*invst.closedAt)*100/invst.investment)).toFixed(2)))}%
                                     </div>
                                 </div>
                                 <div className="modify edit big" onClick={() => triggerEditModal(false, invst)}><FontAwesomeIcon icon={faPenToSquare} /></div>
@@ -454,14 +551,14 @@ export default function UserStock() {
                             </div>)}
                     </div>
                     <div className="bottom_footer pt-3">
-                        <div className="total_investment">Total Invested: ₹ {completedInvestment.totalInvestment}</div>
-                        <div className="total_return mx-4">Return Of Investment: ₹ {completedInvestment.totalReturn}</div>
+                        <div className="total_investment">Total Invested: ₹ {customUnits(completedInvestment.totalInvestment)}</div>
+                        <div className="total_return mx-4">Return Of Investment: ₹ {customUnits(completedInvestment.totalReturn)}</div>
                         <div className="change">
-                            <span className='me-1'>Total Earned: ₹ </span>
+                            <span className='me-1'>Total {completedInvestment.totalReturn-completedInvestment.totalInvestment > 0 ? 'Profit' : 'Loss'}: ₹ </span>
                             <span className={completedInvestment.totalReturn-completedInvestment.totalInvestment > 0 ? 'profit' : 'loss'}>
-                                {Math.abs((completedInvestment.totalReturn-completedInvestment.totalInvestment).toFixed(2))}
+                                {customUnits(Math.abs((completedInvestment.totalReturn-completedInvestment.totalInvestment).toFixed(2)))}
                                 <span className='changePercentage'>
-                                    <FontAwesomeIcon icon={completedInvestment.totalReturn-completedInvestment.totalInvestment > 0 ? faCaretUp : faCaretDown} /> {Math.abs(((completedInvestment.totalReturn-completedInvestment.totalInvestment)*100/completedInvestment.totalInvestment).toFixed(2))} %
+                                    <FontAwesomeIcon icon={completedInvestment.totalReturn-completedInvestment.totalInvestment > 0 ? faCaretUp : faCaretDown} /> {customUnits(Math.abs(((completedInvestment.totalReturn-completedInvestment.totalInvestment)*100/completedInvestment.totalInvestment).toFixed(2)))} %
                                 </span>
                             </span>
                         </div>

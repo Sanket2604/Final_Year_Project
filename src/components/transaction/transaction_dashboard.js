@@ -1,65 +1,71 @@
-import React, {useEffect, useState} from 'react'
-import LoanDonutChart from './donut_chart'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import HorizontalBarGraph from './horizontal_bar';
 import TransactionCard from '../cards/transaction_card';
 import { TransactionModal } from './transaction_modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Form, Row, Label, Input, Col } from "reactstrap";
+import { url } from '../../url'
 import { Link } from 'react-router-dom'
 import './transaction_dashboard.css'
 
 export default function TransactionDashboard() {
-    
-    const [modalOpen, setModalOpen]=useState(false)
-    const [newTransaction, setNewTransaction]=useState(false)
 
-    useEffect(()=>{
+    const [modalOpen, setModalOpen] = useState(false)
+    const [editTransaction, setEditTransaction] = useState(false)
+    const [categoryData, setCategoryData] = useState()
+    const [barGraphData, setBarGraphData] = useState()
+    const [newTransactions, setNewTransactions] = useState()
+    const token = JSON.parse(localStorage.getItem("profile"))?.token
+
+    useEffect(() => {
         document.title = `CDFYP | Transaction Tracker`
         window.scrollTo(0, 0)
-        document.querySelectorAll('.nav_ele').forEach((ele)=>{
-            if(!ele.classList.contains('active')) return
+        document.querySelectorAll('.nav_ele').forEach((ele) => {
+            if (!ele.classList.contains('active')) return
             ele.classList.remove('active')
         })
         document.getElementById('2').classList.add('active')
-    },[])
+        if (token) {
+            try {
+                axios
+                    .get(url + '/transactions/getTransactionsDashboard', {
+                        headers: { 'authorization': `Bearer ${token}` }
+                    })
+                    .then((res) => {
+                        setCategoryData(res.data.categoryData)
+                        setNewTransactions(res.data.newTransactions)
+                        setBarGraphData({
+                            expenditure: res.data.expenditure,
+                            catTotal: res.data.catTotal,
+                            label: res.data.label
+                        })
+                        console.log(res.data)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+        else {
+            window.location.replace("/login")
+        }
+    }, [])
 
     function triggerEditModal(add) {
         setModalOpen(!modalOpen)
-        setNewTransaction(add)
+        setEditTransaction(add)
     }
 
     return (
         <div className="trans_dashboard container py-5">
-            <TransactionModal modalOpen={modalOpen} newTransaction={newTransaction} setModalOpen={setModalOpen} />
-            <div className="add_transaction_btn" onClick={()=>triggerEditModal(true)}>
+            <TransactionModal modalOpen={modalOpen} editTransaction={editTransaction} setModalOpen={setModalOpen} />
+            <div className="add_transaction_btn" onClick={() => triggerEditModal(true)}>
                 <FontAwesomeIcon icon={faPlus} />
                 <div className="text">Add A New Transaction</div>
-            </div>
-            <div className="row">
-                <div className="col-12 heading_cont mb-4">
-                    <div className="heading">Show Data by Date</div>
-                </div>
-            </div>
-            <div className="row">
-                <div className="col-12">
-                    <Form>
-                        <Row className='mb-4'>
-                            <Col md={6}>
-                                <Label htmlFor="name">Start Date</Label>
-                                <Input type="date" id="startDate" name="startDate" />
-                                <div id="error_startDate" className='form_error'></div>
-                            </Col>
-                            <Col md={6}>
-                                <Label htmlFor="name">End Date</Label>
-                                <Input type="date" id="endDate" name="endDate" />
-                                <div id="error_endDate" className='form_error'></div>
-                            </Col>
-                            <Col md={12}>
-                                <div className="btn_cont mt-4"><div className="btn_ btn_small">Search</div></div>
-                            </Col>
-                        </Row>
-                    </Form>
-                </div>
             </div>
             <div className="row">
                 <div className="col-12 heading_cont mb-4">
@@ -67,25 +73,33 @@ export default function TransactionDashboard() {
                     <Link to="/category_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                 </div>
                 <div className="col-12 col-lg-6">
-                    <LoanDonutChart />
+                    {categoryData?.length > 0 ?
+                        <HorizontalBarGraph barGraphData={barGraphData} /> :
+                        <div className="no_data mt-3">No Data Available</div>}
                 </div>
                 <div className="col-12 col-lg-6">
-                    <div className="container-fluid invest_list heading_sec ms-1 mt-4 mt-lg-0">
-                        <div className="row invest heading">
-                            <div className="col-4 data name">Category Name</div>
-                            <div className="col-4 data total_money">Total</div>
-                            <div className="col-4 data percentage">Percentage</div>
-                        </div>
-                    </div>
-                    <div className="container-fluid invest_list ms-1">
-                        {[...Array(20)].map((j,i)=>
-                            <div className="row invest my-2" key={i}>
-                                <div className="col-4 data name">Category 1</div>
-                                <div className="col-4 data total_money">₹ 20000</div>
-                                <div className="col-4 data percentage">20%</div>
+                    {categoryData?.length > 0 ?
+                        <>
+                            <div className="container-fluid invest_list heading_sec ms-1 mt-4 mt-lg-0">
+                                <div className="row invest heading">
+                                    <div className="col-4 data name">Category Name</div>
+                                    <div className="col-3 data name">Expenditure</div>
+                                    <div className="col-3 data total_money">Total</div>
+                                    <div className="col-2 data percentage">Percentage</div>
+                                </div>
                             </div>
-                        )}
-                    </div>
+                            <div className="container-fluid invest_list ms-1">
+                                {categoryData?.map(cat =>
+                                    <Link to={'/category_details/' + cat.category.name} className="row invest my-2" key={cat.category._id}>
+                                        <div className="col-4 data name">{cat.category.name}</div>
+                                        <div className="col-3 data spent">₹ {cat.total}</div>
+                                        <div className="col-3 data total_money">₹ {cat.category.total}</div>
+                                        <div className="col-2 data percentage">{(cat.total * 100 / cat.category.total).toFixed(2)}%</div>
+                                    </Link>
+                                )}
+                            </div>
+                        </> : <div className="no_data mt-3">No Data Available</div>
+                    }
                 </div>
             </div>
             <div className="row transaction_sec mt-5">
@@ -93,9 +107,10 @@ export default function TransactionDashboard() {
                     <div className="heading">Last 10 Transactions</div>
                     <Link to="/transaction_details" className="btn_cont"><div className='btn_ btn_small'>View All</div></Link>
                 </div>
-                {[...Array(10)].map((j,i)=>
-                    <TransactionCard triggerEditModal={triggerEditModal} />
-                )}
+                {newTransactions?.length > 0 ?
+                    <TransactionCard triggerEditModal={triggerEditModal} transactions={newTransactions} /> :
+                    <div className="no_data mt-3">No Data Available</div>
+                }
             </div>
         </div>
     )

@@ -79,7 +79,7 @@ function EditModalForm({ loanData, editModal, closeEditModal, token, setLoanData
     function validateForm() {
         const nodeList = document.querySelectorAll('.form_error')
         for (let i = 0; i < nodeList.length; i++) {
-            nodeList[i].classList.remove('active')
+            nodeList[i].classList.remove('error')
         }
         if (formData.name === '') {
             setErrors({ ...errors, name: 'Select A Name' })
@@ -92,7 +92,7 @@ function EditModalForm({ loanData, editModal, closeEditModal, token, setLoanData
             return false
         }
         if (formData.endDate === '') {
-            setErrors({ ...errors, endDate: 'Select A Name' })
+            setErrors({ ...errors, endDate: 'Select An End Date' })
             document.getElementById('error_endDate').classList.add('error')
             return false
         }
@@ -261,7 +261,21 @@ export default function BorrowerDetails() {
     const [loanData, setLoanData] = useState([])
     const [activeLoans, setActiveLoans] = useState([])
     const [completedLoans, setCompletedLoans] = useState([])
+    const [randomColors, setRandomColors] = useState([])
+    const colors = ['#800000', '#9A6324', '#808000', '#469990', '#000075', '#e6194B', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6', '#a9a9a9', '#fabed4', '#ffd8b1', '#fffac8', '#aaffc3', '#dcbeff']
     const token = JSON.parse(localStorage.getItem("profile"))?.token
+
+    useEffect(() => {
+        let randomColorTemp = []
+        for (let i = 0; i < activeLoans?.loans?.length; i++) {
+            let index = Math.floor(Math.random() * (20))
+            if (randomColorTemp.includes(colors[index])) {
+                index = Math.floor(Math.random() * (20))
+            }
+            randomColorTemp.push(colors[index])
+        }
+        setRandomColors(randomColorTemp)
+    }, [activeLoans])
 
     useEffect(() => {
         document.title = `CDFYP | Borrower Details`
@@ -372,16 +386,17 @@ export default function BorrowerDetails() {
             <div className="heading mb-3">Borrower Details</div>
             <DeleteModal />
             <EditModal />
+            {loanData?.loans?.length>0 ? 
             <div className="row">
                 <div className="col-12 col-lg-6 p-5">
                     <div className="pie_heading">Total Amount</div>
-                    <LoanDonutChart loans={loanData?.loans} chartType="Total" />
+                    <LoanDonutChart loans={loanData?.loans} chartType="Total" randomColors={randomColors} />
                 </div>
                 <div className="col-12 col-lg-6 p-5">
                     <div className="pie_heading">Remaining Amount</div>
-                    <LoanDonutChart loans={loanData?.loans} chartType="Remaining" />
+                    <LoanDonutChart loans={loanData?.loans} chartType="Remaining" randomColors={randomColors} />
                 </div>
-            </div>
+            </div>:<></>}
             <div className="row my-4 debt_table">
                 <div className="col-6 sub_heading mb-3">Active Borrower Debt</div>
                 <div className="col-6">
@@ -429,7 +444,7 @@ export default function BorrowerDetails() {
                             <div>Total Repayment: ₹ {activeLoans.activeTotal}</div>
                             <div>Extra: ₹ {(activeLoans.activeTotal - activeLoans.activeAmount).toFixed(2)}</div>
                         </div>
-                    </> : <></>
+                    </> : <div className="no_data mt-3">No Data Available</div>
                 }
             </div>
             <div className="row my-4 debt_table">
@@ -475,19 +490,26 @@ export default function BorrowerDetails() {
                             <div>Total Repayment: ₹ {completedLoans?.completedTotal}</div>
                             <div>Extra: ₹ {(completedLoans?.completedTotal - completedLoans?.completedAmount).toFixed(2)}</div>
                         </div>
-                    </> : <></>
+                    </> : <div className="no_data mt-3">No Data Available</div>
                 }
             </div>
 
             {nameDetails.loans.length > 0 ?
-                <>  
-                    <div className='row'>
-                        
-                    </div>
+                <>
                     <div className="row">
                         <div className="col-6 sub_heading mb-3">Details About {nameDetails.loans[0].name}</div>
                         <div className="col-12">
                             <div className="details_cont container_fluid">
+                                <div className="row">
+                                    <div className="col-12 data_sec mt-2 mb-3">
+                                        <div className="status_bar">
+                                            <div className="progress_bar" style={{ width: ((nameDetails.totalPaid) / nameDetails.totalAmount) * 100 + '%' }}>
+                                                <div className={"percentage" + (((nameDetails.totalPaid) / nameDetails.totalAmount) * 100 < 10 ? ' outside' : '')}>{(((nameDetails.totalPaid) / nameDetails.totalAmount) * 100).toFixed(2)}%</div>
+                                            </div>
+                                        </div>
+                                        <div className="amount">₹ {nameDetails.totalPaid} / ₹ {nameDetails.totalAmount}</div>
+                                    </div>
+                                </div>
                                 <div className="row">
                                     <div className="col-3">
                                         <div className="detail my-2">

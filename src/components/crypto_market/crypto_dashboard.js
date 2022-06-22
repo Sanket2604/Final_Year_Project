@@ -77,31 +77,35 @@ export default function CryptoDashboard() {
                     <div className="heading">Cryptocurrency Dashboard</div>
                     <Link to="/user_crypto_investments" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                 </div>
-                <div className="col-12 col-lg-6">
-                    <CryptoDonutChart investments={activeInvestment} />
-                </div>
-                <div className="col-12 col-lg-6">
-                    <div className="container-fluid invest_list heading_sec ms-1">
-                        <div className="row invest heading">
-                            <div className="col-1 data">Logo</div>
-                            <div className="col-3 data name ms-2">Name</div>
-                            <div className="col-3 data pos_price ms-2">Buy Price</div>
-                            <div className="col-1 data quantity ms-2">Qty</div>
-                            <div className="col-3 data total_money ms-2">Total Investment</div>
+                {activeInvestment.length > 0 ?
+                    <>
+                        <div className="col-12 col-lg-6">
+                            <CryptoDonutChart investments={activeInvestment} />
                         </div>
-                    </div>
-                    <div className="container-fluid invest_list ms-1">
-                        {activeInvestment?.map((invst, i) =>
-                            <div className="row invest my-2">
-                                <div className="col-1 data"><div className="logo" style={{ backgroundImage: `url(${invst.logo})` }}></div></div>
-                                <div className="col-3 data name ms-2">{invst.name}</div>
-                                <div className="col-3 data pos_price ms-2">₹ {customUnits(invst.boughtAt)}</div>
-                                <div className="col-1 data quantity ms-2">{invst.quantity}</div>
-                                <div className="col-3 data total_money ms-2">₹ {customUnits(invst.investment)}</div>
+                        <div className="col-12 col-lg-6">
+                            <div className="container-fluid invest_list heading_sec ms-1">
+                                <div className="row invest heading">
+                                    <div className="col-1 data">Logo</div>
+                                    <div className="col-3 data name ms-2">Name</div>
+                                    <div className="col-3 data pos_price ms-2">Buy Price</div>
+                                    <div className="col-1 data quantity ms-2">Qty</div>
+                                    <div className="col-3 data total_money ms-2">Total Investment</div>
+                                </div>
                             </div>
-                        )}
-                    </div>
-                </div>
+                            <div className="container-fluid invest_list ms-1">
+                                {activeInvestment?.map((invst, i) =>
+                                    <Link to={`/crypto_coin/${invst.cryptoId}`} className="row invest my-2">
+                                        <div className="col-1 data"><div className="logo" style={{ backgroundImage: `url(${invst.logo})` }}></div></div>
+                                        <div className="col-3 data name ms-2">{invst.name}</div>
+                                        <div className="col-3 data pos_price ms-2">₹ {customUnits(invst.boughtAt)}</div>
+                                        <div className="col-1 data quantity ms-2">{invst.quantity}</div>
+                                        <div className="col-3 data total_money ms-2">₹ {customUnits(invst.investment)}</div>
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+                    </> : <div className="no_data mt-3">No Data Available</div>
+                }
             </div>
             <div className="row">
                 <div className="col-12 heading_cont mt-4 mb-4">

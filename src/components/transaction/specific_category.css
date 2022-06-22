@@ -26,9 +26,10 @@
 }
 .specific_cat .data_sec .status_bar .progress_bar .percentage{
     font-size: 14px;
+    transform: translateX(-30%);
 }
 .specific_cat .data_sec .status_bar .progress_bar .percentage.outside{
-    transform: translateX(60px);
+    transform: translateX(120%);
 }
 .specific_cat .data_sec .amount{
     font-size: 18px;

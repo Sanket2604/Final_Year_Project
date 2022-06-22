@@ -10,6 +10,7 @@ const initialState = {
     email: '',
     password: '',
     rePassword: '',
+    monthlyIncome: ''
 }
 export default function SignUp(props) {
 
@@ -68,6 +69,12 @@ export default function SignUp(props) {
             signup.add('error')
             return false
         }
+        if(formData.monthlyIncome===''){
+            setErrors({...errors, monthlyIncome: 'Enter Your Monthly Income'})
+            document.getElementById('error_monthlyIncome').classList.add('active')
+            signup.add('error')
+            return false
+        }
 
         return true;
     }
@@ -84,7 +91,6 @@ export default function SignUp(props) {
                 })
                 .catch((error)=>{
                     console.log(error.response.data)
-                    // setErrors({...errors, submit: error.response.data.message })
                     document.getElementById('error_submit').classList.add('active')
                     document.querySelector('.signup').classList.add('error')
                 })
@@ -100,7 +106,7 @@ export default function SignUp(props) {
             <div className="signup container-fluid">
                 <div className="heading">Welcome To Cool Dudes Final Year Project (CDFYP)</div>
                 <div className="subheading">Create An Account</div>
-                <div className="row">
+                <div className="row" style={{width: '85%'}}>
                     <div className="col-12 mb-1">
                         <div className="form">
                             <input style={{color:'black'}} type="text" className="fullname" name="fullname" onChange={handleChange} required />
@@ -120,7 +126,7 @@ export default function SignUp(props) {
                         <div id="error_email" className='form_error'>{errors.email}</div>
                     </div>
                 </div>
-                <div className="row">
+                <div className="row" style={{width: '85%'}}>
                     <div className="col-12 mb-1">
                         <div className="form">
                             <input style={{color:'black'}} type="password" className="pass" name="password" onChange={handleChange} required />
@@ -138,6 +144,17 @@ export default function SignUp(props) {
                             </label>                           
                         </div>
                         <div id="error_rePassword" className='form_error'>{errors.rePassword}</div>
+                    </div>
+                </div>
+                <div className="row" style={{width: '85%'}}>
+                    <div className="col-12 mb-1">
+                        <div className="form">
+                            <input style={{color:'black'}} type="text" className="monthlyIncome" name="monthlyIncome" onChange={handleChange} required />
+                            <label htmlFor="monthlyIncome" className="label-name monthlyIncome">
+                                <span className="content-name">Your Monthly Income</span>
+                            </label>                           
+                        </div>
+                        <div id="error_monthlyIncome" className='form_error'>{errors.monthlyIncome}</div>
                     </div>
                 </div>
                 <div className='d-flex flex-column align-items-center mt-5'>

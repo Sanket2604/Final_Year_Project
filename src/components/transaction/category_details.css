@@ -40,11 +40,33 @@
 }
 .cat_details .category_card .status_bar .progress_bar .percentage{
     font-size: 14px;
+    transform: translateX(-15%);
 }
 .cat_details .category_card .status_bar .progress_bar .percentage.outside{
-    transform: translateX(60px);
+    transform: translateX(115%);
 }
 .cat_details .category_card .amount{
     font-size: 18px;
     text-align: end;
+}
+.cat_details .category_card_cont{
+    position: relative;
+}
+.cat_details .category_card_cont .edit,
+.cat_details .category_card_cont .delete{
+    width: fit-content;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    cursor: pointer;
+    padding: 5px;
+    opacity: 0;
+    transition: 0.5s ease-in-out;
+}
+.cat_details .category_card_cont .edit{
+    right: 45px;
+}
+.cat_details .category_card_cont:hover .edit,
+.cat_details .category_card_cont:hover .delete{
+    opacity: 1;
 }

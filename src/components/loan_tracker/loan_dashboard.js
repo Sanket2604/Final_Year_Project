@@ -57,58 +57,65 @@ export default function LoanDashboard() {
                     <div className="heading">Lenders</div>
                     <Link to="/lender_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                 </div>
-                <div className="col-12 col-lg-6 p-4">
-                    <LoanDonutChart loans={lenderData} chartType="Total" />
-                </div>
-                <div className="col-12 col-lg-6">
-                    <div className="container-fluid invest_list heading_sec ms-1 mt-4 mt-lg-0">
-                        <div className="row invest heading">
-                            <div className="col-3 data name">Lender Name</div>
-                            <div className="col-3 data amount">Amount</div>
-                            <div className="col-3 data duration">Paid</div>
-                            <div className="col-3 data total_money">Total</div>
+                {lenderData.length > 0 ?
+                    <>
+                        <div className="col-12 col-lg-6 p-4">
+                            <LoanDonutChart loans={lenderData} chartType="Total" />
                         </div>
-                    </div>
-                    <div className="container-fluid invest_list ms-1">
-                        {lenderData.map(loan =>
-                            <div className="row invest my-2" key={loan._id}>
-                                <div className="col-3 data name">{loan.name}</div>
-                                <div className="col-3 data pos_price">₹ {loan.amount}</div>
-                                <div className="col-3 data duration">₹ {loan.paid}</div>
-                                <div className="col-3 data total_money">₹ {loan.total}</div>
+                        <div className="col-12 col-lg-6">
+                            <div className="container-fluid invest_list heading_sec ms-1 mt-4 mt-lg-0">
+                                <div className="row invest heading">
+                                    <div className="col-3 data name">Lender Name</div>
+                                    <div className="col-3 data amount">Amount</div>
+                                    <div className="col-3 data duration">Paid</div>
+                                    <div className="col-3 data total_money">Total</div>
+                                </div>
                             </div>
-                        )}
-                    </div>
-                </div>
+                            <div className="container-fluid invest_list ms-1">
+                                {lenderData.map(loan =>
+                                    <div className="row invest my-2" key={loan._id}>
+                                        <div className="col-3 data name">{loan.name}</div>
+                                        <div className="col-3 data pos_price">₹ {loan.amount}</div>
+                                        <div className="col-3 data duration">₹ {loan.paid}</div>
+                                        <div className="col-3 data total_money">₹ {loan.total}</div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </> : <div className="no_data mt-3">No Data Available</div>}
             </div>
             <div className="row mt-5">
                 <div className="col-12 heading_cont mb-4">
                     <div className="heading">Borowers</div>
                     <Link to="/borrower_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                 </div>
-                <div className="col-12 col-lg-6">
-                    <LoanDonutChart loans={borrowerData} chartType="Total" />
-                </div>
-                <div className="col-12 col-lg-6">
-                    <div className="container-fluid invest_list heading_sec ms-1 mt-4 mt-lg-0">
-                        <div className="row invest heading">
-                            <div className="col-3 data name">Lender Name</div>
-                            <div className="col-3 data amount">Amount</div>
-                            <div className="col-3 data duration">Paid</div>
-                            <div className="col-3 data total_money">Total</div>
+                {borrowerData.length > 0 ?
+                    <>
+                        <div className="col-12 col-lg-6">
+                            <LoanDonutChart loans={borrowerData} chartType="Total" />
                         </div>
-                    </div>
-                    <div className="container-fluid invest_list ms-1">
-                        {borrowerData.map(loan =>
-                            <div className="row invest my-2" key={loan._id}>
-                                <div className="col-3 data name">{loan.name}</div>
-                                <div className="col-3 data pos_price">₹ {loan.amount}</div>
-                                <div className="col-3 data duration">₹ {loan.paid}</div>
-                                <div className="col-3 data total_money">₹ {loan.total}</div>
+                        <div className="col-12 col-lg-6">
+                            <div className="container-fluid invest_list heading_sec ms-1 mt-4 mt-lg-0">
+                                <div className="row invest heading">
+                                    <div className="col-3 data name">Lender Name</div>
+                                    <div className="col-3 data amount">Amount</div>
+                                    <div className="col-3 data duration">Paid</div>
+                                    <div className="col-3 data total_money">Total</div>
+                                </div>
                             </div>
-                        )}
-                    </div>
-                </div>
+                            <div className="container-fluid invest_list ms-1">
+                                {borrowerData.map(loan =>
+                                    <div className="row invest my-2" key={loan._id}>
+                                        <div className="col-3 data name">{loan.name}</div>
+                                        <div className="col-3 data pos_price">₹ {loan.amount}</div>
+                                        <div className="col-3 data duration">₹ {loan.paid}</div>
+                                        <div className="col-3 data total_money">₹ {loan.total}</div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </> : <div className="no_data mt-3">No Data Available</div>
+                }
             </div>
         </div>
     )

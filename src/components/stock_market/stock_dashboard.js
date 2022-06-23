@@ -58,6 +58,26 @@ export default function StockDashboard() {
         }
     }, [stockRecommendation])
 
+    function customUnits(num) {
+        let unitNum = parseFloat(num)
+        if (unitNum > 10000000) {
+            let tempnum = num / 10000000
+            unitNum = tempnum.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+            unitNum += " Cr"
+        }
+        if (unitNum > 1000) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+        else if (unitNum > 100) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 5 });
+        }
+        else {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 10 });
+        }
+
+        return (unitNum)
+    }
+
     return (
         <div className='container stock_dashboard pt-5 pb-5'>
             <div className="row mb-4">
@@ -85,9 +105,9 @@ export default function StockDashboard() {
                                     <Link to={`/stock_market/${invst.symbol}`} className="row invest my-2" key={invst._id}>
                                         <div className="col-2 data date">{moment(invst.startDate).format('DD/MM/YYYY')}</div>
                                         <div className="col-3 data name">{invst.name}</div>
-                                        <div className="col-3 data pos_price">₹ {invst.boughtAt}</div>
-                                        <div className="col-1 data quantity">{invst.quantity}</div>
-                                        <div className="col-3 data total_money">₹ {invst.investment}</div>
+                                        <div className="col-3 data pos_price">₹ {customUnits(invst.boughtAt)}</div>
+                                        <div className="col-1 data quantity">{customUnits(invst.quantity)}</div>
+                                        <div className="col-3 data total_money">₹ {customUnits(invst.investment)}</div>
                                     </Link>
                                 )}
                             </div>

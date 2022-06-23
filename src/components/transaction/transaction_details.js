@@ -11,7 +11,7 @@ import './transaction_details.css'
 export default function TransactionDetails() {
 
     const [modalOpen, setModalOpen] = useState(false)
-    const [newTransaction, setNewTransaction] = useState(false)
+    const [editTransaction, setEditTransaction] = useState(false)
     const [transactionHistory, setTransactionHistory] = useState()
 
     const token = JSON.parse(localStorage.getItem("profile"))?.token
@@ -31,8 +31,11 @@ export default function TransactionDetails() {
                         headers: { 'authorization': `Bearer ${token}` }
                     })
                     .then((res) => {
-                        setTransactionHistory(res.data.transactionHistory)
+                        setTransactionHistory(res.data)
                         console.log(res.data)
+                        if(res.data.length<1){
+                            window.location.replace("/transaction_dashboard")
+                        }
                     })
                     .catch((error) => {
                         console.log(error)
@@ -49,12 +52,13 @@ export default function TransactionDetails() {
 
     function triggerEditModal(add) {
         setModalOpen(!modalOpen)
-        setNewTransaction(add)
+        setEditTransaction(add)
     }
+
 
     return (
         <div className="container trans_details py-5">
-            <TransactionModal modalOpen={modalOpen} newTransaction={newTransaction} setModalOpen={setModalOpen} />
+            <TransactionModal modalOpen={modalOpen} editTransaction={editTransaction} setModalOpen={setModalOpen} />
             <div className="add_transaction_btn" onClick={() => triggerEditModal(true)}>
                 <FontAwesomeIcon icon={faPlus} />
                 <div className="text">Add A New Transaction</div>
@@ -62,7 +66,7 @@ export default function TransactionDetails() {
             {transactionHistory?.map(data =>
                 <div className="row">
                     <div className="col-12 heading mb-2">All Transactions on {data.date}</div>
-                    <TransactionCard transactions={data.trasactions} triggerEditModal={triggerEditModal} />
+                    <TransactionCard transactions={data.transactions} triggerEditModal={triggerEditModal} />
                 </div>
             )}
 

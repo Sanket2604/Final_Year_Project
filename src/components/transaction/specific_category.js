@@ -58,9 +58,29 @@ export default function SpecificCategory() {
         }
     }, [])
 
+    function customUnits(num) {
+        let unitNum = parseFloat(num)
+        if (unitNum > 10000000) {
+            let tempnum = num / 10000000
+            unitNum = tempnum.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+            unitNum += " Cr"
+        }
+        if (unitNum > 1000) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+        else if (unitNum > 100) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 5 });
+        }
+        else {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 10 });
+        }
+
+        return (unitNum)
+    }
+
     return (
         <div className="container specific_cat py-5">
-            <TransactionModal modalOpen={modalOpen} editTransaction={editTransaction} setModalOpen={setModalOpen} />
+            <TransactionModal modalOpen={modalOpen} editTransaction={editTransaction} setModalOpen={setModalOpen} specificCat={params.catName} />
             <div className="add_transaction_btn" onClick={() => triggerEditModal(true)}>
                 <FontAwesomeIcon icon={faPlus} />
                 <div className="text">Add A New Transaction</div>
@@ -71,11 +91,11 @@ export default function SpecificCategory() {
             <div className="row">
                 <div className="col-12 data_sec mt-4 mb-3">
                     <div className="status_bar">
-                        <div className="progress_bar" style={{ width: `${expenditure*100/category?.total}%` }}>
-                            <div className={"percentage"+(expenditure*100/category?.total < 15 ? ' outside' : '')}>{(expenditure*100/category?.total).toFixed(2)}%</div>
+                        <div className="progress_bar" style={{ width: expenditure*100/category?.total > 100 ? '100%':`${expenditure*100/category?.total}%` }}>
+                            <div className={"percentage"+(expenditure*100/category?.total < 15 ? ' outside' : '')}>{customUnits((expenditure*100/category?.total).toFixed(2))}%</div>
                         </div>
                     </div>
-                    <div className="amount">₹{expenditure} / ₹{category?.total}</div>
+                    <div className="amount">₹{customUnits(expenditure)} / ₹{customUnits(category?.total)}</div>
                 </div>
             </div>
             <div className="row">

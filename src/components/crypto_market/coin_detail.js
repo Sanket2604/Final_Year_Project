@@ -441,7 +441,6 @@ export default function CryptoCoinDetail() {
                 <FontAwesomeIcon icon={faPlus} />
                 <div className="text">Add A New Investment</div>
             </div>
-            {console.log(cryptoDetails)}
             <div className={"heading_cont" + (isFetching ? ' loading' : '')}>
                 <div className="image" style={{ backgroundImage: `url(${cryptoDetails?.iconUrl})` }}></div>
                 <div className="heading ms-2">{isFetching ? '' : `${cryptoDetails?.name}`}</div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import moment from 'moment'
-import LoanDonutChart from './donut_chart'
+import HorizontalBarGraph from './horizontal_bar'
 import { url } from '../../url'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faTrashAlt, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
@@ -386,17 +386,12 @@ export default function BorrowerDetails() {
             <div className="heading mb-3">Borrower Details</div>
             <DeleteModal />
             <EditModal />
-            {loanData?.loans?.length>0 ? 
-            <div className="row">
-                <div className="col-12 col-lg-6 p-5">
-                    <div className="pie_heading">Total Amount</div>
-                    <LoanDonutChart loans={loanData?.loans} chartType="Total" randomColors={randomColors} />
-                </div>
-                <div className="col-12 col-lg-6 p-5">
-                    <div className="pie_heading">Remaining Amount</div>
-                    <LoanDonutChart loans={loanData?.loans} chartType="Remaining" randomColors={randomColors} />
-                </div>
-            </div>:<></>}
+            {loanData?.loans?.length > 0 ?
+                <div className="row">
+                    <div className="col-12">
+                        <HorizontalBarGraph loans={loanData?.loans} />
+                    </div>
+                </div> : <></>}
             <div className="row my-4 debt_table">
                 <div className="col-6 sub_heading mb-3">Active Borrower Debt</div>
                 <div className="col-6">
@@ -503,7 +498,7 @@ export default function BorrowerDetails() {
                                 <div className="row">
                                     <div className="col-12 data_sec mt-2 mb-3">
                                         <div className="status_bar">
-                                            <div className="progress_bar" style={{ width: ((nameDetails.totalPaid) / nameDetails.totalAmount) * 100 + '%' }}>
+                                            <div className="progress_bar" style={{ width: nameDetails.totalPaid * 100 / nameDetails.totalAmount > 100 ? '100%' : `${nameDetails.totalPaid * 100 / nameDetails.totalAmount}%` }}>
                                                 <div className={"percentage" + (((nameDetails.totalPaid) / nameDetails.totalAmount) * 100 < 10 ? ' outside' : '')}>{(((nameDetails.totalPaid) / nameDetails.totalAmount) * 100).toFixed(2)}%</div>
                                             </div>
                                         </div>

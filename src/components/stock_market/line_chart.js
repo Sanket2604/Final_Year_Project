@@ -106,6 +106,26 @@ export default function LineChart({ stockHistory, stockName, timeperiod, isFetch
         }
     }
 
+    function customUnits(num) {
+        let unitNum = parseFloat(num)
+        if (unitNum > 10000000) {
+            let tempnum = num / 10000000
+            unitNum = tempnum.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+            unitNum += " Cr"
+        }
+        if (unitNum > 1000) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+        else if (unitNum > 100) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 5 });
+        }
+        else {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 10 });
+        }
+
+        return (unitNum)
+    }
+
     const data = {
         labels: stockTimestamp,
         datasets
@@ -213,13 +233,13 @@ export default function LineChart({ stockHistory, stockName, timeperiod, isFetch
                 </div>
                 {stockHistory&&!isFetching ?
                     (
-                        <div className="price">Current Price: ₹ {parseFloat(stockHistory.Results[stockHistory?.Results?.length-1].Open*inrValue).toFixed(2)}
+                        <div className="price">Current Price: ₹ {customUnits(parseFloat(stockHistory.Results[stockHistory?.Results?.length-1].Open*inrValue).toFixed(2))}
                             <span className='price_change'>
                                 {priceChange>0 ? 
-                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{priceChange}%</span>): 
+                                    (<span className='profit'><FontAwesomeIcon icon={faCaretUp} />{customUnits(priceChange)}%</span>): 
                                     (priceChange===0 ? 
-                                        (<span className='zero'>{priceChange}%</span>):
-                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{Math.abs(priceChange)}%</span>))}
+                                        (<span className='zero'>{customUnits(priceChange)}%</span>):
+                                        (<span className='loss'><FontAwesomeIcon icon={faCaretDown} />{customUnits(Math.abs(priceChange))}%</span>))}
                             </span>
                         </div>
                     ):<div className="price loading"></div>

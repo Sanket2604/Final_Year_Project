@@ -9,12 +9,30 @@ export default function TransactionCard(props) {
 
     const [modalOpen, setModalOpen] = useState(false)
     const [transDelete, setTransDelete] = useState()
-    function triggerDeleteModal() {
+    function triggerDeleteModal(id) {
         setModalOpen(!modalOpen)
-        setTransDelete()
+        setTransDelete(id)
     }
 
+    function customUnits(num) {
+        let unitNum = parseFloat(num)
+        if (unitNum > 10000000) {
+            let tempnum = num / 10000000
+            unitNum = tempnum.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+            unitNum += " Cr"
+        }
+        if (unitNum > 1000) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+        else if (unitNum > 100) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 5 });
+        }
+        else {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 10 });
+        }
 
+        return (unitNum)
+    }
 
     return (
         <>
@@ -47,7 +65,7 @@ export default function TransactionCard(props) {
                             <FontAwesomeIcon icon={faIndianRupeeSign} />
                             <div className="content ms-2">
                                 <div className="subtext">Amount</div>
-                                <div className="text">{trans.amount}</div>
+                                <div className="text">{customUnits(trans.amount)}</div>
                             </div>
                         </div>
                         <div className="box d-flex align-items-center">

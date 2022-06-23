@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Form, Row, Label, Input, Col } from "reactstrap";
 import './category_details.css'
+import HorizontalBarGraph from './horizontal_bar'
 
 
 function EditModal({ setEditModal, token, editModal}) {
@@ -103,6 +104,7 @@ export default function CategoryDetails() {
         }
     })
     const [catDeleteId, setCatDeleteId]=useState()
+    const [barGraphData, setBarGraphData] = useState()
     const token = JSON.parse(localStorage.getItem("profile"))?.token
 
     useEffect(() => {
@@ -121,7 +123,11 @@ export default function CategoryDetails() {
                     })
                     .then((res) => {
                         setCategoryData(res.data.categoryData)
-                        console.log(res.data)
+                        setBarGraphData({
+                            expenditure: res.data.expenditure,
+                            catTotal: res.data.catTotal,
+                            label: res.data.label
+                        })
                     })
                     .catch((error) => {
                         console.log(error)
@@ -135,6 +141,26 @@ export default function CategoryDetails() {
             window.location.replace("/login")
         }
     }, [])
+
+    function customUnits(num) {
+        let unitNum = parseFloat(num)
+        if (unitNum > 10000000) {
+            let tempnum = num / 10000000
+            unitNum = tempnum.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+            unitNum += " Cr"
+        }
+        if (unitNum > 1000) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+        else if (unitNum > 100) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 5 });
+        }
+        else {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 10 });
+        }
+
+        return (unitNum)
+    }
 
     function closeDeleteModal() {
         setDeleteModal(false)
@@ -190,27 +216,28 @@ export default function CategoryDetails() {
 
     return (
         <div className="container cat_details py-5">
-            <div className="row">
+            <div className="row mb-3">
                 <div className="heading col-12">All Categories</div>
             </div>
+            {categoryData?.length>0 ? <HorizontalBarGraph barGraphData={barGraphData} aspect={true} />:<></>}
             <DeleteModal />
             <EditModal setEditModal={setEditModal} token={token} editModal={editModal} />
             <div className="add_transaction_btn" onClick={() => triggerEditModal(true)}>
                 <FontAwesomeIcon icon={faPlus} />
                 <div className="text">Add A New Category</div>
             </div>
-            <div className="row">
+            <div className="row mt-4">
                 {categoryData?.map(cat =>
                     <div className="col-4 pt-3 category_card_cont" key={cat.category._id}>
                         <Link to={'/category_details/' + cat.category.name}>
                             <div className="category_card">
                                 <div className="name mb-2">{cat.category.name}</div>
                                 <div className="status_bar">
-                                    <div className="progress_bar" style={{ width: `${cat.total * 100 / cat.category.total}%` }}>
-                                        <div className={"percentage" + (cat.total * 100 / cat.category.total < 20 ? ' outside' : '')}>{(cat.total * 100 / cat.category.total).toFixed(2)}%</div>
+                                    <div className="progress_bar" style={{ width: cat.total * 100 / cat.category.total > 100 ? '100%':`${cat.total * 100 / cat.category.total}%` }}>
+                                        <div className={"percentage" + (cat.total * 100 / cat.category.total < 20 ? ' outside' : '')}>{customUnits((cat.total * 100 / cat.category.total).toFixed(2))}%</div>
                                     </div>
                                 </div>
-                                <div className="amount">₹{cat.total} / ₹{cat.category.total}</div>
+                                <div className="amount">₹{customUnits(cat.total)} / ₹{customUnits(cat.category.total)}</div>
                             </div>
                         </Link>
                         <div className="edit"><FontAwesomeIcon icon={faPenToSquare} onClick={() => triggerEditModal(false, cat.category)} /></div>

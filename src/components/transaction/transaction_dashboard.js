@@ -40,7 +40,6 @@ export default function TransactionDashboard() {
                             catTotal: res.data.catTotal,
                             label: res.data.label
                         })
-                        console.log(res.data)
                     })
                     .catch((error) => {
                         console.log(error)
@@ -54,6 +53,26 @@ export default function TransactionDashboard() {
             window.location.replace("/login")
         }
     }, [])
+
+    function customUnits(num) {
+        let unitNum = parseFloat(num)
+        if (unitNum > 10000000) {
+            let tempnum = num / 10000000
+            unitNum = tempnum.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+            unitNum += " Cr"
+        }
+        if (unitNum > 1000) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+        else if (unitNum > 100) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 5 });
+        }
+        else {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 10 });
+        }
+
+        return (unitNum)
+    }
 
     function triggerEditModal(add) {
         setModalOpen(!modalOpen)
@@ -74,7 +93,7 @@ export default function TransactionDashboard() {
                 </div>
                 <div className="col-12 col-lg-6">
                     {categoryData?.length > 0 ?
-                        <HorizontalBarGraph barGraphData={barGraphData} /> :
+                        <HorizontalBarGraph barGraphData={barGraphData} aspect={false} /> :
                         <div className="no_data mt-3">No Data Available</div>}
                 </div>
                 <div className="col-12 col-lg-6">
@@ -92,9 +111,9 @@ export default function TransactionDashboard() {
                                 {categoryData?.map(cat =>
                                     <Link to={'/category_details/' + cat.category.name} className="row invest my-2" key={cat.category._id}>
                                         <div className="col-4 data name">{cat.category.name}</div>
-                                        <div className="col-3 data spent">₹ {cat.total}</div>
-                                        <div className="col-3 data total_money">₹ {cat.category.total}</div>
-                                        <div className="col-2 data percentage">{(cat.total * 100 / cat.category.total).toFixed(2)}%</div>
+                                        <div className="col-3 data spent">₹ {customUnits(cat.total)}</div>
+                                        <div className="col-3 data total_money">₹ {customUnits(cat.category.total)}</div>
+                                        <div className="col-2 data percentage">{customUnits((cat.total * 100 / cat.category.total).toFixed(2))}%</div>
                                     </Link>
                                 )}
                             </div>
@@ -105,7 +124,7 @@ export default function TransactionDashboard() {
             <div className="row transaction_sec mt-5">
                 <div className="col-12 heading_cont my-4">
                     <div className="heading">Last 10 Transactions</div>
-                    <Link to="/transaction_details" className="btn_cont"><div className='btn_ btn_small'>View All</div></Link>
+                    {newTransactions?.length > 0 ? <Link to="/transaction_details" className="btn_cont"><div className='btn_ btn_small'>View All</div></Link>:<></>}
                 </div>
                 {newTransactions?.length > 0 ?
                     <TransactionCard triggerEditModal={triggerEditModal} transactions={newTransactions} /> :

@@ -30,7 +30,7 @@ export default function HorizontalBarGraph(props) {
     useEffect(() => {
         let tempProfitLossColor=[], tempBorderColor=[]
         for(let i=0; i<props.barGraphData?.expenditure?.length;i++){
-            if(props.barGraphData?.expenditure[i]<props.barGraphData?.catTotal[i]){
+            if(props.barGraphData?.expenditure[i]<=props.barGraphData?.catTotal[i]){
                 tempProfitLossColor.push('rgba(23,203,73,0.5)')
                 tempBorderColor.push('rgb(23,203,73)')
             }
@@ -49,7 +49,7 @@ export default function HorizontalBarGraph(props) {
     const options = {
         indexAxis: 'y',
         barPercentage: 1,
-        maintainAspectRatio: false,
+        maintainAspectRatio: props.aspect ? true : false,
         elements: {
             bar: {
                 borderWidth: 2,

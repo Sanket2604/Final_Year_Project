@@ -4,7 +4,7 @@ import LineChart from './line_chart';
 import axios from 'axios'
 import moment from 'moment'
 import CryptoNewsCard from '../cards/crypto_news';
-import { Link } from 'react-router-dom'
+import PredictChart from './crypto_prediction_chart';
 import { url } from '../../url'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useGetCryptosQuery } from '../../services/cryptoApi';
@@ -61,11 +61,6 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, coin
         setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
-    function setCoinName(value) {
-        let tempArray = value.split('+')
-        setFormData({ ...formData, name: tempArray[0], cryptoId: tempArray[1], logo: tempArray[2] })
-    }
-
     function investmentStatus(status) {
         if (status) {
             setFormData({ ...formData, status: 'active' })
@@ -91,7 +86,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, coin
             document.getElementById('error_boughtAt').classList.add('error')
             return false
         }
-        if (formData.boughtAt>100000000 || formData.boughtAt<1) {
+        if (formData.boughtAt > 100000000 || formData.boughtAt < 1) {
             setErrors({ ...errors, boughtAt: 'Enter A Valid Stock Buy Price' })
             document.getElementById('error_boughtAt').classList.add('error')
             return false
@@ -101,7 +96,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, coin
             document.getElementById('error_quantity').classList.add('error')
             return false
         }
-        if (formData.quantity >1000 || formData.quantity<1) {
+        if (formData.quantity > 1000 || formData.quantity < 1) {
             setErrors({ ...errors, quantity: 'Enter Quantity Between 1 and 1000' })
             document.getElementById('error_quantity').classList.add('error')
             return false
@@ -112,7 +107,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, coin
             return false
         }
         duration = moment(formData.startDate).diff(moment(), 'days')
-        if (duration>0) {
+        if (duration > 0) {
             document.getElementById('error_startDate').classList.add('error')
             setErrors({ ...errors, startDate: 'Start Date Can Not Be In Future' })
             return false
@@ -123,7 +118,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, coin
             return false
         }
         duration = moment(formData.endDate).diff(moment(), 'days')
-        if (duration>0) {
+        if (duration > 0) {
             document.getElementById('error_endDate').classList.add('error')
             setErrors({ ...errors, endDate: 'End Date Can Not Be In Future' })
             return false
@@ -139,7 +134,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, coin
             document.getElementById('error_closedAt').classList.add('error')
             return false
         }
-        if ((formData.closedAt>100000000 || formData.closedAt<1) && formData.status === 'completed') {
+        if ((formData.closedAt > 100000000 || formData.closedAt < 1) && formData.status === 'completed') {
             setErrors({ ...errors, closedAt: 'Enter A Valid Stock Sell Price' })
             document.getElementById('error_closedAt').classList.add('error')
             return false
@@ -148,7 +143,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, coin
     }
 
     function postCryptoInvestment() {
-        if(!validateForm()) return
+        if (!validateForm()) return
         axios
             .post(url + '/crypto/postCryptoInvestment', {
                 logo: formData.logo,
@@ -174,7 +169,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, coin
     }
 
     function putCryptoInvestment() {
-        if(!validateForm()) return
+        if (!validateForm()) return
         axios
             .put(url + '/crypto/editCryptoInvestment', {
                 id: formData.id,
@@ -205,7 +200,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, coin
             <ModalHeader toggle={closeEditModal}><img className='modal_logo me-2' src={formData.logo} />{newInvestment ? 'Add' : 'Edit'} Investment in {formData.name}</ModalHeader>
             <ModalBody>
                 <Form>
-                    <Row form>
+                    <Row>
                         <Col md={6} className='d-flex flex-column justify-content-center mb-3'>
                             <div className="details mt-1" style={{ fontSize: '18px' }}><span style={{ fontSize: '20px' }}>Selected Coin:</span> {formData.name}</div>
                             <div className="details mt-1" style={{ fontSize: '16px' }}><span style={{ fontSize: '18px' }}>Current Coin Price:</span> ₹ {currentPrice}</div>
@@ -289,7 +284,7 @@ function TotalChange({ activeInvestment, currentPrice, customUnits }) {
 
     return (
         <>
-            Total {percentageValue > 0 ? 'Profit' : 'Loss'}: ₹ 
+            Total {percentageValue > 0 ? 'Profit' : 'Loss'}: ₹
             <span className={percentageValue > 0 ? 'profit ms-1' : 'loss ms-1'}>
                 {customUnits(Math.abs(currentValue - activeInvestment.investedAmount).toFixed(2))}
                 <span className='changePercentage'><FontAwesomeIcon icon={percentageValue > 0 ? faCaretUp : faCaretDown} /> {customUnits(Math.abs(percentageValue).toFixed(2))} %</span>
@@ -314,6 +309,9 @@ export default function CryptoCoinDetail() {
     const { data: coinHistory, isFetching: isHistoryFetching } = useGetCryptoHistoryQuery({ coinId, timeperiod })
     const cryptoDetails = coinDetails?.data?.coin;
     const { data: cryptoNews, isFetching: isNewsFetching } = useGetCryptoNewsQuery({ newsCategory: cryptoDetails?.name, count: 9 });
+    const [usdPrediction, setUSDPrediction] = useState()
+    const [inrPrediction, setINRPrediction] = useState()
+    const [inrValue, setInrValue] = useState(1)
     const time = ['3h', '24h', '7d', '30d', '3m', '1y', '3y', '5y'];
     let volume24h
     if (cryptoDetails) {
@@ -384,6 +382,20 @@ export default function CryptoCoinDetail() {
                     .catch((error) => {
                         console.log(error)
                     })
+                    const options = {
+                        method: 'GET',
+                        url: 'https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency',
+                        params: { have: 'USD', want: 'INR', amount: '1' },
+                        headers: {
+                            'X-RapidAPI-Host': 'currency-converter-by-api-ninjas.p.rapidapi.com',
+                            'X-RapidAPI-Key': '5ad5ec7c2dmsh0d498e7c9955227p159b35jsnbe88c2f296c1'
+                        }
+                    };
+                    axios.request(options).then(function (response) {
+                        setInrValue(response.data.new_amount);
+                    }).catch(function (error) {
+                        console.error(error);
+                    });
             }
             catch (error) {
                 console.log(error)
@@ -394,6 +406,33 @@ export default function CryptoCoinDetail() {
         }
     }, [])
 
+    useEffect(() => {
+        if(cryptoDetails){
+        axios
+            .get('https://stock-crypto-predicton.herokuapp.com/stocks_crypto/'+cryptoDetails.symbol+'-USD')
+            .then((res) => {
+                setUSDPrediction(res.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        }
+    }, [cryptoDetails])
+
+
+    useEffect(() => {
+        let high = [], low = []
+        if (usdPrediction) {
+            for (let i = 0; i < 5; i++) {
+                high.push(usdPrediction.High[i] * inrValue)
+                low.push(usdPrediction.Low[i] * inrValue)
+            }
+            setINRPrediction({
+                High: high,
+                Low: low
+            })
+        }
+    }, [usdPrediction, inrValue])
 
     function triggerEditModal(add, invst) {
         setEditModalOpen(true)
@@ -435,7 +474,7 @@ export default function CryptoCoinDetail() {
     }
     return (
         <div className="container coin_details pt-5 pb-5">
-            <EditModal editModalOpen={editModalOpen} token={token} coinLogo={cryptoDetails?.iconUrl} coinName={cryptoDetails?.name} coinId={cryptoDetails?.uuid} newInvestment={newInvestment} setEditModalOpen={setEditModalOpen} cryptoCoins={data} editInvestment={editInvestment} currentPrice={customUnits(cryptoDetails?.price)}/>
+            <EditModal editModalOpen={editModalOpen} token={token} coinLogo={cryptoDetails?.iconUrl} coinName={cryptoDetails?.name} coinId={cryptoDetails?.uuid} newInvestment={newInvestment} setEditModalOpen={setEditModalOpen} cryptoCoins={data} editInvestment={editInvestment} currentPrice={customUnits(cryptoDetails?.price)} />
             <DeleteModal />
             <div className="add_transaction_btn" onClick={() => triggerEditModal(true)}>
                 <FontAwesomeIcon icon={faPlus} />
@@ -453,8 +492,15 @@ export default function CryptoCoinDetail() {
                 </Select>
             </div>
             <LineChart coinHistory={coinHistory} timeRange={timeperiod} coinColour={cryptoDetails?.color} currentPrice={customUnits(cryptoDetails?.price)} coinName={cryptoDetails?.name} timeperiod={timeperiod} isFetching={isFetching} isHistoryFetching={isHistoryFetching} />
+            <div className="row mt-5">
+                <div className="col-2"></div>
+                <div className="col-8">
+                    <PredictChart currentPrice={cryptoDetails?.price} coinColour={cryptoDetails?.color} inrValue={inrValue} prediction={inrPrediction} coinName={cryptoDetails?.name} isFetching={isFetching} />
+                </div>
+                <div className="col-2"></div>
+            </div>
             <div className="row mt-5 user_investment py-4 px-2">
-                <div className="col-12 heading mb-4">Active Investments in {cryptoDetails?.name}</div>
+                <div className="col-12 heading mb-4">Active Investments in      {cryptoDetails?.name}</div>
                 {activeInvestment.investments?.length > 0 ?
                     <>
                         <div className="col-12 container-fluid">
@@ -497,7 +543,7 @@ export default function CryptoCoinDetail() {
                     </> : <div className="no_data mt-3">No Data Available</div>}
             </div>
             <div className="row mt-4 py-4 px-2 user_investment">
-            <div className="col-12 heading mb-4">Completed Investments in {cryptoDetails?.name}</div>
+                <div className="col-12 heading mb-4">Completed Investments in {cryptoDetails?.name}</div>
                 {completedInvestment?.investments?.length > 0 ?
                     <>
                         <div className="container-fluid">
@@ -638,13 +684,12 @@ export default function CryptoCoinDetail() {
                     }
                 </div>
             </div>
-            <div className="row news_sec mt-2">
-                    <div className="col-12 heading_cont mb-4">
-                        <div className="heading">Latest {cryptoDetails?.name} News</div>
-                        <Link to="/crypto_news" className="btn_cont"><div className='btn_ btn_small'>Show More</div></Link>
-                    </div>
-                    <CryptoNewsCard cryptoNews={cryptoNews} isFetching={isNewsFetching} />
+            <div className="row news_sec mt-4">
+                <div className="col-12 heading_cont mb-4">
+                    <div className="heading">Latest {cryptoDetails?.name} News</div>
                 </div>
+                <CryptoNewsCard cryptoNews={cryptoNews} isFetching={isNewsFetching} />
+            </div>
         </div>
     )
 }

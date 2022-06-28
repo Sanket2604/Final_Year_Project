@@ -294,11 +294,17 @@
     background-color: var(--secondary);
     animation: pulse 0.5s alternate infinite ease-in-out;
 }
-.coin_details .news_sec .heading_cont{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 .coin_details .news_sec .heading_cont .heading{
     font-size: 24px;
+    text-align: center;
+    color: var(--headingColour)
+}
+.coin_details .chart_cont.prediction .heading_cont{
+    display: flex;
+    justify-content: center;
+}
+.coin_details .chart_cont.prediction .heading_cont .heading{
+    font-size: 24px;
+    text-align: center;
+    color: var(--headingColour)
 }

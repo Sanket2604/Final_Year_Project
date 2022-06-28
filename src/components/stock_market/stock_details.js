@@ -4,6 +4,7 @@ import moment from 'moment'
 import CryptoNewsCard from '../cards/crypto_news';
 import LineChart from './line_chart';
 import BarChartVolume from './bar_chart_volume';
+import PredictChart from './stock_prediction_chart';
 import { url } from '../../url'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -265,6 +266,8 @@ export default function StockDetails() {
     const [newInvestment, setNewInvestment] = useState(false)
     const [activeInvestment, setActiveInvestment] = useState([])
     const [completedInvestment, setCompletedInvestment] = useState([])
+    const [usdPrediction, setUSDPrediction] = useState()
+    const [inrPrediction, setINRPrediction] = useState()
     const [editInvestment, setEditInvestment] = useState({
         id: '',
         symbol: '',
@@ -311,7 +314,7 @@ export default function StockDetails() {
         return (unitNum)
     }
     const technicalPointers = [
-        { title: 'Share Price', value: stockDetail?.price?.regularMarketPrice.raw * inrValue, icon: <FundOutlined /> },
+        { title: 'Share Price', value: '₹ '+customUnits((stockDetail?.price?.regularMarketPrice.raw * inrValue).toFixed(2)), icon: <FundOutlined /> },
         { title: 'Market Cap', value: stockDetail?.summaryDetail?.marketCap.raw ? ('₹ ' + customUnits(stockDetail?.summaryDetail?.marketCap.raw * inrValue)) : 'NA', icon: <ExclamationCircleOutlined /> },
         { title: '52 Week High', value: stockDetail?.summaryDetail?.fiftyTwoWeekHigh.raw ? ('₹ ' + customUnits(stockDetail?.summaryDetail?.fiftyTwoWeekHigh.raw * inrValue)) : 'NA', icon: <ExclamationCircleOutlined /> },
         { title: '52 Week Low', value: stockDetail?.summaryDetail?.fiftyTwoWeekLow.raw ? ('₹ ' + customUnits(stockDetail?.summaryDetail?.fiftyTwoWeekLow.raw * inrValue)) : 'NA', icon: <ExclamationCircleOutlined /> },
@@ -366,6 +369,14 @@ export default function StockDetails() {
                     .catch((error) => {
                         console.log(error)
                     })
+                axios
+                    .get('https://stock-crypto-predicton.herokuapp.com/stocks_crypto/'+stockSymbol)
+                    .then((res) => {
+                        setUSDPrediction(res.data)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
             }
             catch (error) {
                 console.log(error)
@@ -379,6 +390,20 @@ export default function StockDetails() {
     useEffect(() => {
         setEditInvestment({...editInvestment, name: stockDetail?.quoteType?.shortName, symbol: stockDetail?.symbol, price: customUnits(currentPrice * inrValue)})
     }, [stockDetail,inrValue,currentPrice])
+
+    useEffect(()=>{
+        let high=[], low=[]
+        if(usdPrediction){
+            for(let i=0;i<5;i++){
+                high.push(usdPrediction.High[i]*inrValue)
+                low.push(usdPrediction.Low[i]*inrValue)
+            }
+            setINRPrediction({
+                High: high,
+                Low: low
+            })
+        }
+    },[usdPrediction, inrValue])
     
 
     function getStockHistory(timeperiod) {
@@ -516,7 +541,14 @@ export default function StockDetails() {
                 </Select>
             </div>
             <LineChart stockHistory={stockHistory} stockName={stockDetail?.quoteType?.shortName} timeperiod={timeperiod} isFetching={isFetching} inrValue={inrValue} />
-            <BarChartVolume stockHistory={stockHistory} stockName={stockDetail?.quoteType?.shortName} timeperiod={timeperiod} isFetching={isFetching} />
+            <div className="row">
+                <div className="col-5">
+                    <PredictChart  stockHistory={stockHistory}  inrValue={inrValue} prediction={inrPrediction} stockName={stockDetail?.quoteType?.shortName} isFetching={isFetching} />
+                </div>
+                <div className="col-7">
+                    <BarChartVolume stockHistory={stockHistory} stockName={stockDetail?.quoteType?.shortName} timeperiod={timeperiod} isFetching={isFetching} />
+                </div>
+            </div>
             <div className="row mt-5 user_investment py-3">
                 <div className="col-12 heading mb-4">Active Investments in {stockDetail?.quoteType?.shortName}</div>
                 {activeInvestment?.investments?.length > 0 ?

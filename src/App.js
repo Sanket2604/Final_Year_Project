@@ -9,6 +9,7 @@ import TransactionDashboard from './components/transaction/transaction_dashboard
 import TransactionDetails from './components/transaction/transaction_details'
 import CategoryDetails from './components/transaction/category_details';
 import SpecificCategory from './components/transaction/specific_category';
+import ComparePrice from './components/compare_price/compare_price';
 import LoanDashboard from './components/loan_tracker/loan_dashboard';
 import LenderDetails from './components/loan_tracker/lender_details';
 import BorrowerDetails from './components/loan_tracker/borrower_details';
@@ -49,6 +50,7 @@ function App() {
           <Route exact path="/transaction_details" component={()=><TransactionDetails />} />
           <Route exact path="/category_details" component={()=><CategoryDetails />} />
           <Route exact path="/category_details/:catName" component={()=><SpecificCategory />} />
+          <Route exact path="/compare_price" component={()=><ComparePrice />} />
           <Route exact path="/loan_dashboard" component={()=><LoanDashboard />} />
           <Route exact path="/lender_details" component={()=><LenderDetails />} />
           <Route exact path="/borrower_details" component={()=><BorrowerDetails />} />

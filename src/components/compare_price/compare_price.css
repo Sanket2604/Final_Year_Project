@@ -1,0 +1,59 @@
+.compare_cont .heading_cont .heading{
+    font-size: 32px;
+    text-align: center;
+    color: var(--headingColour);
+}
+.compare_cont label{
+    font-size: 18px;
+}
+
+.compare_cont .compare_card{
+    background-color: var(--secondary);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    transition: 0.25s ease-in-out;
+}
+.compare_cont .compare_card:hover{
+    filter: brightness(1.1);
+}
+.compare_cont .compare_card .source{
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 12px;
+    background-color: rgba(53, 53, 53, 0.69);
+    padding: 4px 6px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+}
+.compare_cont .compare_card .source img{
+    height: 15px;
+    width: 15px;
+    margin-right: 5px;
+    margin-left: 2px;
+}
+.compare_cont .compare_card .image{
+    height: 200px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: rgba(233, 233, 233, 0.69);
+}
+.compare_cont .compare_card .content{
+    padding: 15px;
+}
+.compare_cont .compare_card .content .name{
+    font-size: 18px;
+    text-align: center;
+}
+.compare_cont .compare_card .content .price_rating{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+.compare_cont .compare_card .content .price_rating svg path{
+    color: rgb(247,208,0);
+}

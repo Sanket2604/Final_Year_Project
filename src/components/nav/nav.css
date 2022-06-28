@@ -16,6 +16,7 @@
     --success: rgb(0, 228, 0);
     --body: rgb(37, 37, 37);
     --linkColour: rgb(0, 140, 255);
+    --chatBot: rgb(24,64,119);
     --lineColour: rgb(155, 155, 155);
     --btnColour: rgb(0, 35, 102);
     --fontColour: rgb(255, 255, 255);
@@ -174,6 +175,41 @@ input{
 
 .notifications:hover {
     border: 2px solid var(--fontColour);
+}
+
+.add_transaction_btn{
+    position: fixed;
+    display: grid;
+    place-items: center;
+    bottom: 90px;
+    right: 20px;
+    height: 60px;
+    width: 60px;
+    border-radius: 100%;
+    font-size: 32px;
+    background-color: var(--secondary);
+    border: 2px solid var(--lineColour);
+    cursor: pointer;
+    z-index: 5;
+}
+.add_transaction_btn:hover{
+    filter: brightness(1.1);
+}
+.add_transaction_btn .text{
+    position: absolute;
+    width: max-content;
+    padding: 5px 10px;
+    background-color: var(--primary);
+    border: 2px solid var(--lineColour);
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-70%, 10px);
+    transition: 0.25s ease-in-out;
+}
+.add_transaction_btn:hover .text{
+    opacity: 1;
+    transform: translate(-70%, 0);
 }
 
 .search_cont {

@@ -32,7 +32,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
     const [errors, setErrors] = useState(formData)
     const { Option } = Select;
 
-    useEffect(()=>{
+    useEffect(() => {
         setFormData({
             id: editInvestment?._id ? editInvestment._id : '',
             logo: editInvestment?.logo ? editInvestment.logo : '',
@@ -45,9 +45,9 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
             investment: editInvestment?.investment ? editInvestment.investment : '',
             closedAt: editInvestment?.closedAt ? editInvestment.closedAt : '',
             status: editInvestment?.status ? editInvestment.status : 'active',
-            price : 0
+            price: 0
         })
-    },[editInvestment])
+    }, [editInvestment])
 
     function closeEditModal() {
         setEditModalOpen(false)
@@ -87,7 +87,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
             document.getElementById('error_boughtAt').classList.add('error')
             return false
         }
-        if (formData.boughtAt>100000000 || formData.boughtAt<1) {
+        if (formData.boughtAt > 100000000 || formData.boughtAt < 1) {
             setErrors({ ...errors, boughtAt: 'Enter A Valid Crypto Buy Price' })
             document.getElementById('error_boughtAt').classList.add('error')
             return false
@@ -97,7 +97,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
             document.getElementById('error_investment').classList.add('error')
             return false
         }
-        if (formData.investment >100000000 || formData.investment<1) {
+        if (formData.investment > 100000000 || formData.investment < 1) {
             setErrors({ ...errors, investment: 'Enter Investment Between 1 and 10,00,00,000' })
             document.getElementById('error_investment').classList.add('error')
             return false
@@ -108,7 +108,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
             return false
         }
         duration = moment(formData.startDate).diff(moment(), 'days')
-        if (duration>0) {
+        if (duration > 0) {
             document.getElementById('error_startDate').classList.add('error')
             setErrors({ ...errors, startDate: 'Start Date Can Not Be In Future' })
             return false
@@ -119,7 +119,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
             return false
         }
         duration = moment(formData.endDate).diff(moment(), 'days')
-        if (duration>0) {
+        if (duration > 0) {
             document.getElementById('error_endDate').classList.add('error')
             setErrors({ ...errors, endDate: 'End Date Can Not Be In Future' })
             return false
@@ -135,7 +135,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
             document.getElementById('error_closedAt').classList.add('error')
             return false
         }
-        if ((formData.closedAt>100000000 || formData.closedAt<1) && formData.status === 'completed') {
+        if ((formData.closedAt > 100000000 || formData.closedAt < 1) && formData.status === 'completed') {
             setErrors({ ...errors, closedAt: 'Enter A Valid Crypto Sell Price' })
             document.getElementById('error_closedAt').classList.add('error')
             return false
@@ -144,7 +144,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
     }
 
     function postCryptoInvestment() {
-        if(!validateForm()) return
+        if (!validateForm()) return
         axios
             .post(url + '/crypto/postCryptoInvestment', {
                 logo: formData.logo,
@@ -153,8 +153,8 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
                 startDate: formData.startDate,
                 endDate: formData.endDate,
                 boughtAt: formData.boughtAt,
-                closedAt: formData.status==='active' ? 0:formData.closedAt,
-                quantity: formData.investment/formData.boughtAt,
+                closedAt: formData.status === 'active' ? 0 : formData.closedAt,
+                quantity: formData.investment / formData.boughtAt,
                 investment: formData.investment,
                 status: formData.status
             }, {
@@ -169,8 +169,8 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
             })
     }
 
-    function putCryptoInvestment(){
-        if(!validateForm()) return
+    function putCryptoInvestment() {
+        if (!validateForm()) return
         axios
             .put(url + '/crypto/editCryptoInvestment', {
                 id: formData.id,
@@ -180,8 +180,8 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
                 startDate: formData.startDate,
                 endDate: formData.endDate,
                 boughtAt: formData.boughtAt,
-                closedAt: formData.status==='active' ? 0:formData.closedAt,
-                quantity: formData.investment/formData.boughtAt,
+                closedAt: formData.status === 'active' ? 0 : formData.closedAt,
+                quantity: formData.investment / formData.boughtAt,
                 investment: formData.investment,
                 status: formData.status
             }, {
@@ -198,7 +198,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
 
     return (
         <Modal size="xl" isOpen={editModalOpen} toggle={closeEditModal}>
-            <ModalHeader toggle={closeEditModal}><img className='modal_logo me-2' src={formData.logo ? formData.logo:'https://icons.veryicon.com/png/o/miscellaneous/color-work-icon/blockchain-2.png'} />{newInvestment ? 'Add' : 'Edit'} Investment {formData.name ? `in ${formData.name}`:''}</ModalHeader>
+            <ModalHeader toggle={closeEditModal}><img className='modal_logo me-2' src={formData.logo ? formData.logo : 'https://icons.veryicon.com/png/o/miscellaneous/color-work-icon/blockchain-2.png'} />{newInvestment ? 'Add' : 'Edit'} Investment {formData.name ? `in ${formData.name}` : ''}</ModalHeader>
             <ModalBody>
                 <Form>
                     <Row>
@@ -221,7 +221,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
                             {formData.name ? <>
                                 <div className="details mt-1"><span style={{ fontSize: '16px' }}>Selected Coin:</span> {formData.name}</div>
                                 <div className="details mt-1"><span style={{ fontSize: '16px' }}>Current Coin Price:</span> ₹ {customUnits(formData.price)}</div>
-                            </>:<></>}
+                            </> : <></>}
                             <div id="error_name" className='form_error'>{errors.name}</div>
                         </Col>
                         <Col md={6} className='mb-3'>
@@ -267,7 +267,7 @@ function EditModal({ editModalOpen, setEditModalOpen, newInvestment, token, cryp
                 </Form>
             </ModalBody>
             <ModalFooter>
-                <button type="button" className="btn btn-success" onClick={formData.id ? putCryptoInvestment:postCryptoInvestment}>{newInvestment ? 'Add' : 'Edit'}</button>
+                <button type="button" className="btn btn-success" onClick={formData.id ? putCryptoInvestment : postCryptoInvestment}>{newInvestment ? 'Add' : 'Edit'}</button>
                 <button type="button" className="btn btn-secondary" onClick={closeEditModal}>Cancel</button>
             </ModalFooter>
         </Modal>
@@ -369,9 +369,9 @@ export default function UserCrypto() {
         if (changeToken) {
             return (
                 <>
-                    Total {change > 0 ? 'Profit' : 'Loss'}: ₹ 
+                    Total {change > 0 ? 'Profit' : 'Loss'}: ₹
                     <span className={change > 0 ? 'profit ms-1' : 'loss ms-1'}>
-                        {customUnits(Math.abs(currentTotal-activeInvestment.investedAmount).toFixed(2))}
+                        {customUnits(Math.abs(currentTotal - activeInvestment.investedAmount).toFixed(2))}
                         <span className='changePercentage'><FontAwesomeIcon icon={change > 0 ? faCaretUp : faCaretDown} /> {customUnits(Math.abs(change))} %</span>
                     </span>
                 </>
@@ -433,9 +433,9 @@ export default function UserCrypto() {
     function closeDeleteModal() {
         setDeleteModalOpen(false)
     }
-    function deleteCryptoInvestment(){
+    function deleteCryptoInvestment() {
         axios
-            .delete(url + '/crypto/deleteCryptoInvestment/'+investmentDeleteId, {
+            .delete(url + '/crypto/deleteCryptoInvestment/' + investmentDeleteId, {
                 headers: { 'authorization': `Bearer ${token}` }
             })
             .then(() => {
@@ -469,11 +469,12 @@ export default function UserCrypto() {
             <div className="row mb-4">
                 <div className="col-12 heading">Your Crypto Investments</div>
             </div>
-            <div className="row">
-                <div className="col-12">
-                    <HorizontalBarGraph investments={activeInvestment.investments} coinData={data?.data?.coins} />
-                </div>
-            </div>
+            {activeInvestment.investments?.length > 0 ?
+                <div className="row">
+                    <div className="col-12">
+                        <HorizontalBarGraph investments={activeInvestment.investments} coinData={data?.data?.coins} />
+                    </div>
+                </div> : <></>}
             <div className="row mt-5">
                 <div className="col-12 heading">Active Investments</div>
             </div>
@@ -498,7 +499,7 @@ export default function UserCrypto() {
                                 <div className="col-1 data">{moment(invst.startDate).format('DD/MM/YYYY')}</div>
                                 <div className="col-2 data">₹ {customUnits(invst.boughtAt)}</div>
                                 <div className="col-2 data"><CryptoPrice id={invst.cryptoId} qty={1} /></div>
-                                <div className="col-1 data">{invst.investedAmount>100000?customUnits((invst.quantity).toFixed(4)):customUnits((invst.quantity).toFixed(2))}</div>
+                                <div className="col-1 data">{invst.investedAmount > 100000 ? customUnits((invst.quantity).toFixed(4)) : customUnits((invst.quantity).toFixed(2))}</div>
                                 <div className="col-2 data">₹ {customUnits(invst.investment)}</div>
                                 <div className="col-2 data">
                                     <div className="value"><CryptoPrice id={invst.cryptoId} qty={invst.quantity} /></div>
@@ -541,9 +542,9 @@ export default function UserCrypto() {
                                 <div className="col-2 data">₹ {customUnits(invst.closedAt)}</div>
                                 <div className="col-2 data">₹ {customUnits(invst.investment)}</div>
                                 <div className="col-2 data">
-                                    <div className="value">₹ {customUnits((invst.quantity*invst.closedAt).toFixed(2))}</div>
-                                    <div className={'status big ms-2' + ((invst.quantity*invst.closedAt)*100/invst.investment > 100 ? ' profit' : ' loss')}>
-                                        <FontAwesomeIcon icon={(invst.quantity*invst.closedAt)*100/invst.investment > 100 ? faCaretUp : faCaretDown} />{customUnits(Math.abs((100-((invst.quantity*invst.closedAt)*100/invst.investment)).toFixed(2)))}%
+                                    <div className="value">₹ {customUnits((invst.quantity * invst.closedAt).toFixed(2))}</div>
+                                    <div className={'status big ms-2' + ((invst.quantity * invst.closedAt) * 100 / invst.investment > 100 ? ' profit' : ' loss')}>
+                                        <FontAwesomeIcon icon={(invst.quantity * invst.closedAt) * 100 / invst.investment > 100 ? faCaretUp : faCaretDown} />{customUnits(Math.abs((100 - ((invst.quantity * invst.closedAt) * 100 / invst.investment)).toFixed(2)))}%
                                     </div>
                                 </div>
                                 <div className="modify edit big" onClick={() => triggerEditModal(false, invst)}><FontAwesomeIcon icon={faPenToSquare} /></div>
@@ -554,11 +555,11 @@ export default function UserCrypto() {
                         <div className="total_investment">Total Invested: ₹ {customUnits(completedInvestment.totalInvestment)}</div>
                         <div className="total_return mx-4">Return Of Investment: ₹ {customUnits(completedInvestment.totalReturn)}</div>
                         <div className="change">
-                            <span className='me-1'>Total {completedInvestment.totalReturn-completedInvestment.totalInvestment > 0 ? 'Profit' : 'Loss'}: ₹ </span>
-                            <span className={completedInvestment.totalReturn-completedInvestment.totalInvestment > 0 ? 'profit' : 'loss'}>
-                                {customUnits(Math.abs((completedInvestment.totalReturn-completedInvestment.totalInvestment).toFixed(2)))}
+                            <span className='me-1'>Total {completedInvestment.totalReturn - completedInvestment.totalInvestment > 0 ? 'Profit' : 'Loss'}: ₹ </span>
+                            <span className={completedInvestment.totalReturn - completedInvestment.totalInvestment > 0 ? 'profit' : 'loss'}>
+                                {customUnits(Math.abs((completedInvestment.totalReturn - completedInvestment.totalInvestment).toFixed(2)))}
                                 <span className='changePercentage'>
-                                    <FontAwesomeIcon icon={completedInvestment.totalReturn-completedInvestment.totalInvestment > 0 ? faCaretUp : faCaretDown} /> {customUnits(Math.abs(((completedInvestment.totalReturn-completedInvestment.totalInvestment)*100/completedInvestment.totalInvestment).toFixed(2)))} %
+                                    <FontAwesomeIcon icon={completedInvestment.totalReturn - completedInvestment.totalInvestment > 0 ? faCaretUp : faCaretDown} /> {customUnits(Math.abs(((completedInvestment.totalReturn - completedInvestment.totalInvestment) * 100 / completedInvestment.totalInvestment).toFixed(2)))} %
                                 </span>
                             </span>
                         </div>

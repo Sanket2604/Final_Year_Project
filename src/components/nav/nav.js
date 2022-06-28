@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import ChatBot from '../chat_bot/chat_bot'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHouseChimney, faRightFromBracket, faBell, faChartLine, faMoneyBillTransfer, faUserGear, faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons'
+import { faHouseChimney, faRightFromBracket, faChartLine, faMoneyBillTransfer, faUserGear, faHandHoldingDollar, faHeart, faCodeCompare } from '@fortawesome/free-solid-svg-icons'
 import { faBitcoin } from '@fortawesome/free-brands-svg-icons'
 import { Link } from 'react-router-dom';
 import './nav.css'
@@ -48,7 +49,7 @@ export default function Nav(props) {
                 <div className="brand">
                     <div className="logo"></div>
                 </div>
-                <div style={{transform: 'translateY(-40px)'}}>
+                <div style={{transform: 'translateY(-10px)'}}>
                     <Link to="/dashboard">
                         <div className="nav_ele" id="1" onMouseOver={()=>navMouseOver()} onClick={()=>activeNavEle(1)}>
                             <FontAwesomeIcon icon={faHouseChimney} />
@@ -61,8 +62,14 @@ export default function Nav(props) {
                             <div className="text">Transactions</div>
                         </div>
                     </Link>
+                    <Link to="/compare_price">
+                        <div className="nav_ele" id="7" onMouseOver={()=>navMouseOver()} onClick={()=>activeNavEle(7)}>
+                            <FontAwesomeIcon icon={faCodeCompare} />
+                            <div className="text">Compare Price</div>
+                        </div>
+                    </Link>
                     <Link to="/loan_dashboard">
-                        <div className="nav_ele" id="5" onMouseOver={()=>navMouseOver()} onClick={()=>activeNavEle(2)}>
+                        <div className="nav_ele" id="5" onMouseOver={()=>navMouseOver()} onClick={()=>activeNavEle(5)}>
                             <FontAwesomeIcon icon={faHandHoldingDollar} />
                             <div className="text">Loans Tracking</div>
                         </div>
@@ -80,7 +87,7 @@ export default function Nav(props) {
                         </div>
                     </Link>
                     <Link to="/user_settings">
-                        <div className="nav_ele" id="5" onMouseOver={()=>navMouseOver()} onClick={()=>activeNavEle(5)}>
+                        <div className="nav_ele" id="6" onMouseOver={()=>navMouseOver()} onClick={()=>activeNavEle(6)}>
                             <FontAwesomeIcon icon={faUserGear} />
                             <div className="text">User Settings</div>
                         </div>
@@ -88,6 +95,7 @@ export default function Nav(props) {
                 </div>
                 <div className="logout" onClick={logout}><FontAwesomeIcon icon={faRightFromBracket} /></div>
             </div>
+            <ChatBot />
             {/* <div className="notifications">
                 <FontAwesomeIcon icon={faBell} />
             </div> */}

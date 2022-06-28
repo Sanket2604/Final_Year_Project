@@ -36,7 +36,7 @@
 .chat_cont{
     position: fixed;
     bottom: 0;
-    right: 0;
+    right: 20px;
     width: 550px;
     height: 70vh;
     background-image: url(./background.jpg);
@@ -45,13 +45,22 @@
     background-size: cover;
     z-index: 6;
     border-top-left-radius: 20px;
-    overflow: hidden;
+    border-top-right-radius: 20px;
+    padding-bottom: 10px;
+    padding-top: 40px;
 }
 .chat_cont .header{
     background-color: var(--chatBot);
     padding: 8px 20px;
     display: flex;
     justify-content: space-between;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 7;
 }
 .chat_cont .header .name{
     font-size: 18px;
@@ -63,9 +72,12 @@
 .chat_cont .header .status .dot{
     width: 10px;
     height: 10px;
-    background-color: var(--success);
+    background-color: var(--secondary);
     margin-inline: 3px;
     border-radius: 100%;
+}
+.chat_cont .header .status .dot.online{
+    background-color: var(--success);
 }
 .chat_cont .chat_section{
     padding-inline: 10px;
@@ -76,19 +88,12 @@
     display: flex;
     flex-direction: column;
     outline: none;
+    height: 100%;
 }
 .chat_cont .chat_section .conversation_sec{
     padding-top: 10px;
     display: flex;
     flex-direction: column;
-}
-.chat_cont .chat_section .conversation_sec .date{
-    align-self: center;
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: var(--body);
-    margin-bottom: 5px;
-    font-size: 14px;
 }
 .chat_cont .chat_section::-webkit-scrollbar,
 .chat_cont .chat_footer textarea::-webkit-scrollbar{
@@ -98,7 +103,7 @@
 .chat_cont .chat_section::-webkit-scrollbar-thumb,
 .chat_cont .chat_footer textarea::-webkit-scrollbar-thumb{
     border: none;
-    background-color: var(--lineColour);
+    background-color: var(--chatBot);
 }
 .chat_cont .chat_section .message{
     position: relative;
@@ -106,7 +111,7 @@
     background-color: var(--chatBot);
     overflow: hidden;
     min-width: 80px;
-    max-width: 65%;
+    max-width: 85%;
     width: fit-content;
     border-radius: 10px;
     border-top-left-radius: 0px;
@@ -150,82 +155,6 @@
     clip-path: polygon(0 100%, 100% 0, 0 0);
     background-color: var(--secondary);
 }
-.chat_cont .chat_footer{
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    background-color: var(--chatBot);
-    height: 12%;
-    max-height: 80px;
-    min-height: 50px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-.chat_cont .chat_footer .input{
-    width: 100%;
-    height: 100%;
-}
-.chat_cont .chat_footer .input textarea{
-    border: 3px solid hsl(215, 66%, 18%);
-    background-color: transparent;
-    outline: none;
-    padding: 5px 10px;
-    width: 100%;
-    height: 100%;
-    resize: none;
-}
-.chat_cont .chat_footer .input textarea::placeholder { 
-    color: var(--fontColour);
-}
-.chat_cont .chat_footer .send_btn{
-    margin-left: 10px;
-    margin-right: 5px;
-    height: 35px;
-    width: 35px;
-    min-height: 35px;
-    min-width: 35px;
-    display: grid;
-    place-items: center;
-    border-radius: 100%;
-    color: white;
-    background-color: var(--btnColour);
-    cursor: pointer;
-    transform: scale(1.1);
-    transition: 0.25s ease-in-out;
-}
-.chat_cont .chat_footer .send_btn:hover{
-    transform: scale(1.2);
-}
-.chat_cont .chat_footer .send_btn.active{
-    animation: bounce 0.5s;
-}
-@keyframes bounce {
-    0%{
-        transform: scale(1.1);
-    }
-    25%{
-        transform: scale(1);
-    }
-    50%{
-        transform: scale(1.2);
-    }
-    100%{
-        transform: scale(1.1);
-    }
-}
-.chat_cont .error_message{
-    font-size: 14px;
-    color: var(--error);
-    position: absolute;
-    bottom: 0;
-    opacity: 0;
-    transition: 0.25s ease-in-out;
-}
-.chat_cont .error_message.active{
-    opacity: 1;
-}
 .chat_cont .input_cont .chat_input{
     background-color: var(--chatBot);
     padding: 5px 10px;
@@ -236,4 +165,14 @@
 }
 .chat_cont .input_cont .chat_input:hover{
     transform: scale(1.01);
+}
+
+.chat_cont{
+    opacity: 0;
+    transform: translateY(100%);
+    transition: 0.5s ease-in-out;
+}
+.chat_cont.active{
+    opacity: 1;
+    transform: translateY(0);
 }

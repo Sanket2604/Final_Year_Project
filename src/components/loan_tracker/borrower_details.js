@@ -251,7 +251,7 @@ export default function BorrowerDetails() {
             status: ''
         }
     })
-    let debtDeleteId
+    const [debtDeleteId, setDebtDeleteId] = useState()
     const [nameDetails, setNameDetails] = useState({
         loans: [],
         totalAmount: 0,
@@ -261,21 +261,8 @@ export default function BorrowerDetails() {
     const [loanData, setLoanData] = useState([])
     const [activeLoans, setActiveLoans] = useState([])
     const [completedLoans, setCompletedLoans] = useState([])
-    const [randomColors, setRandomColors] = useState([])
-    const colors = ['#800000', '#9A6324', '#808000', '#469990', '#000075', '#e6194B', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6', '#a9a9a9', '#fabed4', '#ffd8b1', '#fffac8', '#aaffc3', '#dcbeff']
     const token = JSON.parse(localStorage.getItem("profile"))?.token
 
-    useEffect(() => {
-        let randomColorTemp = []
-        for (let i = 0; i < activeLoans?.loans?.length; i++) {
-            let index = Math.floor(Math.random() * (20))
-            if (randomColorTemp.includes(colors[index])) {
-                index = Math.floor(Math.random() * (20))
-            }
-            randomColorTemp.push(colors[index])
-        }
-        setRandomColors(randomColorTemp)
-    }, [activeLoans])
 
     useEffect(() => {
         document.title = `CDFYP | Borrower Details`
@@ -314,7 +301,7 @@ export default function BorrowerDetails() {
     }
     function triggerDeleteModal(id) {
         setDeleteModal(!deleteModal)
-        debtDeleteId = id
+        setDebtDeleteId(id)
     }
     function deleteDebt() {
         axios
@@ -353,6 +340,26 @@ export default function BorrowerDetails() {
                 </ModalFooter>
             </Modal>
         )
+    }
+
+    function customUnits(num) {
+        let unitNum = parseFloat(num)
+        if (unitNum > 10000000) {
+            let tempnum = num / 10000000
+            unitNum = tempnum.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+            unitNum += " Cr"
+        }
+        if (unitNum > 1000) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+        else if (unitNum > 100) {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 5 });
+        }
+        else {
+            unitNum = unitNum.toLocaleString('en-IN', { maximumFractionDigits: 10 });
+        }
+
+        return (unitNum)
     }
 
     function EditModal() {
@@ -421,11 +428,11 @@ export default function BorrowerDetails() {
                                         <div className="col-2 data name_sec" style={{ cursor: 'pointer' }}><div className="name" onClick={() => showNameDetails(loan.name)}>{loan.name}</div></div>
                                         <div className="col-1 data">{moment(loan.startDate).format('DD/MM/YYYY')}</div>
                                         <div className="col-1 data">{moment(loan.endDate).format('DD/MM/YYYY')}</div>
-                                        <div className="col-2 data">₹ {loan.amount}</div>
-                                        <div className="col-1 data">{loan.intrest}%</div>
-                                        <div className="col-2 data">₹ {loan.paid} ( ₹ {(loan.total - loan.paid).toFixed(2)} )</div>
-                                        <div className="col-1 data">{((loan.paid / loan.total) * 100).toFixed(2)}%</div>
-                                        <div className="col-1 data">₹ {loan.total}</div>
+                                        <div className="col-2 data">₹ {customUnits(loan.amount)}</div>
+                                        <div className="col-1 data">{customUnits(loan.intrest)}%</div>
+                                        <div className="col-2 data">₹ {customUnits(loan.paid)} ( ₹ {customUnits((loan.total - loan.paid).toFixed(2))} )</div>
+                                        <div className="col-1 data">{customUnits(((loan.paid / loan.total) * 100).toFixed(2))}%</div>
+                                        <div className="col-1 data">₹ {customUnits(loan.total)}</div>
                                         <div className="col-1 data">
                                             <div className="edit" onClick={() => triggerEditModal(false, true, loan)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                                             <div className="delete" onClick={() => triggerDeleteModal(loan._id)}><FontAwesomeIcon icon={faTrashAlt} /></div>
@@ -435,9 +442,9 @@ export default function BorrowerDetails() {
                             </div>
                         </div>
                         <div className="total_sec col-12 pt-3">
-                            <div>Borrowed: ₹ {activeLoans.activeAmount}</div>
-                            <div>Total Repayment: ₹ {activeLoans.activeTotal}</div>
-                            <div>Extra: ₹ {(activeLoans.activeTotal - activeLoans.activeAmount).toFixed(2)}</div>
+                            <div>Borrowed: ₹ {customUnits(activeLoans.activeAmount)}</div>
+                            <div>Total Repayment: ₹ {customUnits(activeLoans.activeTotal)}</div>
+                            <div>Extra: ₹ {customUnits((activeLoans.activeTotal - activeLoans.activeAmount).toFixed(2))}</div>
                         </div>
                     </> : <div className="no_data mt-3">No Data Available</div>
                 }
@@ -469,9 +476,9 @@ export default function BorrowerDetails() {
                                         <div className="col-3 data name_sec" style={{ cursor: 'pointer' }}><div className="name" onClick={() => showNameDetails(loan.name)}>{loan.name}</div></div>
                                         <div className="col-1 data">{moment(loan.startDate).format('DD/MM/YYYY')}</div>
                                         <div className="col-1 data">{moment(loan.endDate).format('DD/MM/YYYY')}</div>
-                                        <div className="col-2 data">₹ {loan.amount}</div>
-                                        <div className="col-1 data">{loan.intrest}%</div>
-                                        <div className="col-3 data">₹ {loan.total}</div>
+                                        <div className="col-2 data">₹ {customUnits(loan.amount)}</div>
+                                        <div className="col-1 data">{customUnits(loan.intrest)}%</div>
+                                        <div className="col-3 data">₹ {customUnits(loan.total)}</div>
                                         <div className="col-1 data">
                                             <div className="edit" onClick={() => triggerEditModal(false, false, loan)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                                             <div className="delete" onClick={() => triggerDeleteModal(loan._id)}><FontAwesomeIcon icon={faTrashAlt} /></div>
@@ -481,9 +488,9 @@ export default function BorrowerDetails() {
                             </div>
                         </div>
                         <div className="col-12 total_sec pt-3">
-                            <div>Borrowed: ₹ {completedLoans?.completedAmount}</div>
-                            <div>Total Repayment: ₹ {completedLoans?.completedTotal}</div>
-                            <div>Extra: ₹ {(completedLoans?.completedTotal - completedLoans?.completedAmount).toFixed(2)}</div>
+                            <div>Borrowed: ₹ {customUnits(completedLoans?.completedAmount)}</div>
+                            <div>Total Repayment: ₹ {customUnits(completedLoans?.completedTotal)}</div>
+                            <div>Extra: ₹ {customUnits((completedLoans?.completedTotal - completedLoans?.completedAmount).toFixed(2))}</div>
                         </div>
                     </> : <div className="no_data mt-3">No Data Available</div>
                 }
@@ -498,36 +505,36 @@ export default function BorrowerDetails() {
                                 <div className="row">
                                     <div className="col-12 data_sec mt-2 mb-3">
                                         <div className="status_bar">
-                                            <div className="progress_bar" style={{ width: nameDetails.totalPaid * 100 / nameDetails.totalAmount > 100 ? '100%' : `${nameDetails.totalPaid * 100 / nameDetails.totalAmount}%` }}>
-                                                <div className={"percentage" + (((nameDetails.totalPaid) / nameDetails.totalAmount) * 100 < 10 ? ' outside' : '')}>{(((nameDetails.totalPaid) / nameDetails.totalAmount) * 100).toFixed(2)}%</div>
+                                            <div className="progress_bar" style={{ width: nameDetails.totalPaid * 100 / nameDetails.totalAmount > 100 ? '100%' : `${customUnits(nameDetails.totalPaid * 100 / nameDetails.totalAmount)}%` }}>
+                                                <div className={"percentage" + (((nameDetails.totalPaid) / nameDetails.totalAmount) * 100 < 10 ? ' outside' : '')}>{customUnits((((nameDetails.totalPaid) / nameDetails.totalAmount) * 100).toFixed(2))}%</div>
                                             </div>
                                         </div>
-                                        <div className="amount">₹ {nameDetails.totalPaid} / ₹ {nameDetails.totalAmount}</div>
+                                        <div className="amount">₹ {customUnits(nameDetails.totalPaid)} / ₹ {customUnits(nameDetails.totalAmount)}</div>
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-3">
                                         <div className="detail my-2">
                                             <div className="title">Total Amount</div>
-                                            <div className="value">₹ {nameDetails.totalAmount}</div>
+                                            <div className="value">₹ {customUnits(nameDetails.totalAmount)}</div>
                                         </div>
                                     </div>
                                     <div className="col-3">
                                         <div className="detail my-2">
                                             <div className="title">Amount Paid</div>
-                                            <div className="value">₹ {nameDetails.totalPaid}</div>
+                                            <div className="value">₹ {customUnits(nameDetails.totalPaid)}</div>
                                         </div>
                                     </div>
                                     <div className="col-3">
                                         <div className="detail my-2">
                                             <div className="title">Amount Remaining</div>
-                                            <div className="value">₹ {nameDetails.totalAmount - nameDetails.totalPaid}</div>
+                                            <div className="value">₹ {customUnits(nameDetails.totalAmount - nameDetails.totalPaid)}</div>
                                         </div>
                                     </div>
                                     <div className="col-3">
                                         <div className="detail my-2">
                                             <div className="title">Number Of Times Borrowed</div>
-                                            <div className="value">{nameDetails.loans.length}</div>
+                                            <div className="value">{customUnits(nameDetails.loans.length)}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -557,11 +564,11 @@ export default function BorrowerDetails() {
                                         <div className="col-2 data name_sec no_line">{loan.name}</div>
                                         <div className="col-1 data">{moment(loan.startDate).format('DD/MM/YYYY')}</div>
                                         <div className="col-1 data">{moment(loan.endDate).format('DD/MM/YYYY')}</div>
-                                        <div className="col-2 data">₹ {loan.amount}</div>
-                                        <div className="col-1 data">{loan.intrest}%</div>
-                                        <div className="col-2 data">₹ {loan.paid} (₹ {(loan.total - loan.paid).toFixed(2)})</div>
-                                        <div className="col-1 data">{((loan.paid / loan.total) * 100).toFixed(2)}%</div>
-                                        <div className="col-1 data">₹ {loan.total}</div>
+                                        <div className="col-2 data">₹ {customUnits(loan.amount)}</div>
+                                        <div className="col-1 data">{customUnits(loan.intrest)}%</div>
+                                        <div className="col-2 data">₹ {customUnits(loan.paid)} (₹ {customUnits((loan.total - loan.paid).toFixed(2))})</div>
+                                        <div className="col-1 data">{customUnits(((loan.paid / loan.total) * 100).toFixed(2))}%</div>
+                                        <div className="col-1 data">₹ {customUnits(loan.total)}</div>
                                         <div className="col-1 data">
                                             <div className="edit" onClick={() => triggerEditModal(false, false, loan)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                                             <div className="delete" onClick={() => triggerDeleteModal(loan._id)}><FontAwesomeIcon icon={faTrashAlt} /></div>
@@ -571,9 +578,9 @@ export default function BorrowerDetails() {
                             </div>
                         </div>
                         <div className="col-12 total_sec pt-3">
-                            <div>Borrowed: ₹ {nameDetails.totalBorrowed}</div>
-                            <div>Total Repayment: ₹ {nameDetails.totalAmount}</div>
-                            <div>Extra: ₹ {(nameDetails.totalAmount - nameDetails.totalBorrowed).toFixed(2)}</div>
+                            <div>Borrowed: ₹ {customUnits(nameDetails.totalBorrowed)}</div>
+                            <div>Total Repayment: ₹ {customUnits(nameDetails.totalAmount)}</div>
+                            <div>Extra: ₹ {customUnits((nameDetails.totalAmount - nameDetails.totalBorrowed).toFixed(2))}</div>
                         </div>
                     </div>
                 </>

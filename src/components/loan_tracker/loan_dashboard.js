@@ -10,6 +10,7 @@ export default function LoanDashboard() {
     const [lenderData, setLenderData] = useState([])
     const [borrowerData, setBorrowerData] = useState([])
     const token = JSON.parse(localStorage.getItem("profile"))?.token
+    
     useEffect(() => {
         document.title = `CDFYP | Loan Tracker`
         window.scrollTo(0, 0)
@@ -25,7 +26,7 @@ export default function LoanDashboard() {
                         headers: { 'authorization': `Bearer ${token}` }
                     })
                     .then((res) => {
-                        setLenderData(res.data.lenderDetails.loans)
+                        setLenderData(res.data.activeLoans.loans)
                     })
                     .catch((error) => {
                         console.log(error)
@@ -35,7 +36,7 @@ export default function LoanDashboard() {
                         headers: { 'authorization': `Bearer ${token}` }
                     })
                     .then((res) => {
-                        setBorrowerData(res.data.borrowerDetails.loans)
+                        setBorrowerData(res.data.activeLoans.loans)
                     })
                     .catch((error) => {
                         console.log(error)

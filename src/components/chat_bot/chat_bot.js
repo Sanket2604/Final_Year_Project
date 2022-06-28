@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCommentsDollar, faTimes, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import './chat_bot.css'
 
-export default function ChatBot() {
+export default function ChatBot({ hideNav }) {
 
     const [data, setData] = useState([])
     const [chatOptions, setChatOptions] = useState([
@@ -28,33 +28,30 @@ export default function ChatBot() {
             message: 'I want to know about Crypto Details'
         }
     ])
-    const [messages, setMessages] = useState([{
-        type: 'bot',
-        message: 'Hi there! My name is <b>Jarvis</b>, your financial assistant. <br/><br/>I can help you navigate through the website via chat. <br/><br/>Select the below options for assistance'
-    }])
+    const [messages, setMessages] = useState([])
     const token = JSON.parse(localStorage.getItem("profile"))?.token
 
     useEffect(() => {
+        if (hideNav) return
         if (token) {
-            try {
-                axios
-                    .get(url + '/account/getMainDashboard', {
-                        headers: { 'authorization': `Bearer ${token}` }
-                    })
-                    .then((res) => {
-                        setData(res.data)
-                        console.log(res.data)
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-            }
-            catch (error) {
-                console.log(error)
-            }
-        }
-        else {
-            window.location.replace("/login")
+            axios
+                .get(url + '/account/getMainDashboard', {
+                    headers: { 'authorization': `Bearer ${token}` }
+                })
+                .then((res) => {
+                    setData(res.data)
+                    setMessages([{
+                        type: 'bot',
+                        message: 'Hi there! My name is <b>Friday</b>, your financial assistant. <br/><br/>I can help you navigate through the website via chat. <br/><br/>Select the below options for assistance'
+                    }])
+                })
+                .catch((error) => {
+                    console.log(error)
+                    setMessages([{
+                        type: 'bot',
+                        message: 'Hi there! My name is <b>Friday</b>, your financial assistant. <br/><br/>Sorry for the inconvenience I can not connect to my server. Please try again later.'
+                    }])
+                })
         }
     }, [])
 
@@ -78,11 +75,11 @@ export default function ChatBot() {
         return (unitNum)
     }
 
-    function openChatbot(){
+    function openChatbot() {
         document.querySelector('.chat_cont').classList.add('active')
     }
 
-    function closeChatbot(){
+    function closeChatbot() {
         document.querySelector('.chat_cont').classList.remove('active')
     }
 
@@ -110,50 +107,61 @@ export default function ChatBot() {
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
-                message: 'What would you like to know about your lender loans.'
+                message: 'What would you like to know about your lender loans?'
             }])
             return
         }
         if (option.link === 'allLender') {
-            let tempMessage='I have found the list of all the active lenders <br/><br/>'
-            data.loan.list.map((loan,i)=>{
-                if(data.loan.list.length-1===i) return tempMessage+=`and ${loan.name}.`
-                if(data.loan.list.length-2===i) return tempMessage+=`${loan.name} `
-                tempMessage+=`${loan.name}, `
-            })
-            
+            let tempMessage
+            if (data.loan.list.length > 0) {
+                tempMessage = 'I have found the list of all the active lenders <br/><br/>'
+                data.loan.list.map((loan, i) => {
+                    if (data.loan.list.length - 1 === i) return tempMessage += `and ${loan.name}.`
+                    if (data.loan.list.length - 2 === i) return tempMessage += `${loan.name} `
+                    tempMessage += `${loan.name}, `
+                })
+            }
+            else {
+                tempMessage = 'There is no active lender loans.'
+            }
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
             return
         }
         if (option.link === 'lenderLoan') {
-            let tempMessage='I have found the list of all the active lenders with the amounts to be paid. <br/><br/>'
-            data.loan.list.map((loan,i)=>{
-                tempMessage+=`<b>${loan.name}</b>: ₹ ${customUnits(loan.total)} <br/>`
-            })
-            tempMessage+=`<br/>Total: ₹ ${customUnits(data.loan.total)}`
+            let tempMessage
+            if (data.loan.list.length > 0) {
+                tempMessage = 'I have found the list of all the active lenders with the amounts to be paid. <br/><br/>'
+                data.loan.list.map((loan, i) => {
+                    tempMessage += `<b>${loan.name}</b>: ₹ ${customUnits(loan.total)} <br/>`
+                })
+                tempMessage += `<br/>Total: ₹ ${customUnits(data.loan.total)}`
+            }
+            else {
+                tempMessage = 'There is no active lender loans.'
+            }
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
             return
         }
         if (option.link === 'lenderDetails') {
-            let tempMessage='I would recommend you to view the below web page to get detail insights for your lender loans. <br/><br/> <a href="/lender_details">Click Here To View Lender Loan Details</a>'
+            let tempMessage = 'I recommend you to view the below web page to get detail insights for your lender loans. <br/><br/> <a href="/lender_details">Click Here To View Lender Loan Details</a>'
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
@@ -182,49 +190,61 @@ export default function ChatBot() {
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
-                message: 'What would you like to know about your borrower loans.'
+                message: 'What would you like to know about your borrower loans?'
             }])
             return
         }
         if (option.link === 'allBorrower') {
-            let tempMessage='I have found the list of all the active borrower <br/><br/>'
-            data.borrow.list.map((loan,i)=>{
-                if(data.borrow.list.length-1===i) return tempMessage+=`and ${loan.name}.`
-                if(data.borrow.list.length-2===i) return tempMessage+=`${loan.name} `
-                tempMessage+=`${loan.name}, `
-            })
+            let tempMessage
+            if (data.borrow.list.length > 0) {
+                tempMessage = 'I have found the list of all the active borrower <br/><br/>'
+                data.borrow.list.map((loan, i) => {
+                    if (data.borrow.list.length - 1 === i) return tempMessage += `and ${loan.name}.`
+                    if (data.borrow.list.length - 2 === i) return tempMessage += `${loan.name} `
+                    tempMessage += `${loan.name}, `
+                })
+            }
+            else {
+                tempMessage = 'There is no active lender loans.'
+            }
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
             return
         }
         if (option.link === 'borrowLoan') {
-            let tempMessage='I have found the list of all the active borrowers with the amounts to be paid. <br/><br/>'
-            data.borrow.list.map(loan=>{
-                tempMessage+=`<b>${loan.name}</b>: ₹ ${customUnits(loan.total)} <br/>`
-            })
-            tempMessage+=`<br/>Total: ₹ ${customUnits(data.borrow.total)}`
+            let tempMessage
+            if (data.borrow.list.length > 0) {
+                tempMessage = 'I have found the list of all the active borrowers with the amounts to be paid. <br/><br/>'
+                data.borrow.list.map(loan => {
+                    tempMessage += `<b>${loan.name}</b>: ₹ ${customUnits(loan.total)} <br/>`
+                })
+                tempMessage += `<br/>Total: ₹ ${customUnits(data.borrow.total)}`
+            }
+            else {
+                tempMessage = 'There is no active lender loans.'
+            }
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
             return
         }
         if (option.link === 'borrowerDetails') {
-            let tempMessage='I would recommend you to view the below web page to get detail insights for your borrower loans. <br/><br/> <a href="/borrower_details">Click Here To View Borrower Loan Details</a>'
+            let tempMessage = 'I recommend you to view the below web page to get detail insights for your borrower loans. <br/><br/> <a href="/borrower_details">Click Here To View Borrower Loan Details</a>'
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
@@ -238,7 +258,7 @@ export default function ChatBot() {
                     message: 'Show all the invested stocks.'
                 }, {
                     link: 'stockTotal',
-                    name: 'Amount Invested In Stock',
+                    name: 'Investment In Stock',
                     message: 'Show total amount invested in each stock.'
                 }, {
                     link: 'stockDetails',
@@ -253,49 +273,61 @@ export default function ChatBot() {
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
-                message: 'What would you like to know about your stock investment.'
+                message: 'What would you like to know about your stock investment?'
             }])
             return
         }
         if (option.link === 'allStock') {
-            let tempMessage='I have found the list of all the company names of active Stock Investments.<br/><br/>'
-            data.stock.list.map((invst,i)=>{
-                if(data.stock.list.length-1===i) return tempMessage+=`and ${invst.name}.`
-                if(data.stock.list.length-2===i) return tempMessage+=`${invst.name} `
-                tempMessage+=`${invst.name}, `
-            })
+            let tempMessage
+            if (data.stock.list.length > 0) {
+                tempMessage = 'I have found the list of all the company names of active Stock Investments.<br/><br/>'
+                data.stock.list.map((invst, i) => {
+                    if (data.stock.list.length - 1 === i) return tempMessage += `and ${invst.name}.`
+                    if (data.stock.list.length - 2 === i) return tempMessage += `${invst.name} `
+                    tempMessage += `${invst.name}, `
+                })
+            }
+            else {
+                tempMessage = 'There is no active stock investments.'
+            }
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
             return
         }
         if (option.link === 'stockTotal') {
-            let tempMessage='I have found the list of all the active stock investments with the quantity and total investment. <br/><br/>'
-            data.stock.list.map((invst)=>{
-                tempMessage+=`<b>${invst.name}</b> x${customUnits(invst.quantity)} - ₹ ${customUnits(invst.investment)} <br/>`
-            })
-            tempMessage+=`<br/>Total: ₹ ${customUnits(data.stock.total)}`
+            let tempMessage
+            if (data.stock.list.length > 0) {
+                tempMessage = 'I have found the list of all the active stock investments with the quantity and total investment. <br/><br/>'
+                data.stock.list.map((invst) => {
+                    tempMessage += `<b>${invst.name}</b> x${customUnits(invst.quantity)} - ₹ ${customUnits(invst.investment)} <br/>`
+                })
+                tempMessage += `<br/>Total: ₹ ${customUnits(data.stock.total)}`
+            }
+            else {
+                tempMessage = 'There is no active stock investments.'
+            }
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
             return
         }
         if (option.link === 'stockDetails') {
-            let tempMessage='I would recommend you to view the below web page to get detail insights for your stock investment. <br/><br/> <a href="/user_stock_investments">Click Here To View Stock Investment Details</a>'
+            let tempMessage = 'I recommend you to view the below web page to get detail insights for your stock investment. <br/><br/> <a href="/user_stock_investments">Click Here To View Stock Investment Details</a>'
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
@@ -309,7 +341,7 @@ export default function ChatBot() {
                     message: 'Show all the invested crypto.'
                 }, {
                     link: 'cryptoTotal',
-                    name: 'Amount Invested In Crypto',
+                    name: 'Investment In Crypto',
                     message: 'Show total amount invested in each crypto.'
                 }, {
                     link: 'cryptoDetails',
@@ -324,49 +356,61 @@ export default function ChatBot() {
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
-                message: 'What would you like to know about your crypto investments.'
+                message: 'What would you like to know about your crypto investments?'
             }])
             return
         }
         if (option.link === 'allCrypto') {
-            let tempMessage='I have found the list of all the coin names of active Crypto Investments.<br/><br/>'
-            data.crypto.list.map((invst,i)=>{
-                if(data.crypto.list.length-1===i) return tempMessage+=`and ${invst.name}.`
-                if(data.crypto.list.length-2===i) return tempMessage+=`${invst.name} `
-                tempMessage+=`${invst.name}, `
-            })
+            let tempMessage
+            if (data.crypto.list.length > 0) {
+                tempMessage = 'I have found the list of all the coin names of active Crypto Investments.<br/><br/>'
+                data.crypto.list.map((invst, i) => {
+                    if (data.crypto.list.length - 1 === i) return tempMessage += `and ${invst.name}.`
+                    if (data.crypto.list.length - 2 === i) return tempMessage += `${invst.name} `
+                    tempMessage += `${invst.name}, `
+                })
+            }
+            else {
+                tempMessage = 'There is no active crypto investments.'
+            }
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
             return
         }
         if (option.link === 'cryptoTotal') {
-            let tempMessage='I have found the list of all the active crypto investments with the quantity and total investment. <br/><br/>'
-            data.crypto.list.map((invst)=>{
-                tempMessage+=`<b>${invst.name}</b> x${customUnits(invst.quantity)} - ₹ ${customUnits(invst.investment)} <br/>`
-            })
-            tempMessage+=`<br/>Total: ₹ ${customUnits(data.crypto.total)}`
+            let tempMessage
+            if (data.crypto.list.length > 0) {
+                tempMessage = 'I have found the list of all the active crypto investments with the quantity and total investment. <br/><br/>'
+                data.crypto.list.map((invst) => {
+                    tempMessage += `<b>${invst.name}</b> x${customUnits(invst.quantity)} - ₹ ${customUnits(invst.investment)} <br/>`
+                })
+                tempMessage += `<br/>Total: ₹ ${customUnits(data.crypto.total)}`
+            }
+            else {
+                tempMessage = 'There is no active crypto investments.'
+            }
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
             return
         }
         if (option.link === 'cryptoDetails') {
-            let tempMessage='I would recommend you to view the below web page to get detail insights for your crypto investment. <br/><br/> <a href="/user_crypto_investments">Click Here To View Crypto Investment Details</a>'
+            let tempMessage = 'I recommend you to view the below web page to get detail insights for your crypto investment. <br/><br/> <a href="/user_crypto_investments">Click Here To View Crypto Investment Details</a>'
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: tempMessage
             }])
@@ -395,7 +439,7 @@ export default function ChatBot() {
             setMessages([...messages, {
                 type: 'user',
                 message: option.message
-            },{
+            }, {
                 type: 'bot',
                 message: 'Here is the main menu.'
             }])
@@ -403,23 +447,23 @@ export default function ChatBot() {
         }
     }
 
-    return (
+    return (!hideNav ?
         <>
             <div className='chatbot_btn' onClick={openChatbot}>
                 <FontAwesomeIcon icon={faCommentsDollar} />
-                <div className="text">Ask Jarvis</div>
+                <div className="text">Ask Friday</div>
             </div>
             <div className="chat_cont">
                 <div className="header">
                     <div className='d-flex align-items-center'>
-                        <div className="name me-2">Jarvis</div>
-                        <div className="status">(<div className={"dot"+(data?.stock?' online':'')}></div>{data?.stock?'Online':'Offline'})</div>
+                        <div className="name me-2">Friday</div>
+                        <div className="status">(<div className={"dot" + (data?.stock ? ' online' : '')}></div>{data?.stock ? 'Online' : 'Offline'})</div>
                     </div>
                     <div className="close" onClick={closeChatbot} style={{ fontSize: '24px', cursor: 'pointer' }}><FontAwesomeIcon icon={faTimes} /></div>
                 </div>
                 <div className="chat_section" id="message_section">
                     <div className='conversation_sec'>
-                        {messages?.map((message,i) =>
+                        {messages?.map((message, i) =>
                             <div key={i} className={'message' + (message.type === 'user' ? ' active' : '')}>
                                 {HTMLReactParser(message.message)}
                             </div>
@@ -436,6 +480,6 @@ export default function ChatBot() {
                     </div>
                 </div>
             </div>
-        </>
+        </> : <></>
     )
 }

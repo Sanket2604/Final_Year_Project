@@ -9,12 +9,19 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHandHoldingDollar, faMoneyBill, faChartLine, faSackDollar, faChartSimple, faPlus, faFileCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import { faBitcoin } from '@fortawesome/free-brands-svg-icons'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Form, Row, Label, Input, Col } from "reactstrap";
 import './home.css'
 
 export default function Home() {
 
     const [modalOpen, setModalOpen] = useState(false)
-    const [data, setData]=useState()
+    const [incomeModal, setIncomeModal] = useState({
+        open: false,
+        income: 0
+    })
+    const [data, setData] = useState()
+    const [portfolioStatus, setPortfolioStatus] = useState()
     const token = JSON.parse(localStorage.getItem("profile"))?.token
 
     useEffect(() => {
@@ -33,6 +40,7 @@ export default function Home() {
                     })
                     .then((res) => {
                         setData(res.data)
+                        setIncomeModal({...incomeModal, income: res.data.income})
                     })
                     .catch((error) => {
                         console.log(error)
@@ -47,8 +55,46 @@ export default function Home() {
         }
     }, [])
 
+    useEffect(() => {
+        if (data) {
+            try {
+                axios
+                    .get(`https://cdfyp-server.herokuapp.com/portfolio_decision/${data?.income}/${data?.loan?.total}/${data?.borrow?.total}/${data?.stock?.total}/${data?.crypto?.total}`)
+                    .then((res) => {
+                        setPortfolioStatus(res.data)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+    }, [data])
+
     function triggerEditModal() {
         setModalOpen(!modalOpen)
+    }
+
+    function triggerIncomeModal(){
+        setIncomeModal({...incomeModal, open: !incomeModal.open})
+    }
+
+    function editMonthlyIncome(){
+        axios
+            .put(url + '/account/editMonthlyIncome', {
+                income: incomeModal.income
+            }, {
+                headers: { 'authorization': `Bearer ${token}` }
+            })
+            .then(() => {
+                alert("Monthly Income Edited")
+                window.location.reload()
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     function customUnits(num) {
@@ -74,13 +120,31 @@ export default function Home() {
     return (
         <div className="container homepage py-5">
             <TransactionModal modalOpen={modalOpen} newTransaction={true} setModalOpen={setModalOpen} />
+            <Modal isOpen={incomeModal.open} toggle={triggerIncomeModal}>
+                <ModalHeader toggle={triggerIncomeModal}>Change Your Monthly Income</ModalHeader>
+                <ModalBody>
+                    <Form>
+                        <Row>
+                            <Col md={12}>
+                                <Label htmlFor="income">Enter Your Monthly Income</Label>
+                                <Input type="text" id="income" name="income" placeholder="New Category Name" value={incomeModal.income} onChange={(e)=>setIncomeModal({...incomeModal, income: e.target.value})} />
+                                <div id="error_income" className='form_error'></div>
+                            </Col>
+                        </Row>
+                    </Form>
+                </ModalBody>
+                <ModalFooter>
+                    <button type="button" className="btn btn-success" onClick={editMonthlyIncome}>Edit</button>
+                    <button type="button" className="btn btn-secondary" onClick={triggerIncomeModal}>Cancel</button>
+                </ModalFooter>
+            </Modal>
             <div className="row top_row">
                 <div className="col-2">
-                    <div className="box">
+                    <div className="box" onClick={triggerIncomeModal}>
                         <FontAwesomeIcon icon={faMoneyBill} />
                         <div className="content">
                             <div className="subtext">Monthly Earning</div>
-                            <div className="text">₹ {data?.income?customUnits(data?.income):0}</div>
+                            <div className="text">₹ {data?.income ? customUnits(data?.income) : 0}</div>
                         </div>
                     </div>
                 </div>
@@ -88,8 +152,8 @@ export default function Home() {
                     <Link to="/borrower_details" className="box">
                         <FontAwesomeIcon icon={faSackDollar} />
                         <div className="content">
-                            <div className="subtext">Money Borrowed</div>
-                            <div className="text">₹ {data?.borrow?.total?customUnits(data?.borrow?.total):0}</div>
+                            <div className="subtext">Money Taken</div>
+                            <div className="text">₹ {data?.borrow?.total ? customUnits(data?.loan?.total) : 0}</div>
                         </div>
                     </Link>
                 </div>
@@ -97,8 +161,8 @@ export default function Home() {
                     <Link to="/lender_details" className="box">
                         <FontAwesomeIcon icon={faHandHoldingDollar} />
                         <div className="content">
-                            <div className="subtext">Money Lent</div>
-                            <div className="text">₹ {data?.loan?.total?customUnits(data?.loan?.total):0}</div>
+                            <div className="subtext">Money Given</div>
+                            <div className="text">₹ {data?.loan?.total ? customUnits(data?.borrow?.total) : 0}</div>
                         </div>
                     </Link>
                 </div>
@@ -107,7 +171,7 @@ export default function Home() {
                         <FontAwesomeIcon icon={faChartLine} />
                         <div className="content">
                             <div className="subtext">Stock Investment</div>
-                            <div className="text">₹ {data?.stock?.total?customUnits(data?.stock?.total):0}</div>
+                            <div className="text">₹ {data?.stock?.total ? customUnits(data?.stock?.total) : 0}</div>
                         </div>
                     </Link>
                 </div>
@@ -116,7 +180,7 @@ export default function Home() {
                         <FontAwesomeIcon icon={faBitcoin} />
                         <div className="content">
                             <div className="subtext">Crypto Investment</div>
-                            <div className="text">₹ {data?.crypto?.total?customUnits(data?.crypto?.total):0}</div>
+                            <div className="text">₹ {data?.crypto?.total ? customUnits(data?.crypto?.total) : 0}</div>
                         </div>
                     </Link>
                 </div>
@@ -125,7 +189,7 @@ export default function Home() {
                         <FontAwesomeIcon icon={faChartSimple} />
                         <div className="content">
                             <div className="subtext">Portfolio Status</div>
-                            <div className="text">Good</div>
+                            <div className="text">{portfolioStatus?.Status}</div>
                         </div>
                     </div>
                 </div>
@@ -172,8 +236,8 @@ export default function Home() {
                             <Link to="/user_stock_investments" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            {data?.stock?.list?.length>0 ? 
-                                <StockDonutChart investments={data?.stock?.list} />:
+                            {data?.stock?.list?.length > 0 ?
+                                <StockDonutChart investments={data?.stock?.list} /> :
                                 <div className="no_data">No Data Available</div>
                             }
                         </div>
@@ -186,8 +250,8 @@ export default function Home() {
                             <Link to="/user_crypto_investments" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            {data?.crypto?.list?.length>0 ?
-                                <CryptoDonutChart investments={data?.crypto?.list} />:
+                            {data?.crypto?.list?.length > 0 ?
+                                <CryptoDonutChart investments={data?.crypto?.list} /> :
                                 <div className="no_data">No Data Available</div>
                             }
                         </div>
@@ -202,8 +266,8 @@ export default function Home() {
                             <Link to="/lender_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            {data?.loan?.list?.length>0 ?
-                                <LoanDonutChart loans={data?.loan?.list} chartType="Total" />:
+                            {data?.loan?.list?.length > 0 ?
+                                <LoanDonutChart loans={data?.loan?.list} chartType="Total" /> :
                                 <div className="no_data">No Data Available</div>
                             }
                         </div>
@@ -216,8 +280,8 @@ export default function Home() {
                             <Link to="/borrower_details" className="btn_cont"><div className='btn_ btn_small'>Show Details</div></Link>
                         </div>
                         <div className='px-5'>
-                            {data?.borrow?.list?.length>0 ?
-                                <LoanDonutChart loans={data?.borrow?.list} chartType="Total" />:
+                            {data?.borrow?.list?.length > 0 ?
+                                <LoanDonutChart loans={data?.borrow?.list} chartType="Total" /> :
                                 <div className="no_data">No Data Available</div>}
                         </div>
                     </div>

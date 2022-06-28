@@ -95,7 +95,7 @@ export default function Nav(props) {
                 </div>
                 <div className="logout" onClick={logout}><FontAwesomeIcon icon={faRightFromBracket} /></div>
             </div>
-            <ChatBot />
+            <ChatBot hideNav={props.hideNav} />
             {/* <div className="notifications">
                 <FontAwesomeIcon icon={faBell} />
             </div> */}

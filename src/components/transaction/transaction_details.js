@@ -32,7 +32,6 @@ export default function TransactionDetails() {
                     })
                     .then((res) => {
                         setTransactionHistory(res.data)
-                        console.log(res.data)
                         if(res.data.length<1){
                             window.location.replace("/transaction_dashboard")
                         }
@@ -64,7 +63,7 @@ export default function TransactionDetails() {
                 <div className="text">Add A New Transaction</div>
             </div>
             {transactionHistory?.map(data =>
-                <div className="row">
+                <div className="row mt-4">
                     <div className="col-12 heading mb-2">All Transactions on {data.date}</div>
                     <TransactionCard transactions={data.transactions} triggerEditModal={triggerEditModal} />
                 </div>

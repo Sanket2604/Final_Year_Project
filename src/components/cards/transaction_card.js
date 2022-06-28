@@ -58,7 +58,7 @@ export default function TransactionCard(props) {
                             <FontAwesomeIcon icon={faCalendarDay} />
                             <div className="content ms-2">
                                 <div className="subtext">Transaction Date and Time</div>
-                                <div className="text">{moment(trans.createdAt).format('DD/MM/YYYY hh:mm A')}</div>
+                                <div className="text">{moment(trans.date).format('DD/MM/YYYY hh:mm A')}</div>
                             </div>
                         </div>
                         <div className="box d-flex align-items-center">

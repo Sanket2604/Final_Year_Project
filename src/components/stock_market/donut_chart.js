@@ -10,7 +10,7 @@ export default function StockDonutChart({ investments }) {
     const [randomColors, setRandomColors] = useState([])
     const [dataset, setDataset] = useState([])
     const [labels, setLabels] = useState([])
-    const colors = ['rgb(47,47,161)', 'rgb(246,76,113)', 'rgb(252,68,68)', 'rgb(79,27,29)', 'rgb(53,0,212)', 'rgb(78,78,80)', 'rgb(26,26,28)', 'rgb(70,162,159)', 'rgb(155,23,80)', 'rgb(241,60,31)' ,'rgb(27,51,51)', 'rgb(16,100,102)', 'rgb(255,228,1)', 'rgb(19,167,107)', 'rgb(68,49,141)', 'rgb(45,156,202)', 'rgb(230,66,152)', 'rgb(188,70,58)', 'rgb(129,43,178)', 'rgb(136,211,24)']
+    const colors = ['rgb(47,47,161)', 'rgb(246,76,113)', 'rgb(252,68,68)', 'rgb(79,27,29)', 'rgb(53,0,212)', 'rgb(78,78,80)', 'rgb(0,255,0)', 'rgb(70,162,159)', 'rgb(155,23,80)', 'rgb(241,60,31)' ,'rgb(27,51,51)', 'rgb(16,100,102)', 'rgb(255,228,1)', 'rgb(19,167,107)', 'rgb(68,49,141)', 'rgb(45,156,202)', 'rgb(230,66,152)', 'rgb(188,70,58)', 'rgb(129,43,178)', 'rgb(136,211,24)']
 
 
     useEffect(() => {

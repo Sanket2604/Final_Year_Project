@@ -105,7 +105,6 @@ export function TransactionModal(props) {
 
 
     function addTransaction() {
-        console.log(transactionData)
         axios
             .post(url + '/transactions/addNewTransaction', transactionData, {
                 headers: { 'authorization': `Bearer ${token}` }

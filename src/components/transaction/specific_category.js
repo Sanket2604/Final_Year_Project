@@ -43,7 +43,6 @@ export default function SpecificCategory() {
                         setTransactionList(res.data.specificTransaction)
                         setExpenditure(res.data.expenditure)
                         setCategory(res.data.specificCategory)
-                        console.log(res.data)
                     })
                     .catch((error) => {
                         console.log(error)

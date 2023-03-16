@@ -653,7 +653,6 @@ export default function CryptoCoinDetail() {
                     ) : (
                         <div className="about_crpto">
                             <div className="title">What is {cryptoDetails?.name}?</div>
-                            {console.log(cryptoDetails.description)}
                             {isFetching ? (<></>) : HTMLReactParser(cryptoDetails.description)}
                         </div>
                     )
